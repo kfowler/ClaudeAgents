@@ -1,89 +1,47 @@
-# Specialized AI Agents
+# The Mythical Man-Month: The Agents
 
-This directory contains specialized AI agent definitions used by Claude Code to handle complex, domain-specific tasks. Each agent is an expert in their field and can work autonomously to deliver comprehensive solutions.
+This directory contains a team of specialized AI agents, inspired by the roles described in Fred Brooks's "The Mythical Man-Month." Each agent is an expert in their field, and together they form a "Surgical Team" that can tackle any software development project with precision and skill.
 
-## How Agents Work
+## The Surgical Team
 
-Agents are intelligent, autonomous specialists that:
-- Analyze requirements and create execution plans
-- Perform complex multi-step tasks independently
-- Utilize all available tools and knowledge
-- Coordinate with other agents when needed
-- Deliver complete, production-ready solutions
+Our team is structured like a surgical team, with each member playing a specific and vital role. This structure ensures that we can work together seamlessly to deliver high-quality software.
 
-## Available Agents
+### 👩‍⚕️ Sally the Surgeon
+**Role**: The master programmer who performs the most critical operations on the codebase.
+**Expertise**: Analyzing requirements, designing solutions, writing clean and efficient code, and testing her own work.
 
-### 🎯 Project Orchestrator
-**Purpose**: Coordinates complex projects requiring multiple domains  
-**Use When**: Building new projects, features requiring frontend + backend + testing  
-**Expertise**: Breaking down high-level requirements into actionable tasks, delegating to specialized agents in optimal sequence  
+### 👨‍✈️ Chip the Copilot
+**Role**: Sally's trusty sidekick, always ready to help.
+**Expertise**: Assisting the surgeon, filling in gaps in the team, and keeping morale high.
 
-### 🏗️ Backend API Architect  
-**Purpose**: Designs and implements backend APIs  
-**Use When**: Need server infrastructure, REST/GraphQL APIs, database design  
-**Expertise**: Framework selection, database schemas, authentication, security, performance optimization  
+### 👩‍💼 Penny the Project Manager
+**Role**: The organizational wizard who keeps the project on track.
+**Expertise**: Creating project plans, tracking progress, communicating with the team, and removing roadblocks.
 
-### 📱 SwiftUI Architect
-**Purpose**: Builds modern iOS/macOS applications  
-**Use When**: SwiftUI development, iOS 18/26 features, app refactoring  
-**Expertise**: Component-driven architecture, @Observable patterns, modern iOS APIs, performance optimization  
+### 👨‍🎨 Eddie the Editor
+**Role**: The wordsmith who makes the documentation shine.
+**Expertise**: Reviewing and editing documentation for clarity, style, and consistency.
 
-### ⚡ Next.js Project Bootstrapper
-**Purpose**: Creates production-ready web applications  
-**Use When**: Starting new web projects, need modern React setup  
-**Expertise**: Next.js App Router, TypeScript, Tailwind CSS, project structure, responsive design  
+### 👩‍💻 Clara the Clerk
+**Role**: The meticulous keeper of the project's history.
+**Expertise**: Maintaining the program library, tracking changes, generating reports, and preserving the project's history.
 
-### 🧪 QA Test Engineer
-**Purpose**: Ensures code quality through comprehensive testing  
-**Use When**: Need test coverage, quality assurance, functionality verification  
-**Expertise**: Test strategies, automated testing, coverage analysis, CI/CD integration  
+### 👩‍🔧 Tina the Toolsmith
+**Role**: The master craftswoman who builds the tools that build the tools.
+**Expertise**: Identifying the need for new tools, building high-quality tools, and maintaining them.
 
-### 🔒 Security Audit Specialist
-**Purpose**: Identifies and prevents security vulnerabilities  
-**Use When**: Security reviews, credential audits, compliance preparation  
-**Expertise**: Credential leak detection, token security, authentication flows, OWASP standards  
+### 🕵️‍♀️ Tess the Tester
+**Role**: The eagle-eyed bug hunter who ensures the quality of the code.
+**Expertise**: Devising test cases, executing tests, working with developers to fix bugs, and automating tests.
 
-### 🔧 Code Refactoring Architect
-**Purpose**: Improves code structure and maintainability  
-**Use When**: Code cleanup, architectural improvements, legacy modernization  
-**Expertise**: Design patterns, separation of concerns, performance optimization, best practices  
+### 👨‍⚖️ Larry the Language Lawyer
+**Role**: The language expert who can solve the most obscure programming puzzles.
+**Expertise**: Consulting on language-specific issues, solving complex problems, optimizing code, and sharing his knowledge with the team.
 
-## The Orchestrator's Role
+## How the Team Works
 
-The **Project Orchestrator** serves as the master conductor, analyzing complex requirements and coordinating multiple agents:
-
-1. **Requirements Analysis**: Breaks down user requests into technical components
-2. **Task Planning**: Creates comprehensive, prioritized task lists with dependencies  
-3. **Agent Selection**: Matches tasks to the most appropriate specialist agents
-4. **Execution Coordination**: Manages handoffs and integration between agents
-5. **Progress Tracking**: Monitors completion and maintains project coherence
-
-### Example Orchestration Flow
-```
-User: "Build an e-commerce app with React frontend and Node.js backend"
-
-Orchestrator:
-├── nextjs-project-bootstrapper → Create React frontend structure
-├── backend-api-architect → Design and implement API endpoints  
-├── security-audit-specialist → Review authentication security
-└── qa-test-engineer → Implement comprehensive test suite
-```
-
-## Agent Coordination
-
-Agents work together seamlessly:
-- **Sequential**: Backend API created before frontend integration
-- **Parallel**: Security audit while QA engineer writes tests
-- **Handoffs**: Orchestrator ensures each agent has necessary context from previous work
-- **Integration**: All agents contribute to a cohesive final solution
+The team works together like a well-oiled machine. Penny the Project Manager creates the plan, Sally the Surgeon and Chip the Copilot write the code, Tina the Toolsmith builds the tools, Tess the Tester finds the bugs, Eddie the Editor writes the documentation, Clara the Clerk keeps track of everything, and Larry the Language Lawyer provides expert advice when needed.
 
 ## Getting Started
 
-Agents are invoked automatically when tasks match their expertise. You can also explicitly request an agent:
-
-```
-"Use the security-audit-specialist to review my OAuth implementation"
-"Have the project-orchestrator plan my new social media app"
-```
-
-Each agent delivers production-ready solutions with documentation, tests, and deployment guidance appropriate for their domain.
+To get started, simply describe your project to Penny the Project Manager. She will assemble the team and create a project plan. Then, sit back and watch as the Surgical Team works its magic.
