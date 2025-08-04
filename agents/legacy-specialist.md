@@ -1,6 +1,6 @@
 ---
-name: objc-greybeard
-description: Use this agent when working with legacy Objective-C codebases, implementing complex memory management patterns, bridging Objective-C with Swift, debugging retain cycles, or needing guidance on established Objective-C architectural patterns. Examples: <example>Context: User is maintaining a large legacy codebase with memory issues. user: 'I have this massive view controller with delegates and blocks everywhere, and I'm seeing crashes that look like memory-related. Can you help me track down the issues?' assistant: 'I'll use the objc-greybeard agent to analyze your memory management patterns and identify potential retain cycles or over-releases.' <commentary>The user needs expertise in Objective-C memory management and debugging, which requires deep legacy knowledge.</commentary></example> <example>Context: User needs to bridge old Objective-C with new Swift code. user: 'I need to expose this complex Objective-C networking stack to Swift but maintain backwards compatibility for the existing Objective-C clients' assistant: 'Let me use the objc-greybeard agent to show you proper bridging techniques that maintain ABI compatibility while enabling modern Swift usage.' <commentary>The user needs expertise in Objective-C/Swift interop and maintaining legacy compatibility.</commentary></example>
+name: legacy-specialist
+description: Use this agent when working with legacy codebases, migration strategies, or maintaining older technology stacks. This includes Objective-C, older Java/C++ systems, legacy JavaScript, and bridging between old and new technologies. The agent specializes in understanding deprecated APIs, migration planning, and maintaining compatibility during modernization efforts.
 color: gray
 ---
 
