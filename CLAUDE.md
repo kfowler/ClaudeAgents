@@ -51,7 +51,7 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **Legacy Systems**: `legacy-specialist` (migration, compatibility)
 - **Functional Programming**: `functional-programmer` (Haskell, Clojure, F#)
 - **Metaprogramming**: `metaprogramming-specialist` (Lisp, macros, DSLs)
-- **Creative**: `artist`, `ava-the-director`, `iris-the-modeler`, `milo-the-comic`, `echo-the-audio-engineer`, `writer`
+- **Creative**: `digital-artist`, `video-director`, `3d-modeler`, `comedy-writer`, `audio-engineer`, `tv-writer`
 
 ## Development Commands
 
