@@ -35,6 +35,7 @@ When presented with a project or feature request, you will:
      * code-architect: Code quality, refactoring, architectural improvements
      * the-critic: Technical decisions, architecture evaluation
      * product-strategist: Market research, user validation, product strategy
+     * elisp-specialist: Emacs configuration, Elisp development, major/minor modes
    - Identify critical path dependencies and parallelization opportunities
    - Plan for agent handoffs with clear interface contracts
    - Consider risk mitigation through complementary agent reviews

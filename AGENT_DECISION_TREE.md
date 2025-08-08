@@ -120,6 +120,7 @@ This guide helps Claude Code automatically select the optimal agents based on us
 - `"Rust"`, `"performance"`, `"optimization"`, `"C++"`, `"Go"`, `"systems"`, `"concurrent"`, `"memory"` → **systems-engineer**
 - `"Haskell"`, `"functional"`, `"Clojure"`, `"F#"`, `"category theory"`, `"monad"`, `"immutable"` → **functional-programmer**
 - `"Lisp"`, `"macro"`, `"DSL"`, `"metaprogramming"`, `"code generation"`, `"compiler"` → **metaprogramming-specialist**
+- `"Emacs"`, `"init.el"`, `"elisp"`, `"Emacs Lisp"`, `"use-package"`, `"straight.el"`, `"Doom Emacs"`, `"Spacemacs"`, `"major mode"`, `"minor mode"`, `"MELPA"` → **elisp-specialist**
 - `"legacy"`, `"migration"`, `"Objective-C"`, `"COBOL"`, `"modernize"`, `"refactor"` → **legacy-specialist**
 
 ### **Quality/Review Triggers**
