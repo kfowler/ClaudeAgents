@@ -9,25 +9,48 @@ This document provides strategies for maximizing the effectiveness of specialize
 Claude Code should proactively suggest agents based on:
 
 **📁 File Analysis:**
-- `.md` files with product specs → `product-strategist`
-- `package.json` + React → `full-stack-architect`
+- `.md` files with product specs, PRDs → `product-strategist`
+- `package.json` + React/Next.js → `full-stack-architect`
 - `Cargo.toml` + performance issues → `systems-engineer`
+- `Dockerfile`, `docker-compose.yml` → `devops-engineer`
 - iOS project + accessibility concerns → `accessibility-expert`
-- ML/AI code + vector operations → `ai-ml-engineer`
+- ML/AI code + vector operations, embeddings → `ai-ml-engineer`
+- `.rs` files with `unsafe` blocks → `systems-engineer`
+- Test files with low coverage → `qa-test-engineer`
+- Auth-related code → `security-audit-specialist`
+- Database migration files → `data-engineer`
+- Swift/Kotlin + mobile UI → `mobile-developer`
+- Lisp/Scheme files → `metaprogramming-specialist`
+- Legacy .obj-c, COBOL files → `legacy-specialist`
 
 **🔍 Code Pattern Detection:**
-- Authentication code → `security-audit-specialist`
-- Database queries without indexes → `data-engineer`
-- Large functions (>100 lines) → `code-architect`
-- Missing tests → `qa-test-engineer`
-- Legacy APIs → `legacy-specialist`
+- Authentication code, JWT handling → `security-audit-specialist`
+- Database queries without indexes, N+1 problems → `data-engineer`
+- Large functions (>100 lines), high cyclomatic complexity → `code-architect`
+- Missing tests, low coverage → `qa-test-engineer`
+- Legacy APIs, deprecated frameworks → `legacy-specialist`
+- Performance bottlenecks, memory leaks → `systems-engineer`
+- Hardcoded values, magic numbers → `code-architect`
+- Accessibility violations, missing ARIA → `accessibility-expert`
+- Unsafe Rust, manual memory management → `systems-engineer`
+- Complex async/concurrent code → `systems-engineer`
+- API design inconsistencies → `full-stack-architect`
+- Mobile platform-specific code → `mobile-developer`
+- AI model integration, embedding queries → `ai-ml-engineer`
 
 **💬 Conversation Context:**
-- User mentions competitors → `product-strategist`
-- Performance complaints → `systems-engineer`
-- Deployment issues → `devops-engineer`
-- User experience concerns → `accessibility-expert`
-- Feature complexity → `project-orchestrator`
+- User mentions competitors, market research → `product-strategist`
+- Performance complaints, slow responses → `systems-engineer`
+- Deployment issues, CI/CD problems → `devops-engineer`
+- User experience concerns, usability → `accessibility-expert`
+- Feature complexity, multi-step requirements → `project-orchestrator`
+- Security breaches, vulnerabilities mentioned → `security-audit-specialist`
+- Testing failures, bugs in production → `qa-test-engineer`
+- Code quality concerns, maintainability → `code-architect`
+- Architecture decisions, technical tradeoffs → `the-critic`
+- AI/ML feature requests, intelligent behavior → `ai-ml-engineer`
+- Mobile app store issues, platform compliance → `mobile-developer`
+- Data analysis needs, reporting → `data-engineer`
 
 ## 🚀 AGENT UTILIZATION STRATEGIES
 
@@ -111,12 +134,19 @@ Track these metrics to optimize agent selection:
 
 **Context Vector Analysis:**
 Create embeddings for:
-- User request text
-- Current project context
-- Historical successful agent combinations
-- Agent capability descriptions
+- User request text and technical language patterns
+- Current project context (tech stack, domain, complexity)
+- Historical successful agent combinations and outcomes
+- Agent capability descriptions and success patterns
+- Error patterns and failure modes by agent type
+- User satisfaction scores by agent and task type
+- Code quality improvements by agent intervention
 
-Match requests to optimal agents using semantic similarity.
+Match requests to optimal agents using:
+- Semantic similarity for technical language
+- Success pattern matching for complex multi-agent workflows
+- Risk assessment for security/quality requirements
+- Performance optimization for high-stakes projects
 
 **Learning from Usage Patterns:**
 - Track which agent combinations work well together
