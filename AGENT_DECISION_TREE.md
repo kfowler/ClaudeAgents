@@ -125,9 +125,10 @@ This guide helps Claude Code automatically select the optimal agents based on us
 
 ### **Quality/Review Triggers**
 - `"code review"`, `"best practices"`, `"clean code"` → **code-architect** or **code-reviewer**
+- `"readability"`, `"clarity"`, `"maintainability"`, `"hard to understand"` → **readability-expert**
 - `"test"`, `"testing"`, `"QA"`, `"quality assurance"` → **qa-test-engineer**
 - `"decide"`, `"choose"`, `"evaluate options"` → **the-critic**
-- `"merge conflict"`, `"git conflict"` → **merge-meister**
+- `"merge conflict"`, `"git conflict"`, `"resolve conflicts"` → **merge-meister**
 
 ## 📋 CONTEXTUAL DECISION FACTORS
 
