@@ -1,0 +1,240 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+  namespace: claude-agents
+type: Opaque
+data:
+  # These should be base64 encoded in production
+  # echo -n 'your_password' | base64
+  postgres-password: Y2xhdWRlX3Bhc3N3b3Jk  # claude_password
+  postgres-user: Y2xhdWRl  # claude
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: claude-agents
+data:
+  POSTGRES_DB: claude_agents
+  POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+  postgres.conf: |
+    # PostgreSQL configuration for Claude Agents
+    max_connections = 200
+    shared_buffers = 256MB
+    effective_cache_size = 1GB
+    work_mem = 4MB
+    maintenance_work_mem = 64MB
+    
+    # Write-ahead logging
+    wal_buffers = 16MB
+    checkpoint_completion_target = 0.9
+    
+    # Query tuning
+    random_page_cost = 1.1
+    effective_io_concurrency = 200
+    
+    # Logging
+    log_destination = 'stderr'
+    log_statement = 'all'
+    log_duration = on
+    log_min_duration_statement = 1000
+    
+    # Performance monitoring
+    shared_preload_libraries = 'pg_stat_statements'
+    pg_stat_statements.track = all
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-storage
+  namespace: claude-agents
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: claude-agents
+  labels:
+    app: postgres
+    component: database
+spec:
+  serviceName: postgres-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+        component: database
+    spec:
+      securityContext:
+        fsGroup: 999
+        runAsUser: 999
+        runAsGroup: 999
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_DB
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-password
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        ports:
+        - containerPort: 5432
+          name: postgres
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+        - name: postgres-config-volume
+          mountPath: /etc/postgresql
+        - name: init-scripts
+          mountPath: /docker-entrypoint-initdb.d
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          exec:
+            command:
+              - pg_isready
+              - -U
+              - claude
+              - -d
+              - claude_agents
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+              - pg_isready
+              - -U
+              - claude
+              - -d
+              - claude_agents
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: postgres-storage
+      - name: postgres-config-volume
+        configMap:
+          name: postgres-config
+          items:
+          - key: postgres.conf
+            path: postgresql.conf
+      - name: init-scripts
+        configMap:
+          name: postgres-init-scripts
+          defaultMode: 0755
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: claude-agents
+  labels:
+    app: postgres
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgres
+  selector:
+    app: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-headless
+  namespace: claude-agents
+  labels:
+    app: postgres
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgres
+  selector:
+    app: postgres
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+  namespace: claude-agents
+data:
+  01-init-db.sql: |
+    -- Initialize Claude Agents Database
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    CREATE EXTENSION IF NOT EXISTS "pg_stat_statements";
+    CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+    
+    -- Create schemas
+    CREATE SCHEMA IF NOT EXISTS agents;
+    CREATE SCHEMA IF NOT EXISTS analytics;
+    CREATE SCHEMA IF NOT EXISTS workflows;
+    CREATE SCHEMA IF NOT EXISTS learning;
+    CREATE SCHEMA IF NOT EXISTS semantic;
+    
+    -- Create application user
+    DO $$ 
+    BEGIN
+        IF NOT EXISTS (SELECT FROM pg_catalog.pg_user WHERE usename = 'app_user') THEN
+            CREATE USER app_user WITH PASSWORD 'app_user_password';
+        END IF;
+    END
+    $$;
+    
+    -- Grant permissions
+    GRANT USAGE ON SCHEMA agents, analytics, workflows, learning, semantic TO app_user;
+    GRANT CREATE ON SCHEMA agents, analytics, workflows, learning, semantic TO app_user;
+    
+    -- Create system health table
+    CREATE TABLE IF NOT EXISTS public.system_health (
+        id SERIAL PRIMARY KEY,
+        component VARCHAR(100) NOT NULL,
+        status VARCHAR(20) NOT NULL DEFAULT 'healthy',
+        last_check TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        details JSONB,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+    
+    CREATE INDEX IF NOT EXISTS idx_system_health_component ON public.system_health(component);
+    CREATE INDEX IF NOT EXISTS idx_system_health_last_check ON public.system_health(last_check);

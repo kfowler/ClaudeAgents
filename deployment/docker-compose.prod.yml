@@ -1,0 +1,422 @@
+version: '3.8'
+
+services:
+  orchestrator:
+    image: claude-orchestrator:${VERSION:-latest}
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      - RUST_ENV=production
+      - RUST_LOG=info
+      - DATABASE_URL=postgresql://claude:${POSTGRES_PASSWORD}@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - PROMETHEUS_PORT=9090
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - MAX_CONNECTIONS=100
+      - CONNECTION_TIMEOUT=30
+    secrets:
+      - postgres_password
+      - redis_password
+      - jwt_secret
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  agent-recommender:
+    image: claude-agent-recommender:${VERSION:-latest}
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    ports:
+      - "8001:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:${POSTGRES_PASSWORD}@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=INFO
+      - WORKERS=4
+      - MAX_REQUESTS=1000
+      - MAX_REQUESTS_JITTER=100
+    secrets:
+      - postgres_password
+      - redis_password
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  learning-system:
+    image: claude-learning-system:${VERSION:-latest}
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    ports:
+      - "8002:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:${POSTGRES_PASSWORD}@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - VECTOR_DB_URL=http://qdrant:6333
+      - LOG_LEVEL=INFO
+      - WORKERS=4
+    secrets:
+      - postgres_password
+      - redis_password
+    volumes:
+      - learning-models:/app/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  semantic-agent:
+    image: claude-semantic-agent:${VERSION:-latest}
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    ports:
+      - "8003:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:${POSTGRES_PASSWORD}@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - VECTOR_DB_URL=http://qdrant:6333
+      - LOG_LEVEL=INFO
+      - WORKERS=4
+    secrets:
+      - postgres_password
+      - redis_password
+    volumes:
+      - semantic-embeddings:/app/embeddings
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  analytics:
+    image: claude-analytics:${VERSION:-latest}
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    ports:
+      - "8004:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:${POSTGRES_PASSWORD}@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=INFO
+      - WORKERS=4
+    secrets:
+      - postgres_password
+      - redis_password
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  workflows:
+    image: claude-workflows:${VERSION:-latest}
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    ports:
+      - "8005:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:${POSTGRES_PASSWORD}@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=INFO
+      - WORKERS=4
+    secrets:
+      - postgres_password
+      - redis_password
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  postgres:
+    image: postgres:15-alpine
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.postgres == true
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    environment:
+      POSTGRES_DB: claude_agents
+      POSTGRES_USER: claude
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - /opt/claude/backups:/backups
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U claude -d claude_agents"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  postgres-backup:
+    image: postgres:15-alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      POSTGRES_DB: claude_agents
+      POSTGRES_USER: claude
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      BACKUP_RETENTION_DAYS: 7
+    secrets:
+      - postgres_password
+    volumes:
+      - /opt/claude/backups:/backups
+      - ../deployment/scripts/postgres-backup.sh:/usr/local/bin/backup.sh:ro
+    command: >
+      sh -c "
+        while true; do
+          sleep 3600
+          /usr/local/bin/backup.sh
+        done
+      "
+    depends_on:
+      - postgres
+    networks:
+      - claude-network
+
+  redis:
+    image: redis:7-alpine
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.redis == true
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    command: redis-server --appendonly yes --requirepass_file /run/secrets/redis_password
+    secrets:
+      - redis_password
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  qdrant:
+    image: qdrant/qdrant:v1.8.4
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.qdrant == true
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__STORAGE__PERFORMANCE__MAX_SEARCH_THREADS=4
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  nginx:
+    image: nginx:alpine
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../deployment/nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - /opt/claude/ssl:/etc/nginx/ssl:ro
+      - /opt/claude/logs/nginx:/var/log/nginx
+    secrets:
+      - ssl_certificate
+      - ssl_private_key
+    depends_on:
+      - orchestrator
+      - agent-recommender
+      - learning-system
+      - semantic-agent
+      - analytics
+      - workflows
+    networks:
+      - claude-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  claude-network:
+    driver: overlay
+    attachable: true
+
+volumes:
+  postgres-data:
+    external: true
+  redis-data:
+    external: true
+  qdrant-data:
+    external: true
+  learning-models:
+    external: true
+  semantic-embeddings:
+    external: true
+
+secrets:
+  postgres_password:
+    external: true
+  redis_password:
+    external: true
+  jwt_secret:
+    external: true
+  ssl_certificate:
+    external: true
+  ssl_private_key:
+    external: true

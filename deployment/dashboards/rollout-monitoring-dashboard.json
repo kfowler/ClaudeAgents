@@ -1,0 +1,666 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Claude Code 2.0 Rollout Monitoring Dashboard",
+    "tags": ["claude-agents", "rollout", "monitoring"],
+    "style": "dark",
+    "timezone": "browser",
+    "editable": true,
+    "graphTooltip": 1,
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "10s",
+    "schemaVersion": 39,
+    "panels": [
+      {
+        "id": 1,
+        "title": "Rollout Phase Status",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "claude_rollout_phase_status",
+            "refId": "A",
+            "legendFormat": "{{phase}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "yellow",
+                  "value": 1
+                },
+                {
+                  "color": "green",
+                  "value": 2
+                }
+              ]
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "value": "0",
+                "text": "Failed"
+              },
+              {
+                "type": "value", 
+                "value": "1",
+                "text": "In Progress"
+              },
+              {
+                "type": "value",
+                "value": "2", 
+                "text": "Success"
+              }
+            ]
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Traffic Distribution",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "claude_traffic_weight_stable",
+            "refId": "A",
+            "legendFormat": "Stable"
+          },
+          {
+            "expr": "claude_traffic_weight_canary",
+            "refId": "B", 
+            "legendFormat": "Canary"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "pieType": "pie",
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "Request Rate",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total[5m]))",
+            "refId": "A",
+            "legendFormat": "Total Requests/sec"
+          },
+          {
+            "expr": "sum(rate(http_requests_total{version=\"stable\"}[5m]))",
+            "refId": "B",
+            "legendFormat": "Stable Version"
+          },
+          {
+            "expr": "sum(rate(http_requests_total{version=\"canary\"}[5m]))",
+            "refId": "C",
+            "legendFormat": "Canary Version"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Requests/sec",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "vis": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "unit": "reqps"
+          }
+        },
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 8
+        }
+      },
+      {
+        "id": 4,
+        "title": "Error Rate Comparison",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m])) * 100",
+            "refId": "A",
+            "legendFormat": "Overall Error Rate"
+          },
+          {
+            "expr": "sum(rate(http_requests_total{version=\"stable\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{version=\"stable\"}[5m])) * 100",
+            "refId": "B",
+            "legendFormat": "Stable Error Rate"
+          },
+          {
+            "expr": "sum(rate(http_requests_total{version=\"canary\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{version=\"canary\"}[5m])) * 100",
+            "refId": "C",
+            "legendFormat": "Canary Error Rate"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Error Rate %",
+              "axisPlacement": "auto",
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "line"
+              }
+            },
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 1
+                },
+                {
+                  "color": "red",
+                  "value": 5
+                }
+              ]
+            },
+            "unit": "percent"
+          }
+        },
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list", 
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 16
+        }
+      },
+      {
+        "id": 5,
+        "title": "Response Time Comparison",
+        "type": "timeseries", 
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+            "refId": "A",
+            "legendFormat": "Overall p95"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{version=\"stable\"}[5m])) by (le))",
+            "refId": "B",
+            "legendFormat": "Stable p95"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{version=\"canary\"}[5m])) by (le))",
+            "refId": "C",
+            "legendFormat": "Canary p95"
+          },
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+            "refId": "D",
+            "legendFormat": "Overall p50"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Response Time",
+              "axisPlacement": "auto",
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "line"
+              }
+            },
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 1
+                },
+                {
+                  "color": "red",
+                  "value": 3
+                }
+              ]
+            },
+            "unit": "s"
+          }
+        },
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 16
+        }
+      },
+      {
+        "id": 6,
+        "title": "Pod Status by Phase",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "count by (phase, pod) (kube_pod_info{namespace=\"claude-agents-alpha\"})",
+            "refId": "A",
+            "format": "table",
+            "legendFormat": "Alpha"
+          },
+          {
+            "expr": "count by (phase, pod) (kube_pod_info{namespace=\"claude-agents-beta\"})",
+            "refId": "B", 
+            "format": "table",
+            "legendFormat": "Beta"
+          },
+          {
+            "expr": "count by (phase, pod) (kube_pod_info{namespace=\"claude-agents-prod\"})",
+            "refId": "C",
+            "format": "table", 
+            "legendFormat": "Production"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto"
+            },
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "showHeader": true
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 24
+        }
+      },
+      {
+        "id": 7,
+        "title": "Resource Utilization - CPU",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"claude-agents-alpha\"}[5m])) by (namespace)",
+            "refId": "A",
+            "legendFormat": "Alpha CPU"
+          },
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"claude-agents-beta\"}[5m])) by (namespace)",
+            "refId": "B", 
+            "legendFormat": "Beta CPU"
+          },
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"claude-agents-prod\"}[5m])) by (namespace)",
+            "refId": "C",
+            "legendFormat": "Production CPU"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "CPU Cores",
+              "axisPlacement": "auto",
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              }
+            },
+            "unit": "short"
+          }
+        },
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 32
+        }
+      },
+      {
+        "id": 8,
+        "title": "Resource Utilization - Memory",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "sum(container_memory_usage_bytes{namespace=\"claude-agents-alpha\"}) by (namespace)",
+            "refId": "A",
+            "legendFormat": "Alpha Memory"
+          },
+          {
+            "expr": "sum(container_memory_usage_bytes{namespace=\"claude-agents-beta\"}) by (namespace)",
+            "refId": "B",
+            "legendFormat": "Beta Memory"
+          },
+          {
+            "expr": "sum(container_memory_usage_bytes{namespace=\"claude-agents-prod\"}) by (namespace)", 
+            "refId": "C",
+            "legendFormat": "Production Memory"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Memory",
+              "axisPlacement": "auto",
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              }
+            },
+            "unit": "bytes"
+          }
+        },
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 32
+        }
+      },
+      {
+        "id": 9,
+        "title": "Rollout Validation Results",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "claude_validation_score",
+            "refId": "A",
+            "legendFormat": "{{phase}} Validation"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "yellow",
+                  "value": 70
+                },
+                {
+                  "color": "green",
+                  "value": 90
+                }
+              ]
+            },
+            "unit": "percent"
+          }
+        },
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 40
+        }
+      },
+      {
+        "id": 10,
+        "title": "Rollback Events",
+        "type": "logs",
+        "targets": [
+          {
+            "expr": "{namespace=~\"claude-agents-.*\"} |= \"rollback\" or \"ROLLBACK\"",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": true
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 40
+        }
+      }
+    ],
+    "variables": [
+      {
+        "name": "phase",
+        "type": "query",
+        "query": "label_values(claude_rollout_phase_status, phase)",
+        "refresh": "time",
+        "includeAll": true,
+        "allValue": ".*"
+      },
+      {
+        "name": "namespace", 
+        "type": "query",
+        "query": "label_values(kube_namespace_created, namespace)",
+        "regex": "claude-agents-.*",
+        "refresh": "time",
+        "includeAll": true,
+        "allValue": ".*"
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        },
+        {
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "changes(claude_rollout_phase_status[5m]) > 0",
+          "iconColor": "red",
+          "name": "Phase Changes",
+          "titleFormat": "Phase {{phase}} changed",
+          "textFormat": "Status: {{value}}"
+        },
+        {
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "increase(claude_rollback_count[1h]) > 0",
+          "iconColor": "yellow", 
+          "name": "Rollback Events",
+          "titleFormat": "Rollback executed",
+          "textFormat": "Phase: {{phase}}"
+        }
+      ]
+    }
+  }
+}

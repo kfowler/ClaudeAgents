@@ -1,0 +1,63 @@
+apiVersion: v2
+name: claude-agents
+description: A comprehensive AI agent orchestration platform for Claude Code enhancement system
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+
+keywords:
+  - ai
+  - agents
+  - orchestration
+  - claude
+  - automation
+  - development
+
+home: https://github.com/your-org/claude-agents
+sources:
+  - https://github.com/your-org/claude-agents
+
+maintainers:
+  - name: DevOps Team
+    email: devops@your-org.com
+    url: https://your-org.com
+
+dependencies:
+  - name: postgresql
+    version: "12.12.10"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.enabled
+  - name: redis
+    version: "18.4.0"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: redis.enabled
+  - name: prometheus
+    version: "25.8.0"
+    repository: "https://prometheus-community.github.io/helm-charts"
+    condition: monitoring.prometheus.enabled
+  - name: grafana
+    version: "7.0.19"
+    repository: "https://grafana.github.io/helm-charts"
+    condition: monitoring.grafana.enabled
+
+annotations:
+  category: Development
+  licenses: MIT
+  artifacthub.io/changes: |
+    - Added comprehensive monitoring and observability
+    - Implemented security best practices
+    - Added enterprise-grade scalability features
+  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/images: |
+    - name: orchestrator
+      image: claude-orchestrator:1.0.0
+    - name: agent-recommender
+      image: claude-agent-recommender:1.0.0
+    - name: learning-system
+      image: claude-learning-system:1.0.0
+    - name: semantic-agent
+      image: claude-semantic-agent:1.0.0
+    - name: analytics
+      image: claude-analytics:1.0.0
+    - name: workflows
+      image: claude-workflows:1.0.0

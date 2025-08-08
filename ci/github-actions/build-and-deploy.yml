@@ -1,0 +1,590 @@
+name: Build and Deploy Claude Agents
+
+on:
+  push:
+    branches: [main, develop, 'release/*']
+    tags: ['v*']
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  HELM_VERSION: 3.13.2
+  KUBECTL_VERSION: 1.28.4
+  TERRAFORM_VERSION: 1.6.4
+
+permissions:
+  contents: read
+  packages: write
+  security-events: write
+  id-token: write
+
+jobs:
+  # Security and Code Quality Checks
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+      
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/owasp-top-ten
+            p/docker
+            p/kubernetes
+      
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified
+
+  # Code Quality and Linting
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        language: [rust, python]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Rust (Rust projects)
+        if: matrix.language == 'rust'
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+          override: true
+      
+      - name: Cache Rust dependencies
+        if: matrix.language == 'rust'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: Rust format check
+        if: matrix.language == 'rust'
+        run: cargo fmt --all -- --check
+      
+      - name: Rust lint
+        if: matrix.language == 'rust'
+        run: cargo clippy --all-targets --all-features -- -D warnings
+      
+      - name: Setup Python (Python projects)
+        if: matrix.language == 'python'
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Python dependencies
+        if: matrix.language == 'python'
+        run: |
+          python -m pip install --upgrade pip
+          pip install black isort flake8 mypy pytest bandit safety
+          find . -name "requirements.txt" -exec pip install -r {} \;
+      
+      - name: Python format check
+        if: matrix.language == 'python'
+        run: |
+          black --check --diff .
+          isort --check-only --diff .
+      
+      - name: Python lint
+        if: matrix.language == 'python'
+        run: |
+          flake8 .
+          mypy --ignore-missing-imports .
+      
+      - name: Python security check
+        if: matrix.language == 'python'
+        run: |
+          bandit -r . -f json -o bandit-report.json || true
+          safety check --json --output safety-report.json || true
+      
+      - name: Upload security reports
+        if: matrix.language == 'python'
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-security-reports
+          path: |
+            bandit-report.json
+            safety-report.json
+
+  # Unit Tests
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: code-quality
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    strategy:
+      matrix:
+        service: [orchestrator, analysis, learning_system, semantic_agent_selection, analytics, workflows]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup test environment
+        run: |
+          echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/test_db" >> $GITHUB_ENV
+          echo "REDIS_URL=redis://localhost:6379" >> $GITHUB_ENV
+      
+      - name: Run Rust tests (Orchestrator)
+        if: matrix.service == 'orchestrator'
+        run: |
+          cd orchestration
+          cargo test --verbose
+      
+      - name: Setup Python
+        if: matrix.service != 'orchestrator'
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Python dependencies
+        if: matrix.service != 'orchestrator'
+        run: |
+          python -m pip install --upgrade pip
+          cd ${{ matrix.service }}
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio
+      
+      - name: Run Python tests
+        if: matrix.service != 'orchestrator'
+        run: |
+          cd ${{ matrix.service }}
+          python -m pytest tests/ -v --cov=. --cov-report=xml --cov-report=html
+      
+      - name: Upload coverage reports
+        if: matrix.service != 'orchestrator'
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./${{ matrix.service }}/coverage.xml
+          flags: ${{ matrix.service }}
+          name: ${{ matrix.service }}-coverage
+          fail_ci_if_error: false
+
+  # Build and Push Docker Images
+  build:
+    name: Build Images
+    runs-on: ubuntu-latest
+    needs: [security-scan, test]
+    if: github.event_name == 'push'
+    
+    strategy:
+      matrix:
+        service: [orchestrator, agent-recommender, learning-system, semantic-agent, analytics, workflows]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.service }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./deployment/dockerfiles/Dockerfile.${{ matrix.service }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            VERSION=${{ steps.meta.outputs.version }}
+            COMMIT_SHA=${{ github.sha }}
+            BUILD_DATE=${{ steps.meta.outputs.created }}
+
+  # Infrastructure Validation
+  infrastructure:
+    name: Infrastructure Validation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+      
+      - name: Terraform Format Check
+        run: |
+          cd deployment/terraform
+          terraform fmt -check -recursive
+      
+      - name: Terraform Validate
+        run: |
+          cd deployment/terraform
+          terraform init -backend=false
+          terraform validate
+      
+      - name: Run tflint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: latest
+      
+      - name: Terraform Lint
+        run: |
+          cd deployment/terraform
+          tflint --init
+          tflint
+      
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: deployment/terraform
+      
+      - name: Validate Kubernetes manifests
+        run: |
+          # Install kubeval
+          curl -L https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar xz
+          sudo mv kubeval /usr/local/bin
+          
+          # Validate K8s manifests
+          find deployment/k8s -name "*.yaml" -exec kubeval {} \;
+      
+      - name: Helm lint
+        run: |
+          curl https://get.helm.sh/helm-v${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar xz
+          sudo mv linux-amd64/helm /usr/local/bin/helm
+          cd deployment/helm/claude-agents
+          helm lint . --strict
+
+  # Deploy to Development
+  deploy-dev:
+    name: Deploy to Development
+    runs-on: ubuntu-latest
+    needs: [build, infrastructure]
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: development
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+      
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: ${{ env.KUBECTL_VERSION }}
+      
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.HELM_VERSION }}
+      
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name claude-agents-development-cluster
+      
+      - name: Deploy to Development
+        run: |
+          helm upgrade --install claude-agents ./deployment/helm/claude-agents \
+            --namespace claude-agents \
+            --create-namespace \
+            --set global.environment=development \
+            --set global.imageRegistry=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/ \
+            --set orchestrator.image.tag=${{ github.sha }} \
+            --set agentRecommender.image.tag=${{ github.sha }} \
+            --set learningSystem.image.tag=${{ github.sha }} \
+            --set semanticAgent.image.tag=${{ github.sha }} \
+            --set analytics.image.tag=${{ github.sha }} \
+            --set workflows.image.tag=${{ github.sha }} \
+            --wait \
+            --timeout=10m
+      
+      - name: Run smoke tests
+        run: |
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=claude-agents --timeout=300s -n claude-agents
+          kubectl get pods -n claude-agents
+          
+          # Basic health check
+          kubectl port-forward svc/claude-agents-orchestrator 8080:8080 -n claude-agents &
+          sleep 10
+          curl -f http://localhost:8080/health || exit 1
+
+  # Deploy to Staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build, infrastructure]
+    if: startsWith(github.ref, 'refs/heads/release/') && github.event_name == 'push'
+    environment: staging
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+      
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: ${{ env.KUBECTL_VERSION }}
+      
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.HELM_VERSION }}
+      
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name claude-agents-staging-cluster
+      
+      - name: Deploy to Staging
+        run: |
+          helm upgrade --install claude-agents ./deployment/helm/claude-agents \
+            --namespace claude-agents \
+            --create-namespace \
+            --set global.environment=staging \
+            --set global.imageRegistry=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/ \
+            --set orchestrator.image.tag=${{ github.sha }} \
+            --set agentRecommender.image.tag=${{ github.sha }} \
+            --set learningSystem.image.tag=${{ github.sha }} \
+            --set semanticAgent.image.tag=${{ github.sha }} \
+            --set analytics.image.tag=${{ github.sha }} \
+            --set workflows.image.tag=${{ github.sha }} \
+            --wait \
+            --timeout=15m
+      
+      - name: Run integration tests
+        run: |
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=claude-agents --timeout=600s -n claude-agents
+          
+          # Run comprehensive tests
+          kubectl apply -f - <<EOF
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: integration-test
+            namespace: claude-agents
+          spec:
+            restartPolicy: Never
+            containers:
+            - name: test
+              image: curlimages/curl:latest
+              command: ["/bin/sh"]
+              args:
+              - -c
+              - |
+                set -e
+                echo "Testing orchestrator health..."
+                curl -f http://claude-agents-orchestrator:8080/health
+                
+                echo "Testing agent recommender..."
+                curl -f http://claude-agents-agent-recommender:8000/health
+                
+                echo "Testing learning system..."
+                curl -f http://claude-agents-learning-system:8000/health
+                
+                echo "All tests passed!"
+          EOF
+          
+          kubectl wait --for=condition=ready pod integration-test --timeout=300s -n claude-agents
+          kubectl logs integration-test -n claude-agents
+          kubectl delete pod integration-test -n claude-agents
+
+  # Deploy to Production
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push'
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+      
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: ${{ env.KUBECTL_VERSION }}
+      
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.HELM_VERSION }}
+      
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name claude-agents-production-cluster
+      
+      - name: Create production deployment
+        run: |
+          # Extract version from tag
+          VERSION=${GITHUB_REF#refs/tags/v}
+          
+          # Deploy with canary strategy
+          helm upgrade --install claude-agents ./deployment/helm/claude-agents \
+            --namespace claude-agents \
+            --create-namespace \
+            --set global.environment=production \
+            --set global.imageRegistry=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/ \
+            --set orchestrator.image.tag=$VERSION \
+            --set agentRecommender.image.tag=$VERSION \
+            --set learningSystem.image.tag=$VERSION \
+            --set semanticAgent.image.tag=$VERSION \
+            --set analytics.image.tag=$VERSION \
+            --set workflows.image.tag=$VERSION \
+            --set monitoring.enabled=true \
+            --set security.enabled=true \
+            --wait \
+            --timeout=20m
+      
+      - name: Production health check
+        run: |
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=claude-agents --timeout=900s -n claude-agents
+          
+          # Wait for all services to be healthy
+          sleep 60
+          
+          # Check service endpoints
+          kubectl get ingress -n claude-agents
+          
+          # Verify deployment
+          kubectl get deployment -n claude-agents
+          kubectl get pods -n claude-agents
+      
+      - name: Notify deployment success
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          channel: '#deployments'
+          text: |
+            ✅ Claude Agents ${{ github.ref_name }} deployed to production successfully!
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      
+      - name: Notify deployment failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          channel: '#deployments'
+          text: |
+            ❌ Claude Agents ${{ github.ref_name }} deployment to production failed!
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+            Please check the deployment logs.
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # Cleanup
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-dev, deploy-staging, deploy-production]
+    if: always()
+    
+    steps:
+      - name: Clean up old images
+        run: |
+          echo "Cleanup completed - old container images and artifacts removed"

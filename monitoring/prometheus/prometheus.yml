@@ -1,0 +1,269 @@
+# Prometheus Configuration for Claude Agents
+# Production-ready configuration with service discovery and alerting
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'claude-agents-production'
+    replica: 'prometheus-1'
+
+# Rule files
+rule_files:
+  - "/etc/prometheus/rules/*.yml"
+
+# Alerting configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+      timeout: 10s
+      api_version: v2
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    
+  # Kubernetes API server
+  - job_name: 'kubernetes-apiservers'
+    kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+            - default
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      insecure_skip_verify: true
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+
+  # Kubernetes nodes
+  - job_name: 'kubernetes-nodes'
+    kubernetes_sd_configs:
+      - role: node
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      insecure_skip_verify: true
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        target_label: __metrics_path__
+        replacement: /api/v1/nodes/${1}/proxy/metrics
+
+  # Kubernetes node exporter
+  - job_name: 'kubernetes-node-exporter'
+    kubernetes_sd_configs:
+      - role: endpoints
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_endpoints_name]
+        action: keep
+        regex: node-exporter
+      - source_labels: [__meta_kubernetes_endpoint_address_target_name]
+        target_label: node
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+
+  # Kubernetes cadvisor
+  - job_name: 'kubernetes-cadvisor'
+    kubernetes_sd_configs:
+      - role: node
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      insecure_skip_verify: true
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        target_label: __metrics_path__
+        replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+    metric_relabel_configs:
+      - source_labels: [container]
+        target_label: container_name
+      - source_labels: [pod]
+        target_label: kubernetes_pod_name
+
+  # Claude Agents Services
+  - job_name: 'claude-agents-orchestrator'
+    kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+            - claude-agents
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        action: keep
+        regex: .*orchestrator.*
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: metrics
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_service_name]
+        target_label: kubernetes_service_name
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: kubernetes_pod_name
+    scrape_interval: 15s
+    metrics_path: /metrics
+
+  - job_name: 'claude-agents-python-services'
+    kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+            - claude-agents
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        action: keep
+        regex: '.*(agent-recommender|learning-system|semantic-agent|analytics|workflows).*'
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: http
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_service_name]
+        target_label: kubernetes_service_name
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: kubernetes_pod_name
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # PostgreSQL metrics
+  - job_name: 'postgresql'
+    kubernetes_sd_configs:
+      - role: service
+        namespaces:
+          names:
+            - claude-agents
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        action: keep
+        regex: '.*postgres.*'
+      - source_labels: [__meta_kubernetes_service_port_name]
+        action: keep
+        regex: metrics
+    scrape_interval: 30s
+
+  # Redis metrics
+  - job_name: 'redis'
+    kubernetes_sd_configs:
+      - role: service
+        namespaces:
+          names:
+            - claude-agents
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        action: keep
+        regex: '.*redis.*'
+      - source_labels: [__meta_kubernetes_service_port_name]
+        action: keep
+        regex: metrics
+    scrape_interval: 30s
+
+  # NGINX Ingress Controller
+  - job_name: 'nginx-ingress'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - ingress-nginx
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+        action: keep
+        regex: ingress-nginx
+      - source_labels: [__meta_kubernetes_pod_container_port_number]
+        action: keep
+        regex: "10254"
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: pod
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # Kubernetes state metrics
+  - job_name: 'kube-state-metrics'
+    kubernetes_sd_configs:
+      - role: endpoints
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        action: keep
+        regex: kube-state-metrics
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: http-metrics
+    scrape_interval: 30s
+
+  # Jaeger metrics
+  - job_name: 'jaeger'
+    kubernetes_sd_configs:
+      - role: service
+        namespaces:
+          names:
+            - claude-agents
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        action: keep
+        regex: jaeger
+      - source_labels: [__meta_kubernetes_service_port_name]
+        action: keep
+        regex: admin-http
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # Qdrant vector database
+  - job_name: 'qdrant'
+    kubernetes_sd_configs:
+      - role: service
+        namespaces:
+          names:
+            - claude-agents
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        action: keep
+        regex: qdrant
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+# Storage configuration
+storage:
+  tsdb:
+    retention.time: 15d
+    retention.size: 50GB
+    path: /prometheus/data
+
+# Remote write configuration (for long-term storage)
+# remote_write:
+#   - url: "https://prometheus-remote-write.example.com/api/v1/write"
+#     basic_auth:
+#       username: "username"
+#       password: "password"
+#     write_relabel_configs:
+#       - source_labels: [__name__]
+#         regex: "claude_agents_.*"
+#         action: keep
+
+# Query log configuration
+query_log_file: /prometheus/query.log

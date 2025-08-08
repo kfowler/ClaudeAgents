@@ -1,0 +1,274 @@
+version: '3.8'
+
+services:
+  orchestrator:
+    build:
+      context: ../orchestration
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "8080:8080"
+      - "9090:9090"  # Metrics port
+    environment:
+      - RUST_ENV=development
+      - RUST_LOG=debug
+      - DATABASE_URL=postgresql://claude:claude_password@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - PROMETHEUS_PORT=9090
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+    volumes:
+      - ../orchestration/src:/app/src:ro
+      - ../orchestration/Cargo.toml:/app/Cargo.toml:ro
+      - ../orchestration/config.toml:/app/config.toml:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - claude-network
+
+  agent-recommender:
+    build:
+      context: ../analysis
+      dockerfile: ../deployment/dockerfiles/Dockerfile.analysis
+    ports:
+      - "8001:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:claude_password@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - ../analysis:/app/analysis:ro
+      - ../agents:/app/agents:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - claude-network
+
+  learning-system:
+    build:
+      context: ../learning_system
+      dockerfile: ../deployment/dockerfiles/Dockerfile.learning
+    ports:
+      - "8002:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:claude_password@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - VECTOR_DB_URL=http://qdrant:6333
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - ../learning_system:/app/learning_system:ro
+      - learning-models:/app/models
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    networks:
+      - claude-network
+
+  semantic-agent:
+    build:
+      context: ../semantic_agent_selection
+      dockerfile: ../deployment/dockerfiles/Dockerfile.semantic
+    ports:
+      - "8003:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:claude_password@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - VECTOR_DB_URL=http://qdrant:6333
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - ../semantic_agent_selection:/app/semantic_agent_selection:ro
+      - ../agents:/app/agents:ro
+      - semantic-embeddings:/app/embeddings
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    networks:
+      - claude-network
+
+  analytics:
+    build:
+      context: ../analytics
+      dockerfile: ../deployment/dockerfiles/Dockerfile.analytics
+    ports:
+      - "8004:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:claude_password@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - ../analytics:/app/analytics:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - claude-network
+
+  workflows:
+    build:
+      context: ../workflows
+      dockerfile: ../deployment/dockerfiles/Dockerfile.workflows
+    ports:
+      - "8005:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://claude:claude_password@postgres:5432/claude_agents
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - ../workflows:/app/workflows:ro
+      - ../workflow_templates:/app/workflow_templates:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - claude-network
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: claude_agents
+      POSTGRES_USER: claude
+      POSTGRES_PASSWORD: claude_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ../deployment/init-scripts:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U claude -d claude_agents"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - claude-network
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --requirepass redis_password
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - claude-network
+
+  qdrant:
+    image: qdrant/qdrant:v1.8.4
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - claude-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../deployment/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+      - ../deployment/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - orchestrator
+      - agent-recommender
+      - learning-system
+      - semantic-agent
+      - analytics
+      - workflows
+    networks:
+      - claude-network
+
+  prometheus:
+    image: prom/prometheus:v2.47.2
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../monitoring/prometheus/prometheus.dev.yml:/etc/prometheus/prometheus.yml:ro
+      - ../monitoring/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    networks:
+      - claude-network
+
+  grafana:
+    image: grafana/grafana:10.2.2
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin_password
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ../monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ../monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+    networks:
+      - claude-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.50
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - claude-network
+
+networks:
+  claude-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  qdrant-data:
+  prometheus-data:
+  grafana-data:
+  learning-models:
+  semantic-embeddings:

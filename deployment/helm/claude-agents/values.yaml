@@ -1,0 +1,503 @@
+# Default values for Claude Agents
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global configuration
+global:
+  # Image registry and repository settings
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+  
+  # Security context
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 1000
+  
+  # Resource limits and requests
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Namespace configuration
+namespace:
+  create: true
+  name: claude-agents
+  labels:
+    environment: production
+    app.kubernetes.io/name: claude-agents
+
+# Service account configuration
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: false
+
+# RBAC configuration
+rbac:
+  create: true
+  rules: []
+
+# Network policies
+networkPolicy:
+  enabled: true
+  ingress:
+    enabled: true
+    allowExternal: true
+  egress:
+    enabled: true
+    allowExternal: true
+
+# Pod security policy
+podSecurityPolicy:
+  enabled: false
+
+# Orchestrator service configuration
+orchestrator:
+  enabled: true
+  replicaCount: 3
+  
+  image:
+    repository: claude-orchestrator
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+    annotations: {}
+  
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      nginx.ingress.kubernetes.io/rate-limit: "100"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    hosts:
+      - host: api.claude-agents.local
+        paths:
+          - path: /api/orchestrator
+            pathType: Prefix
+    tls:
+      - secretName: claude-agents-tls
+        hosts:
+          - api.claude-agents.local
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  config:
+    server:
+      host: "0.0.0.0"
+      port: 8080
+      workers: 4
+    database:
+      maxConnections: 10
+      minConnections: 5
+    redis:
+      poolSize: 10
+    metrics:
+      enabled: true
+      port: 9090
+    orchestration:
+      maxConcurrentTasks: 100
+      taskTimeout: 300
+      retryAttempts: 3
+
+# Agent Recommender service configuration
+agentRecommender:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: claude-agent-recommender
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 8
+    targetCPUUtilizationPercentage: 70
+
+# Learning System service configuration
+learningSystem:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: claude-learning-system
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 70
+  
+  persistence:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 10Gi
+
+# Semantic Agent service configuration
+semanticAgent:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: claude-semantic-agent
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  
+  persistence:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 20Gi
+
+# Analytics service configuration
+analytics:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: claude-analytics
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+# Workflows service configuration
+workflows:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: claude-workflows
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+# PostgreSQL configuration (using Bitnami chart)
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "claude_password"
+    username: "claude"
+    password: "claude_password"
+    database: "claude_agents"
+  
+  architecture: standalone
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 100Gi
+    
+    resources:
+      limits:
+        memory: 2Gi
+        cpu: 1000m
+      requests:
+        memory: 512Mi
+        cpu: 250m
+    
+    configuration: |
+      max_connections = 200
+      shared_buffers = 256MB
+      effective_cache_size = 1GB
+      work_mem = 4MB
+      maintenance_work_mem = 64MB
+      wal_buffers = 16MB
+      checkpoint_completion_target = 0.9
+      random_page_cost = 1.1
+      effective_io_concurrency = 200
+      shared_preload_libraries = 'pg_stat_statements'
+      pg_stat_statements.track = all
+  
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+# Redis configuration (using Bitnami chart)
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: true
+    password: "redis_password"
+  
+  master:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 20Gi
+    
+    resources:
+      limits:
+        memory: 1Gi
+        cpu: 500m
+      requests:
+        memory: 256Mi
+        cpu: 100m
+    
+    configuration: |
+      maxmemory 1gb
+      maxmemory-policy allkeys-lru
+      tcp-keepalive 300
+      timeout 300
+      save 900 1
+      save 300 10
+      save 60 10000
+  
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+# Qdrant vector database configuration
+qdrant:
+  enabled: true
+  replicaCount: 1
+  
+  image:
+    repository: qdrant/qdrant
+    tag: "v1.8.4"
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    httpPort: 6333
+    grpcPort: 6334
+  
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 50Gi
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  
+  config:
+    service:
+      httpPort: 6333
+      grpcPort: 6334
+    storage:
+      performance:
+        maxSearchThreads: 4
+
+# Monitoring configuration
+monitoring:
+  enabled: true
+  
+  prometheus:
+    enabled: true
+    server:
+      retention: "15d"
+      resources:
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+        requests:
+          cpu: 250m
+          memory: 512Mi
+      persistentVolume:
+        enabled: true
+        size: 50Gi
+    
+    alertmanager:
+      enabled: true
+      persistence:
+        enabled: true
+        size: 2Gi
+  
+  grafana:
+    enabled: true
+    adminPassword: "admin_password"
+    persistence:
+      enabled: true
+      size: 1Gi
+    
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+    
+    dashboards:
+      default:
+        claude-agents-overview:
+          gnetId: 1860
+          revision: 27
+          datasource: Prometheus
+
+# Security configuration
+security:
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 1000
+  
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+  
+  networkPolicy:
+    enabled: true
+    allowExternal: true
+
+# Secrets management
+secrets:
+  create: true
+  annotations: {}
+  
+  # Database credentials
+  database:
+    url: "postgresql://claude:claude_password@claude-agents-postgresql:5432/claude_agents"
+  
+  # API keys (should be overridden in production)
+  apiKeys:
+    openai: ""
+    anthropic: ""
+    jwt: "your-jwt-secret-here"
+  
+  # TLS certificates
+  tls:
+    create: false
+    secretName: "claude-agents-tls"
+
+# Node affinity and tolerations
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+            - key: node.kubernetes.io/instance-type
+              operator: In
+              values:
+                - m5.large
+                - m5.xlarge
+
+tolerations: []
+
+# Additional labels and annotations
+commonLabels:
+  app.kubernetes.io/name: claude-agents
+  app.kubernetes.io/instance: claude-agents
+  app.kubernetes.io/version: "1.0.0"
+  app.kubernetes.io/component: ai-platform
+  app.kubernetes.io/part-of: claude-enhancement-system
+
+commonAnnotations:
+  deployment.kubernetes.io/revision: "1"

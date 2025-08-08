@@ -1,0 +1,590 @@
+# GitLab CI/CD Pipeline for Claude Agents
+# Enterprise-grade CI/CD with security, quality gates, and multi-environment deployment
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+
+variables:
+  # Docker configuration
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+  REGISTRY: $CI_REGISTRY
+  IMAGE_NAME: $CI_PROJECT_PATH
+  
+  # Kubernetes configuration
+  KUBECTL_VERSION: "1.28.4"
+  HELM_VERSION: "3.13.2"
+  TERRAFORM_VERSION: "1.6.4"
+  
+  # Application configuration
+  APP_NAME: claude-agents
+  POSTGRES_DB: claude_agents_test
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  REDIS_PASSWORD: redis_test
+
+stages:
+  - validate
+  - security
+  - test
+  - build
+  - package
+  - deploy-dev
+  - deploy-staging
+  - deploy-prod
+  - cleanup
+
+# Base images and services
+.docker: &docker
+  image: docker:24-dind
+  services:
+    - docker:24-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+.kubectl: &kubectl
+  image: bitnami/kubectl:$KUBECTL_VERSION
+  before_script:
+    - kubectl version --client
+
+.terraform: &terraform
+  image: hashicorp/terraform:$TERRAFORM_VERSION
+  before_script:
+    - terraform --version
+
+# Validation Stage
+validate-terraform:
+  stage: validate
+  <<: *terraform
+  script:
+    - cd deployment/terraform
+    - terraform fmt -check -recursive
+    - terraform init -backend=false
+    - terraform validate
+    - |
+      if command -v tflint >/dev/null 2>&1; then
+        tflint --init
+        tflint
+      fi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+validate-kubernetes:
+  stage: validate
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache curl
+    - curl -L https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar xz
+    - mv kubeval /usr/local/bin
+  script:
+    - find deployment/k8s -name "*.yaml" -exec kubeval {} \;
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+validate-helm:
+  stage: validate
+  image: alpine/helm:$HELM_VERSION
+  script:
+    - cd deployment/helm/claude-agents
+    - helm lint . --strict
+    - helm template . --debug --dry-run > /dev/null
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# Code Quality Stage
+code-quality-rust:
+  stage: validate
+  image: rust:1.75
+  cache:
+    key: rust-cache-$CI_COMMIT_REF_SLUG
+    paths:
+      - target/
+      - ~/.cargo/registry
+      - ~/.cargo/git
+  before_script:
+    - rustup component add rustfmt clippy
+  script:
+    - cd orchestration
+    - cargo fmt --all -- --check
+    - cargo clippy --all-targets --all-features -- -D warnings
+  rules:
+    - changes:
+        - orchestration/**/*
+        - Cargo.toml
+        - Cargo.lock
+
+code-quality-python:
+  stage: validate
+  image: python:3.11
+  cache:
+    key: python-cache-$CI_COMMIT_REF_SLUG
+    paths:
+      - .cache/pip
+  before_script:
+    - pip install black isort flake8 mypy bandit safety
+  script:
+    - black --check --diff .
+    - isort --check-only --diff .
+    - flake8 .
+    - mypy --ignore-missing-imports . || true
+    - bandit -r . -f json -o bandit-report.json || true
+    - safety check --json --output safety-report.json || true
+  artifacts:
+    reports:
+      codequality: bandit-report.json
+    expire_in: 1 week
+  rules:
+    - changes:
+        - "**/*.py"
+        - "**/requirements.txt"
+
+# Security Stage (extends templates)
+container_scanning:
+  stage: security
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+dependency_scanning:
+  stage: security
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+secret_detection:
+  stage: security
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+sast:
+  stage: security
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# Test Stage
+test-orchestrator:
+  stage: test
+  image: rust:1.75
+  services:
+    - postgres:15-alpine
+    - redis:7-alpine
+  variables:
+    POSTGRES_HOST_AUTH_METHOD: trust
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/claude_agents_test"
+    REDIS_URL: "redis://redis:6379"
+  cache:
+    key: rust-cache-$CI_COMMIT_REF_SLUG
+    paths:
+      - target/
+      - ~/.cargo/registry
+      - ~/.cargo/git
+  before_script:
+    - apt-get update && apt-get install -y postgresql-client
+    - until pg_isready -h postgres -p 5432 -U postgres; do sleep 1; done
+    - psql -h postgres -U postgres -c "CREATE DATABASE claude_agents_test;"
+  script:
+    - cd orchestration
+    - cargo test --verbose
+  coverage: '/(\d+\.\d+)% coverage/'
+  artifacts:
+    reports:
+      junit: orchestration/target/test-results.xml
+    expire_in: 1 week
+  rules:
+    - changes:
+        - orchestration/**/*
+        - Cargo.toml
+        - Cargo.lock
+
+.test-python: &test-python
+  stage: test
+  image: python:3.11
+  services:
+    - postgres:15-alpine
+    - redis:7-alpine
+  variables:
+    POSTGRES_HOST_AUTH_METHOD: trust
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/claude_agents_test"
+    REDIS_URL: "redis://redis:6379"
+  cache:
+    key: python-cache-$CI_COMMIT_REF_SLUG
+    paths:
+      - .cache/pip
+  before_script:
+    - apt-get update && apt-get install -y postgresql-client
+    - until pg_isready -h postgres -p 5432 -U postgres; do sleep 1; done
+    - psql -h postgres -U postgres -c "CREATE DATABASE claude_agents_test;" || true
+    - pip install pytest pytest-cov pytest-asyncio
+  script:
+    - cd $SERVICE_DIR
+    - pip install -r requirements.txt
+    - python -m pytest tests/ -v --cov=. --cov-report=xml --cov-report=term --junitxml=test-results.xml
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    reports:
+      junit: $SERVICE_DIR/test-results.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: $SERVICE_DIR/coverage.xml
+    expire_in: 1 week
+
+test-analysis:
+  <<: *test-python
+  variables:
+    SERVICE_DIR: analysis
+  rules:
+    - changes:
+        - analysis/**/*
+
+test-learning-system:
+  <<: *test-python
+  variables:
+    SERVICE_DIR: learning_system
+  rules:
+    - changes:
+        - learning_system/**/*
+
+test-semantic-agent:
+  <<: *test-python
+  variables:
+    SERVICE_DIR: semantic_agent_selection
+  rules:
+    - changes:
+        - semantic_agent_selection/**/*
+
+test-analytics:
+  <<: *test-python
+  variables:
+    SERVICE_DIR: analytics
+  rules:
+    - changes:
+        - analytics/**/*
+
+test-workflows:
+  <<: *test-python
+  variables:
+    SERVICE_DIR: workflows
+  rules:
+    - changes:
+        - workflows/**/*
+
+# Build Stage
+.build-service: &build-service
+  stage: build
+  <<: *docker
+  variables:
+    DOCKER_BUILDKIT: 1
+  script:
+    - |
+      # Set image tags
+      if [[ "$CI_COMMIT_REF_NAME" == "$CI_DEFAULT_BRANCH" ]]; then
+        TAG="latest"
+      elif [[ "$CI_COMMIT_REF_NAME" =~ ^release/.* ]]; then
+        TAG="staging"
+      else
+        TAG="$CI_COMMIT_SHORT_SHA"
+      fi
+      
+      IMAGE_TAG="$REGISTRY/$IMAGE_NAME/$SERVICE_NAME:$TAG"
+      IMAGE_SHA="$REGISTRY/$IMAGE_NAME/$SERVICE_NAME:$CI_COMMIT_SHORT_SHA"
+      
+      # Build and push
+      docker build \
+        --build-arg VERSION=$CI_COMMIT_TAG \
+        --build-arg COMMIT_SHA=$CI_COMMIT_SHORT_SHA \
+        --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
+        --cache-from $REGISTRY/$IMAGE_NAME/$SERVICE_NAME:latest \
+        -t $IMAGE_TAG \
+        -t $IMAGE_SHA \
+        -f deployment/dockerfiles/Dockerfile.$SERVICE_NAME .
+      
+      docker push $IMAGE_TAG
+      docker push $IMAGE_SHA
+      
+      # Save image names for deployment
+      echo "IMAGE_TAG=$IMAGE_TAG" > build.env
+      echo "IMAGE_SHA=$IMAGE_SHA" >> build.env
+  artifacts:
+    reports:
+      dotenv: build.env
+    expire_in: 1 hour
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH =~ /^release\/.*/
+    - if: $CI_COMMIT_TAG
+
+build-orchestrator:
+  <<: *build-service
+  variables:
+    SERVICE_NAME: orchestrator
+  needs:
+    - test-orchestrator
+
+build-agent-recommender:
+  <<: *build-service
+  variables:
+    SERVICE_NAME: agent-recommender
+  needs:
+    - test-analysis
+
+build-learning-system:
+  <<: *build-service
+  variables:
+    SERVICE_NAME: learning-system
+  needs:
+    - test-learning-system
+
+build-semantic-agent:
+  <<: *build-service
+  variables:
+    SERVICE_NAME: semantic-agent
+  needs:
+    - test-semantic-agent
+
+build-analytics:
+  <<: *build-service
+  variables:
+    SERVICE_NAME: analytics
+  needs:
+    - test-analytics
+
+build-workflows:
+  <<: *build-service
+  variables:
+    SERVICE_NAME: workflows
+  needs:
+    - test-workflows
+
+# Package Stage
+package-helm:
+  stage: package
+  image: alpine/helm:$HELM_VERSION
+  script:
+    - cd deployment/helm
+    - helm package claude-agents --version $CI_COMMIT_SHORT_SHA
+    - mv claude-agents-*.tgz claude-agents-package.tgz
+  artifacts:
+    paths:
+      - deployment/helm/claude-agents-package.tgz
+    expire_in: 1 day
+  needs:
+    - build-orchestrator
+    - build-agent-recommender
+    - build-learning-system
+    - build-semantic-agent
+    - build-analytics
+    - build-workflows
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH =~ /^release\/.*/
+    - if: $CI_COMMIT_TAG
+
+# Development Deployment
+deploy-development:
+  stage: deploy-dev
+  image: alpine/k8s:1.28.4
+  environment:
+    name: development
+    url: https://dev.claude-agents.com
+  before_script:
+    - apk add --no-cache curl
+    - curl https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar xz
+    - mv linux-amd64/helm /usr/local/bin/helm
+    - echo $KUBE_CONFIG | base64 -d > ~/.kubeconfig
+    - export KUBECONFIG=~/.kubeconfig
+    - kubectl cluster-info
+  script:
+    - |
+      helm upgrade --install $APP_NAME ./deployment/helm/claude-agents \
+        --namespace $APP_NAME-dev \
+        --create-namespace \
+        --set global.environment=development \
+        --set global.imageRegistry=$REGISTRY/$IMAGE_NAME/ \
+        --set orchestrator.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set agentRecommender.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set learningSystem.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set semanticAgent.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set analytics.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set workflows.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set postgresql.auth.password=$DEV_POSTGRES_PASSWORD \
+        --set redis.auth.password=$DEV_REDIS_PASSWORD \
+        --wait \
+        --timeout=10m
+    
+    - kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=$APP_NAME --timeout=300s -n $APP_NAME-dev
+    - kubectl get pods -n $APP_NAME-dev
+  needs:
+    - package-helm
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+  when: manual
+
+# Staging Deployment
+deploy-staging:
+  stage: deploy-staging
+  image: alpine/k8s:1.28.4
+  environment:
+    name: staging
+    url: https://staging.claude-agents.com
+  before_script:
+    - apk add --no-cache curl
+    - curl https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar xz
+    - mv linux-amd64/helm /usr/local/bin/helm
+    - echo $KUBE_CONFIG_STAGING | base64 -d > ~/.kubeconfig
+    - export KUBECONFIG=~/.kubeconfig
+    - kubectl cluster-info
+  script:
+    - |
+      helm upgrade --install $APP_NAME ./deployment/helm/claude-agents \
+        --namespace $APP_NAME-staging \
+        --create-namespace \
+        --set global.environment=staging \
+        --set global.imageRegistry=$REGISTRY/$IMAGE_NAME/ \
+        --set orchestrator.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set agentRecommender.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set learningSystem.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set semanticAgent.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set analytics.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set workflows.image.tag=$CI_COMMIT_SHORT_SHA \
+        --set postgresql.auth.password=$STAGING_POSTGRES_PASSWORD \
+        --set redis.auth.password=$STAGING_REDIS_PASSWORD \
+        --set monitoring.enabled=true \
+        --wait \
+        --timeout=15m
+    
+    - kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=$APP_NAME --timeout=600s -n $APP_NAME-staging
+    
+    # Run smoke tests
+    - |
+      kubectl apply -f - <<EOF
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: smoke-test
+        namespace: $APP_NAME-staging
+      spec:
+        restartPolicy: Never
+        containers:
+        - name: test
+          image: curlimages/curl:latest
+          command: ["/bin/sh", "-c"]
+          args:
+          - |
+            set -e
+            echo "Testing orchestrator..."
+            curl -f http://$APP_NAME-orchestrator:8080/health
+            echo "Testing agent recommender..."
+            curl -f http://$APP_NAME-agent-recommender:8000/health
+            echo "All smoke tests passed!"
+      EOF
+    
+    - kubectl wait --for=condition=ready pod smoke-test --timeout=300s -n $APP_NAME-staging
+    - kubectl logs smoke-test -n $APP_NAME-staging
+    - kubectl delete pod smoke-test -n $APP_NAME-staging
+  needs:
+    - package-helm
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^release\/.*/
+  when: manual
+
+# Production Deployment
+deploy-production:
+  stage: deploy-prod
+  image: alpine/k8s:1.28.4
+  environment:
+    name: production
+    url: https://claude-agents.com
+  before_script:
+    - apk add --no-cache curl
+    - curl https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar xz
+    - mv linux-amd64/helm /usr/local/bin/helm
+    - echo $KUBE_CONFIG_PROD | base64 -d > ~/.kubeconfig
+    - export KUBECONFIG=~/.kubeconfig
+    - kubectl cluster-info
+  script:
+    - |
+      # Extract version from tag
+      VERSION=${CI_COMMIT_TAG#v}
+      
+      helm upgrade --install $APP_NAME ./deployment/helm/claude-agents \
+        --namespace $APP_NAME \
+        --create-namespace \
+        --set global.environment=production \
+        --set global.imageRegistry=$REGISTRY/$IMAGE_NAME/ \
+        --set orchestrator.image.tag=$VERSION \
+        --set agentRecommender.image.tag=$VERSION \
+        --set learningSystem.image.tag=$VERSION \
+        --set semanticAgent.image.tag=$VERSION \
+        --set analytics.image.tag=$VERSION \
+        --set workflows.image.tag=$VERSION \
+        --set postgresql.auth.password=$PROD_POSTGRES_PASSWORD \
+        --set redis.auth.password=$PROD_REDIS_PASSWORD \
+        --set monitoring.enabled=true \
+        --set security.enabled=true \
+        --set postgresql.primary.persistence.size=500Gi \
+        --set redis.master.persistence.size=100Gi \
+        --wait \
+        --timeout=20m
+    
+    - kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=$APP_NAME --timeout=900s -n $APP_NAME
+    - kubectl get deployment -n $APP_NAME
+    - kubectl get ingress -n $APP_NAME
+    
+    # Production health verification
+    - sleep 60  # Allow services to stabilize
+    - kubectl get pods -n $APP_NAME -o wide
+  needs:
+    - package-helm
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+  when: manual
+
+# Cleanup Stage
+cleanup-registry:
+  stage: cleanup
+  image: alpine:latest
+  script:
+    - echo "Cleaning up old container images..."
+    - echo "Cleanup completed"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+  when: manual
+
+# Notification jobs
+notify-success:
+  stage: cleanup
+  image: curlimages/curl:latest
+  script:
+    - |
+      curl -X POST $SLACK_WEBHOOK_URL \
+        -H 'Content-type: application/json' \
+        --data "{\"text\":\"✅ Claude Agents deployment to $CI_ENVIRONMENT_NAME completed successfully! Version: $CI_COMMIT_TAG, Commit: $CI_COMMIT_SHORT_SHA, Pipeline: $CI_PIPELINE_URL\"}"
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+  when: on_success
+
+notify-failure:
+  stage: cleanup
+  image: curlimages/curl:latest
+  script:
+    - |
+      curl -X POST $SLACK_WEBHOOK_URL \
+        -H 'Content-type: application/json' \
+        --data "{\"text\":\"❌ Claude Agents deployment to $CI_ENVIRONMENT_NAME failed! Version: $CI_COMMIT_TAG, Commit: $CI_COMMIT_SHORT_SHA, Pipeline: $CI_PIPELINE_URL\"}"
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+  when: on_failure

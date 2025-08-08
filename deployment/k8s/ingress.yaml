@@ -1,0 +1,199 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: claude-agents-ingress
+  namespace: claude-agents
+  annotations:
+    # Ingress class and controller
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    
+    # SSL/TLS configuration
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    
+    # Rate limiting
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/rate-limit-connections: "10"
+    
+    # CORS configuration
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://claude-agents.com,https://app.claude-agents.com"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    
+    # Security headers
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+      add_header X-Frame-Options DENY always;
+      add_header X-Content-Type-Options nosniff always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+      add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' wss:; font-src 'self'; object-src 'none'; media-src 'self'; frame-ancestors 'none';" always;
+    
+    # Load balancing
+    nginx.ingress.kubernetes.io/load-balance: "ewma"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$binary_remote_addr"
+    
+    # Timeouts
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    
+    # Body size limits
+    nginx.ingress.kubernetes.io/proxy-body-size: "16m"
+    
+    # Monitoring
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location /nginx_status {
+        stub_status on;
+        access_log off;
+        allow 10.0.0.0/8;
+        allow 172.16.0.0/12;
+        allow 192.168.0.0/16;
+        deny all;
+      }
+
+spec:
+  tls:
+  - hosts:
+    - api.claude-agents.com
+    - claude-agents.com
+    secretName: tls-secret
+  
+  rules:
+  - host: api.claude-agents.com
+    http:
+      paths:
+      # Health check endpoint
+      - path: /health
+        pathType: Exact
+        backend:
+          service:
+            name: orchestrator
+            port:
+              number: 8080
+      
+      # Orchestrator API
+      - path: /api/orchestrator(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestrator
+            port:
+              number: 8080
+      
+      # Agent Recommender API
+      - path: /api/recommend(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: agent-recommender
+            port:
+              number: 8000
+      
+      # Learning System API
+      - path: /api/learning(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: learning-system
+            port:
+              number: 8000
+      
+      # Semantic Agent API
+      - path: /api/semantic(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: semantic-agent
+            port:
+              number: 8000
+      
+      # Analytics API
+      - path: /api/analytics(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: analytics
+            port:
+              number: 8000
+      
+      # Workflows API
+      - path: /api/workflows(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: workflows
+            port:
+              number: 8000
+
+---
+# Network policy for ingress traffic control
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: claude-agents-ingress-policy
+  namespace: claude-agents
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    - namespaceSelector:
+        matchLabels:
+          name: cert-manager
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8000
+  - from: []
+    ports:
+    - protocol: TCP
+      port: 9090  # Metrics port for monitoring
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 5432  # PostgreSQL
+    - protocol: TCP
+      port: 6379  # Redis
+    - protocol: TCP
+      port: 6333  # Qdrant HTTP
+    - protocol: TCP
+      port: 6334  # Qdrant gRPC
+    - protocol: TCP
+      port: 53    # DNS
+    - protocol: UDP
+      port: 53    # DNS
+    - protocol: TCP
+      port: 443   # HTTPS outbound
+    - protocol: TCP
+      port: 80    # HTTP outbound
+
+---
+# Service monitor for Prometheus scraping
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: claude-agents-ingress
+  namespace: claude-agents
+  labels:
+    app: claude-agents
+    component: ingress
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+  endpoints:
+  - port: prometheus
+    interval: 30s
+    path: /metrics
+    honorLabels: true

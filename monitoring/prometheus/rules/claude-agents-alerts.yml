@@ -1,0 +1,326 @@
+# Claude Agents Alerting Rules
+# Production-ready alerts for monitoring system health and performance
+
+groups:
+  - name: claude-agents.rules
+    interval: 30s
+    rules:
+      # High-level SLI/SLO alerts
+      - alert: HighErrorRate
+        expr: |
+          (
+            sum(rate(http_requests_total{job=~"claude-agents-.*", code!~"2.."}[5m])) by (job, instance)
+            /
+            sum(rate(http_requests_total{job=~"claude-agents-.*"}[5m])) by (job, instance)
+          ) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          team: platform
+          service: "{{ $labels.job }}"
+        annotations:
+          summary: "High error rate detected for {{ $labels.job }}"
+          description: "Error rate is {{ $value | humanizePercentage }} for service {{ $labels.job }} on instance {{ $labels.instance }}. SLO threshold is 5%."
+          runbook_url: "https://runbooks.claude-agents.com/high-error-rate"
+
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(http_request_duration_seconds_bucket{job=~"claude-agents-.*"}[5m])) by (job, instance, le)
+          ) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: "{{ $labels.job }}"
+        annotations:
+          summary: "High latency detected for {{ $labels.job }}"
+          description: "95th percentile latency is {{ $value }}s for service {{ $labels.job }} on instance {{ $labels.instance }}. SLO threshold is 1s."
+          runbook_url: "https://runbooks.claude-agents.com/high-latency"
+
+      # Service availability alerts
+      - alert: ServiceDown
+        expr: up{job=~"claude-agents-.*"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          team: platform
+          service: "{{ $labels.job }}"
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service {{ $labels.job }} on instance {{ $labels.instance }} has been down for more than 1 minute."
+          runbook_url: "https://runbooks.claude-agents.com/service-down"
+
+      - alert: ServiceHighMemoryUsage
+        expr: |
+          (
+            container_memory_working_set_bytes{container!="", pod=~"claude-agents-.*"}
+            /
+            container_spec_memory_limit_bytes{container!="", pod=~"claude-agents-.*"}
+          ) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: "{{ $labels.pod }}"
+        annotations:
+          summary: "High memory usage for {{ $labels.pod }}"
+          description: "Memory usage is {{ $value | humanizePercentage }} for pod {{ $labels.pod }}. Threshold is 90%."
+          runbook_url: "https://runbooks.claude-agents.com/high-memory-usage"
+
+      - alert: ServiceHighCPUUsage
+        expr: |
+          (
+            rate(container_cpu_usage_seconds_total{container!="", pod=~"claude-agents-.*"}[5m])
+            /
+            container_spec_cpu_quota{container!="", pod=~"claude-agents-.*"} * container_spec_cpu_period{container!="", pod=~"claude-agents-.*"}
+          ) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: "{{ $labels.pod }}"
+        annotations:
+          summary: "High CPU usage for {{ $labels.pod }}"
+          description: "CPU usage is {{ $value | humanizePercentage }} for pod {{ $labels.pod }}. Threshold is 80%."
+          runbook_url: "https://runbooks.claude-agents.com/high-cpu-usage"
+
+      # Database alerts
+      - alert: PostgreSQLDown
+        expr: up{job="postgresql"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          team: platform
+          service: postgresql
+        annotations:
+          summary: "PostgreSQL is down"
+          description: "PostgreSQL instance {{ $labels.instance }} has been down for more than 1 minute."
+          runbook_url: "https://runbooks.claude-agents.com/postgresql-down"
+
+      - alert: PostgreSQLHighConnections
+        expr: |
+          (
+            pg_stat_database_numbackends
+            /
+            pg_settings_max_connections
+          ) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: postgresql
+        annotations:
+          summary: "PostgreSQL high connection usage"
+          description: "PostgreSQL connection usage is {{ $value | humanizePercentage }} on database {{ $labels.datname }}. Threshold is 80%."
+          runbook_url: "https://runbooks.claude-agents.com/postgresql-high-connections"
+
+      - alert: PostgreSQLSlowQueries
+        expr: pg_stat_activity_max_tx_duration{datname!~"template.*"} > 300
+        for: 2m
+        labels:
+          severity: warning
+          team: platform
+          service: postgresql
+        annotations:
+          summary: "PostgreSQL slow queries detected"
+          description: "Long-running query detected on database {{ $labels.datname }} for {{ $value }}s. Threshold is 300s."
+          runbook_url: "https://runbooks.claude-agents.com/postgresql-slow-queries"
+
+      # Redis alerts
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          team: platform
+          service: redis
+        annotations:
+          summary: "Redis is down"
+          description: "Redis instance {{ $labels.instance }} has been down for more than 1 minute."
+          runbook_url: "https://runbooks.claude-agents.com/redis-down"
+
+      - alert: RedisHighMemoryUsage
+        expr: |
+          (
+            redis_memory_used_bytes
+            /
+            redis_memory_max_bytes
+          ) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: redis
+        annotations:
+          summary: "Redis high memory usage"
+          description: "Redis memory usage is {{ $value | humanizePercentage }} on instance {{ $labels.instance }}. Threshold is 90%."
+          runbook_url: "https://runbooks.claude-agents.com/redis-high-memory"
+
+      - alert: RedisHighKeyEvictionRate
+        expr: rate(redis_evicted_keys_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: redis
+        annotations:
+          summary: "Redis high key eviction rate"
+          description: "Redis is evicting keys at {{ $value }} keys/second on instance {{ $labels.instance }}."
+          runbook_url: "https://runbooks.claude-agents.com/redis-high-eviction"
+
+      # Kubernetes cluster alerts
+      - alert: KubernetesPodCrashLooping
+        expr: |
+          rate(kube_pod_container_status_restarts_total[15m]) * 60 * 15 > 0
+        for: 1m
+        labels:
+          severity: warning
+          team: platform
+          service: "{{ $labels.pod }}"
+        annotations:
+          summary: "Pod {{ $labels.pod }} is crash looping"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is restarting {{ $value }} times per 15 minutes."
+          runbook_url: "https://runbooks.claude-agents.com/pod-crash-looping"
+
+      - alert: KubernetesNodeNotReady
+        expr: kube_node_status_condition{condition="Ready", status="true"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          team: infrastructure
+        annotations:
+          summary: "Node {{ $labels.node }} is not ready"
+          description: "Node {{ $labels.node }} has been not ready for more than 5 minutes."
+          runbook_url: "https://runbooks.claude-agents.com/node-not-ready"
+
+      - alert: KubernetesNodeHighCPU
+        expr: |
+          (
+            (1 - rate(node_cpu_seconds_total{mode="idle"}[5m]))
+            * on(instance) group_left(nodename)
+            node_uname_info{nodename=~".+"}
+          ) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          team: infrastructure
+        annotations:
+          summary: "Node {{ $labels.nodename }} high CPU usage"
+          description: "Node {{ $labels.nodename }} CPU usage is {{ $value | humanizePercentage }}. Threshold is 80%."
+          runbook_url: "https://runbooks.claude-agents.com/node-high-cpu"
+
+      - alert: KubernetesNodeHighMemory
+        expr: |
+          (
+            (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)
+            /
+            node_memory_MemTotal_bytes
+            * on(instance) group_left(nodename)
+            node_uname_info{nodename=~".+"}
+          ) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          team: infrastructure
+        annotations:
+          summary: "Node {{ $labels.nodename }} high memory usage"
+          description: "Node {{ $labels.nodename }} memory usage is {{ $value | humanizePercentage }}. Threshold is 90%."
+          runbook_url: "https://runbooks.claude-agents.com/node-high-memory"
+
+      - alert: KubernetesNodeDiskSpaceLow
+        expr: |
+          (
+            node_filesystem_avail_bytes{mountpoint="/"}
+            /
+            node_filesystem_size_bytes{mountpoint="/"}
+            * on(instance) group_left(nodename)
+            node_uname_info{nodename=~".+"}
+          ) < 0.1
+        for: 5m
+        labels:
+          severity: critical
+          team: infrastructure
+        annotations:
+          summary: "Node {{ $labels.nodename }} low disk space"
+          description: "Node {{ $labels.nodename }} disk space is {{ $value | humanizePercentage }} available. Threshold is 10%."
+          runbook_url: "https://runbooks.claude-agents.com/node-low-disk-space"
+
+      # Application-specific alerts
+      - alert: OrchestratorTaskQueueBacklog
+        expr: claude_agents_orchestrator_task_queue_size > 1000
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: orchestrator
+        annotations:
+          summary: "Orchestrator task queue backlog"
+          description: "Orchestrator has {{ $value }} tasks in queue. Normal operation should be < 1000."
+          runbook_url: "https://runbooks.claude-agents.com/orchestrator-queue-backlog"
+
+      - alert: AgentRecommendationLatency
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(claude_agents_recommendation_duration_seconds_bucket[5m])) by (le)
+          ) > 5.0
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: agent-recommender
+        annotations:
+          summary: "High agent recommendation latency"
+          description: "95th percentile agent recommendation latency is {{ $value }}s. Threshold is 5s."
+          runbook_url: "https://runbooks.claude-agents.com/high-recommendation-latency"
+
+      - alert: LearningSystemModelLoadFailure
+        expr: increase(claude_agents_learning_model_load_failures_total[10m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+          team: platform
+          service: learning-system
+        annotations:
+          summary: "Learning system model load failures"
+          description: "Learning system has failed to load models {{ $value }} times in the last 10 minutes."
+          runbook_url: "https://runbooks.claude-agents.com/model-load-failure"
+
+      - alert: VectorDatabaseHighLatency
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(qdrant_request_duration_seconds_bucket[5m])) by (le)
+          ) > 2.0
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: qdrant
+        annotations:
+          summary: "High vector database latency"
+          description: "95th percentile vector database query latency is {{ $value }}s. Threshold is 2s."
+          runbook_url: "https://runbooks.claude-agents.com/vector-db-high-latency"
+
+      # Security alerts
+      - alert: HighFailedAuthAttempts
+        expr: increase(claude_agents_auth_failures_total[5m]) > 100
+        for: 1m
+        labels:
+          severity: warning
+          team: security
+        annotations:
+          summary: "High failed authentication attempts"
+          description: "{{ $value }} failed authentication attempts in the last 5 minutes from {{ $labels.source_ip }}."
+          runbook_url: "https://runbooks.claude-agents.com/high-auth-failures"
+
+      - alert: SuspiciousAPIActivity
+        expr: |
+          sum(rate(http_requests_total{job=~"claude-agents-.*", code="429"}[5m])) by (job, source_ip) > 10
+        for: 2m
+        labels:
+          severity: warning
+          team: security
+        annotations:
+          summary: "Suspicious API activity detected"
+          description: "High rate of 429 responses ({{ $value }}/sec) from IP {{ $labels.source_ip }} to service {{ $labels.job }}."
+          runbook_url: "https://runbooks.claude-agents.com/suspicious-api-activity"
