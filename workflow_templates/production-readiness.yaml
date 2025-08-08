@@ -1,0 +1,247 @@
+id: "production-readiness"
+name: "Production Readiness Validation"
+description: "Multi-agent parallel validation ensuring applications meet production standards for security, accessibility, performance, and quality"
+version: "1.0"
+author: "Claude Code Workflow Engine"
+created_at: "2025-01-08"
+
+metadata:
+  category: "validation"
+  complexity: "high"
+  estimated_duration: 2400  # 40 minutes
+  suitable_for: ["web applications", "mobile apps", "APIs", "microservices"]
+  prerequisites: ["feature complete", "initial testing done"]
+
+global_parameters:
+  deployment_target: "production"
+  compliance_requirements: ["WCAG 2.1 AA", "SOC2", "GDPR"]
+  performance_targets:
+    response_time_p95: "200ms"
+    availability_target: "99.9%"
+    error_rate_threshold: "0.1%"
+  security_level: "high"
+  quality_gate_threshold: 85
+
+hooks:
+  pre_workflow:
+    - "backup_current_state"
+    - "prepare_test_environment"
+  post_workflow:
+    - "generate_readiness_report"
+    - "update_deployment_status"
+    - "notify_stakeholders"
+
+tasks:
+  - id: "security_comprehensive_audit"
+    name: "Comprehensive Security Audit"
+    agent: "security-audit-specialist"
+    description: "Full security assessment including vulnerability scanning, penetration testing, and compliance validation"
+    parameters:
+      audit_scope: "comprehensive"
+      vulnerability_scanning: true
+      penetration_testing: true
+      compliance_validation: true
+      threat_modeling: true
+      security_headers_check: true
+      dependency_scanning: true
+      secrets_scanning: true
+    execution_mode: "parallel"
+    timeout: 1200
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_security_report"
+        - "update_security_dashboard"
+
+  - id: "accessibility_compliance_validation"
+    name: "Accessibility Compliance Validation"
+    agent: "accessibility-expert"
+    description: "Comprehensive accessibility audit ensuring WCAG compliance and inclusive design"
+    parameters:
+      compliance_level: "WCAG_2_1_AA"
+      automated_testing: true
+      manual_testing: true
+      screen_reader_testing: true
+      keyboard_navigation_testing: true
+      color_contrast_analysis: true
+      cognitive_accessibility_review: true
+      mobile_accessibility_testing: true
+    execution_mode: "parallel"
+    timeout: 900
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_accessibility_report"
+        - "update_compliance_status"
+
+  - id: "performance_benchmarking"
+    name: "Performance Benchmarking and Optimization"
+    agent: "systems-engineer"
+    description: "Comprehensive performance analysis, load testing, and optimization validation"
+    parameters:
+      benchmarking_scope: "production_load"
+      load_testing: true
+      stress_testing: true
+      memory_profiling: true
+      cpu_profiling: true
+      database_performance_analysis: true
+      caching_effectiveness_review: true
+      cdn_optimization_check: true
+      monitoring_validation: true
+    execution_mode: "parallel"
+    timeout: 1500
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_performance_report"
+        - "update_monitoring_dashboards"
+
+  - id: "quality_assurance_validation"
+    name: "Quality Assurance Comprehensive Testing"
+    agent: "qa-test-engineer"
+    description: "Full QA validation including functional, integration, and regression testing"
+    parameters:
+      testing_scope: "comprehensive"
+      functional_testing: true
+      integration_testing: true
+      regression_testing: true
+      api_testing: true
+      user_journey_testing: true
+      cross_browser_testing: true
+      mobile_testing: true
+      error_handling_validation: true
+      data_integrity_testing: true
+    execution_mode: "parallel"
+    timeout: 1200
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_qa_report"
+        - "update_test_coverage_metrics"
+
+  - id: "infrastructure_readiness_check"
+    name: "Infrastructure and DevOps Readiness"
+    agent: "devops-engineer"
+    description: "Validate infrastructure readiness, deployment processes, and operational capabilities"
+    parameters:
+      infrastructure_scope: "production"
+      ci_cd_pipeline_validation: true
+      infrastructure_as_code_review: true
+      monitoring_alerting_setup: true
+      backup_disaster_recovery_testing: true
+      scaling_configuration_review: true
+      security_configuration_audit: true
+      log_aggregation_validation: true
+      health_check_configuration: true
+    execution_mode: "parallel"
+    timeout: 900
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_infrastructure_report"
+        - "validate_runbooks"
+
+  - id: "code_quality_architecture_review"
+    name: "Code Quality and Architecture Review"
+    agent: "code-architect"
+    description: "Comprehensive code quality analysis and architectural review"
+    parameters:
+      review_scope: "comprehensive"
+      code_quality_metrics: true
+      architectural_compliance: true
+      design_pattern_analysis: true
+      maintainability_assessment: true
+      technical_debt_analysis: true
+      documentation_completeness: true
+      api_design_review: true
+      dependency_analysis: true
+    execution_mode: "parallel"
+    timeout: 900
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_code_quality_report"
+        - "update_technical_debt_tracking"
+
+  - id: "data_protection_compliance"
+    name: "Data Protection and Privacy Compliance"
+    agent: "security-audit-specialist"
+    description: "Validate data protection, privacy compliance, and data governance"
+    dependencies:
+      - "security_comprehensive_audit"
+    parameters:
+      compliance_scope: "data_protection"
+      gdpr_compliance_check: true
+      data_encryption_validation: true
+      data_retention_policy_check: true
+      consent_management_validation: true
+      data_anonymization_review: true
+      cross_border_data_transfer_review: true
+      audit_trail_validation: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 1
+
+  - id: "user_experience_validation"
+    name: "User Experience and Usability Validation"
+    agent: "accessibility-expert"
+    description: "Comprehensive UX validation ensuring optimal user experience"
+    dependencies:
+      - "accessibility_compliance_validation"
+    parameters:
+      ux_scope: "comprehensive"
+      usability_testing: true
+      user_journey_optimization: true
+      interface_responsiveness_check: true
+      error_message_clarity_review: true
+      help_documentation_review: true
+      onboarding_experience_validation: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 2
+
+  - id: "disaster_recovery_validation"
+    name: "Disaster Recovery and Business Continuity"
+    agent: "devops-engineer"
+    description: "Validate disaster recovery procedures and business continuity plans"
+    dependencies:
+      - "infrastructure_readiness_check"
+    parameters:
+      dr_scope: "comprehensive"
+      backup_restoration_testing: true
+      failover_procedure_validation: true
+      recovery_time_objective_testing: true
+      recovery_point_objective_validation: true
+      business_continuity_plan_review: true
+      communication_plan_validation: true
+    execution_mode: "sequential"
+    timeout: 900
+    max_retries: 1
+
+  - id: "final_readiness_assessment"
+    name: "Final Production Readiness Assessment"
+    agent: "project-orchestrator"
+    description: "Aggregate all validation results and provide final go/no-go decision"
+    dependencies:
+      - "data_protection_compliance"
+      - "user_experience_validation"
+      - "disaster_recovery_validation"
+      - "code_quality_architecture_review"
+      - "quality_assurance_validation"
+      - "performance_benchmarking"
+    parameters:
+      assessment_scope: "final_validation"
+      risk_assessment: true
+      compliance_summary: true
+      performance_summary: true
+      security_summary: true
+      quality_gate_evaluation: true
+      deployment_recommendation: true
+    execution_mode: "sequential"
+    timeout: 300
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_final_readiness_report"
+        - "update_deployment_approval_status"
+        - "create_production_deployment_plan"

@@ -1,0 +1,301 @@
+id: "ai-integration-workflow"
+name: "AI Integration Development Workflow"
+description: "Specialized workflow for integrating AI/ML capabilities including model development, system integration, and production deployment"
+version: "1.0"
+author: "Claude Code Workflow Engine"
+created_at: "2025-01-08"
+
+metadata:
+  category: "ai_ml_development"
+  complexity: "high"
+  estimated_duration: 4800  # 80 minutes
+  suitable_for: ["AI applications", "ML model integration", "RAG systems", "LLM applications"]
+  prerequisites: ["AI requirements defined", "data availability confirmed"]
+
+global_parameters:
+  ai_model_type: "LLM"  # Options: LLM, ML_MODEL, RAG_SYSTEM, COMPUTER_VISION
+  deployment_target: "production"
+  performance_requirements:
+    latency_target: "500ms"
+    throughput_target: "100 rps"
+    accuracy_threshold: "90%"
+  security_level: "high"
+  data_privacy_compliance: true
+  monitoring_enabled: true
+
+hooks:
+  pre_workflow:
+    - "validate_ai_prerequisites"
+    - "setup_ml_environment"
+    - "prepare_datasets"
+  post_workflow:
+    - "cleanup_training_artifacts"
+    - "archive_model_versions"
+    - "update_ai_inventory"
+
+tasks:
+  - id: "ai_requirements_analysis"
+    name: "AI/ML Requirements Analysis and Design"
+    agent: "ai-ml-engineer"
+    description: "Analyze AI requirements, design model architecture, and plan integration strategy"
+    parameters:
+      analysis_scope: "comprehensive"
+      model_architecture_design: true
+      data_requirements_analysis: true
+      performance_target_definition: true
+      integration_strategy_planning: true
+      ethical_ai_considerations: true
+      bias_mitigation_planning: true
+      explainability_requirements: true
+      scalability_planning: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    hooks:
+      post_task:
+        - "document_ai_architecture"
+        - "validate_feasibility"
+
+  - id: "data_pipeline_setup"
+    name: "Data Pipeline and Preprocessing Setup"
+    agent: "data-engineer"
+    description: "Design and implement data pipeline for AI model training and inference"
+    dependencies:
+      - "ai_requirements_analysis"
+    parameters:
+      pipeline_scope: "comprehensive"
+      data_ingestion_setup: true
+      data_preprocessing_pipeline: true
+      feature_engineering: true
+      data_validation_framework: true
+      data_versioning: true
+      data_quality_monitoring: true
+      privacy_preserving_techniques: true
+      data_lineage_tracking: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    hooks:
+      post_task:
+        - "validate_data_quality"
+        - "setup_data_monitoring"
+
+  - id: "model_development"
+    name: "AI Model Development and Training"
+    agent: "ai-ml-engineer"
+    description: "Develop, train, and validate AI models according to specifications"
+    dependencies:
+      - "data_pipeline_setup"
+    parameters:
+      development_scope: "full_model"
+      model_training: true
+      hyperparameter_tuning: true
+      cross_validation: true
+      model_evaluation: true
+      bias_assessment: true
+      explainability_implementation: true
+      model_versioning: true
+      experiment_tracking: true
+    execution_mode: "sequential"
+    timeout: 2400  # Longer timeout for training
+    max_retries: 1
+    hooks:
+      pre_task:
+        - "prepare_training_environment"
+        - "allocate_compute_resources"
+      post_task:
+        - "evaluate_model_metrics"
+        - "save_model_artifacts"
+
+  - id: "model_validation_testing"
+    name: "AI Model Validation and Testing"
+    agent: "qa-test-engineer"
+    description: "Comprehensive testing of AI model including accuracy, robustness, and edge cases"
+    dependencies:
+      - "model_development"
+    parameters:
+      testing_scope: "ai_comprehensive"
+      accuracy_testing: true
+      robustness_testing: true
+      adversarial_testing: true
+      edge_case_testing: true
+      performance_testing: true
+      bias_testing: true
+      fairness_evaluation: true
+      a_b_testing_preparation: true
+    execution_mode: "sequential"
+    timeout: 900
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_model_test_report"
+        - "validate_acceptance_criteria"
+
+  - id: "system_integration_development"
+    name: "System Integration Development"
+    agent: "systems-engineer"
+    description: "Integrate AI model into existing systems with proper error handling and monitoring"
+    dependencies:
+      - "model_validation_testing"
+    parameters:
+      integration_scope: "production_ready"
+      api_development: true
+      error_handling_implementation: true
+      fallback_mechanism_setup: true
+      caching_strategy: true
+      load_balancing_configuration: true
+      circuit_breaker_implementation: true
+      monitoring_instrumentation: true
+      logging_implementation: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    hooks:
+      post_task:
+        - "validate_integration_endpoints"
+        - "test_fallback_mechanisms"
+
+  - id: "ai_security_assessment"
+    name: "AI Security and Privacy Assessment"
+    agent: "security-audit-specialist"
+    description: "Comprehensive security assessment for AI systems including model security and data protection"
+    dependencies:
+      - "system_integration_development"
+    parameters:
+      assessment_scope: "ai_security"
+      model_security_review: true
+      data_privacy_validation: true
+      adversarial_attack_assessment: true
+      model_stealing_protection: true
+      input_validation_review: true
+      output_sanitization_check: true
+      access_control_validation: true
+      audit_trail_implementation: true
+    execution_mode: "parallel"
+    timeout: 900
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_ai_security_report"
+        - "implement_security_recommendations"
+
+  - id: "performance_optimization"
+    name: "AI System Performance Optimization"
+    agent: "systems-engineer"
+    description: "Optimize AI system performance for production workloads"
+    dependencies:
+      - "ai_security_assessment"
+    parameters:
+      optimization_scope: "ai_performance"
+      inference_optimization: true
+      memory_optimization: true
+      batch_processing_optimization: true
+      gpu_utilization_optimization: true
+      model_compression: true
+      quantization_evaluation: true
+      caching_optimization: true
+      auto_scaling_configuration: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    hooks:
+      post_task:
+        - "benchmark_optimized_performance"
+        - "validate_performance_targets"
+
+  - id: "monitoring_alerting_setup"
+    name: "AI Monitoring and Alerting Setup"
+    agent: "devops-engineer"
+    description: "Set up comprehensive monitoring and alerting for AI systems in production"
+    dependencies:
+      - "performance_optimization"
+    parameters:
+      monitoring_scope: "ai_comprehensive"
+      model_performance_monitoring: true
+      data_drift_monitoring: true
+      concept_drift_monitoring: true
+      prediction_quality_monitoring: true
+      system_health_monitoring: true
+      resource_utilization_monitoring: true
+      error_rate_monitoring: true
+      business_metrics_tracking: true
+    execution_mode: "sequential"
+    timeout: 900
+    max_retries: 2
+    hooks:
+      post_task:
+        - "test_alert_configurations"
+        - "setup_monitoring_dashboards"
+
+  - id: "ai_governance_compliance"
+    name: "AI Governance and Compliance Validation"
+    agent: "security-audit-specialist"
+    description: "Ensure AI system meets governance requirements and regulatory compliance"
+    dependencies:
+      - "monitoring_alerting_setup"
+    parameters:
+      compliance_scope: "ai_governance"
+      ethical_ai_compliance: true
+      regulatory_compliance_check: true
+      documentation_completeness: true
+      model_explainability_validation: true
+      bias_mitigation_verification: true
+      human_oversight_implementation: true
+      audit_trail_validation: true
+      consent_management_validation: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_compliance_report"
+        - "document_governance_framework"
+
+  - id: "deployment_automation"
+    name: "AI Deployment Automation and CI/CD"
+    agent: "devops-engineer"
+    description: "Set up automated deployment pipeline for AI models and systems"
+    dependencies:
+      - "ai_governance_compliance"
+    parameters:
+      deployment_scope: "automated_cicd"
+      model_deployment_pipeline: true
+      automated_testing_pipeline: true
+      canary_deployment_setup: true
+      rollback_automation: true
+      model_versioning_automation: true
+      a_b_testing_automation: true
+      deployment_validation_automation: true
+      infrastructure_as_code: true
+    execution_mode: "sequential"
+    timeout: 900
+    max_retries: 2
+    hooks:
+      post_task:
+        - "test_deployment_pipeline"
+        - "validate_rollback_procedures"
+
+  - id: "production_readiness_validation"
+    name: "AI Production Readiness Final Validation"
+    agent: "ai-ml-engineer"
+    description: "Final validation that AI system is ready for production deployment"
+    dependencies:
+      - "deployment_automation"
+    parameters:
+      validation_scope: "production_readiness"
+      end_to_end_testing: true
+      load_testing: true
+      disaster_recovery_testing: true
+      business_continuity_validation: true
+      stakeholder_acceptance_testing: true
+      documentation_completeness_check: true
+      team_training_validation: true
+      operational_readiness_check: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_production_readiness_report"
+        - "obtain_production_deployment_approval"
+        - "schedule_production_deployment"

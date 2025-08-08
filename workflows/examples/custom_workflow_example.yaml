@@ -1,0 +1,220 @@
+id: "web-app-deployment"
+name: "Web Application Deployment Workflow" 
+description: "Complete workflow for deploying a web application from development to production with comprehensive validation and monitoring setup"
+version: "1.0"
+author: "Development Team"
+created_at: "2025-01-08"
+
+metadata:
+  category: "deployment"
+  complexity: "high"
+  estimated_duration: 2700  # 45 minutes
+  suitable_for: ["web applications", "full-stack applications", "microservices"]
+  prerequisites: ["application code complete", "tests passing", "deployment environment configured"]
+
+global_parameters:
+  application_name: "my-web-app"
+  environment: "production"
+  deployment_strategy: "blue_green"
+  monitoring_enabled: true
+  backup_enabled: true
+  rollback_enabled: true
+  notification_webhook: "https://api.slack.com/webhooks/..."
+  quality_gate_threshold: 90
+
+hooks:
+  pre_workflow:
+    - "backup_current_state"
+    - "validate_prerequisites"
+    - "setup_deployment_environment"
+  post_workflow:
+    - "cleanup_temporary_files"
+    - "send_completion_notification"
+    - "update_deployment_registry"
+
+tasks:
+  - id: "pre_deployment_validation"
+    name: "Pre-deployment Validation"
+    agent: "qa-test-engineer"
+    description: "Validate application is ready for deployment with comprehensive testing"
+    parameters:
+      validation_scope: "pre_deployment"
+      test_suite_execution: true
+      smoke_testing: true
+      integration_testing: true
+      performance_baseline_check: true
+      security_scan: true
+      dependency_audit: true
+    execution_mode: "sequential"
+    timeout: 900
+    max_retries: 2
+    hooks:
+      pre_task:
+        - "prepare_test_environment"
+      post_task:
+        - "archive_test_results"
+
+  - id: "security_final_scan"
+    name: "Final Security Scan"
+    agent: "security-audit-specialist"
+    description: "Comprehensive security scan before production deployment"
+    parameters:
+      scan_scope: "pre_production"
+      vulnerability_scanning: true
+      penetration_testing: false  # Optional based on deployment frequency
+      compliance_validation: true
+      secrets_scanning: true
+      container_security_scan: true
+      infrastructure_security_review: true
+    execution_mode: "parallel"
+    timeout: 1200
+    max_retries: 1
+    dependencies:
+      - "pre_deployment_validation"
+
+  - id: "accessibility_final_check"
+    name: "Final Accessibility Compliance Check"
+    agent: "accessibility-expert" 
+    description: "Final validation of accessibility compliance before production"
+    parameters:
+      compliance_level: "WCAG_2_1_AA"
+      automated_testing: true
+      manual_spot_checks: true
+      screen_reader_validation: true
+      keyboard_navigation_testing: true
+    execution_mode: "parallel"
+    timeout: 600
+    max_retries: 1
+    dependencies:
+      - "pre_deployment_validation"
+
+  - id: "performance_load_testing"
+    name: "Performance Load Testing"
+    agent: "systems-engineer"
+    description: "Execute load testing to validate production readiness"
+    parameters:
+      load_testing_scope: "production_simulation"
+      concurrent_users: 1000
+      test_duration_minutes: 10
+      performance_targets:
+        response_time_p95: "200ms"
+        error_rate_threshold: "0.1%"
+        throughput_minimum: "100rps"
+      resource_monitoring: true
+    execution_mode: "parallel"
+    timeout: 1800
+    max_retries: 1
+    dependencies:
+      - "pre_deployment_validation"
+
+  - id: "infrastructure_preparation"
+    name: "Infrastructure Preparation"
+    agent: "devops-engineer"
+    description: "Prepare production infrastructure and deployment pipeline"
+    parameters:
+      infrastructure_scope: "production_deployment"
+      environment_provisioning: true
+      load_balancer_configuration: true
+      database_migration_preparation: true
+      monitoring_setup: true
+      alerting_configuration: true
+      backup_verification: true
+      rollback_preparation: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    dependencies:
+      - "security_final_scan"
+      - "accessibility_final_check"
+      - "performance_load_testing"
+
+  - id: "deployment_orchestration"
+    name: "Production Deployment Orchestration"
+    agent: "devops-engineer"
+    description: "Execute the production deployment using blue-green strategy"
+    parameters:
+      deployment_scope: "production"
+      deployment_strategy: "blue_green"
+      health_check_validation: true
+      gradual_traffic_routing: true
+      monitoring_validation: true
+      rollback_readiness: true
+      deployment_verification: true
+    execution_mode: "sequential"
+    timeout: 1800
+    max_retries: 1
+    dependencies:
+      - "infrastructure_preparation"
+    conditions:
+      previous_task_status:
+        task_id: "infrastructure_preparation"
+        status: "completed"
+    hooks:
+      pre_task:
+        - "create_deployment_checkpoint"
+        - "notify_deployment_start"
+      post_task:
+        - "validate_deployment_success"
+
+  - id: "post_deployment_validation"
+    name: "Post-deployment Validation"
+    agent: "qa-test-engineer"
+    description: "Validate successful deployment with comprehensive post-deployment testing"
+    parameters:
+      validation_scope: "post_deployment"
+      smoke_testing: true
+      integration_testing: true
+      user_journey_testing: true
+      performance_regression_testing: true
+      monitoring_validation: true
+      alert_testing: true
+    execution_mode: "sequential"
+    timeout: 900
+    max_retries: 2
+    dependencies:
+      - "deployment_orchestration"
+    hooks:
+      post_task:
+        - "generate_deployment_report"
+
+  - id: "monitoring_activation"
+    name: "Monitoring and Alerting Activation"
+    agent: "devops-engineer"
+    description: "Activate comprehensive monitoring and alerting for the deployed application"
+    parameters:
+      monitoring_scope: "production_comprehensive"
+      application_monitoring: true
+      infrastructure_monitoring: true
+      business_metrics_tracking: true
+      error_tracking: true
+      performance_monitoring: true
+      security_monitoring: true
+      user_experience_monitoring: true
+      alert_validation: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 1
+    dependencies:
+      - "post_deployment_validation"
+
+  - id: "deployment_completion"
+    name: "Deployment Completion and Handover"
+    agent: "project-orchestrator"
+    description: "Finalize deployment process and prepare for ongoing operations"
+    parameters:
+      completion_scope: "deployment_handover"
+      deployment_documentation: true
+      runbook_validation: true
+      team_notification: true
+      metrics_baseline_establishment: true
+      success_criteria_validation: true
+      post_deployment_planning: true
+    execution_mode: "sequential"
+    timeout: 300
+    max_retries: 1
+    dependencies:
+      - "monitoring_activation"
+    hooks:
+      post_task:
+        - "finalize_deployment_records"
+        - "schedule_post_deployment_review"

@@ -1,0 +1,323 @@
+id: "legacy-modernization"
+name: "Legacy System Modernization Workflow"
+description: "Comprehensive workflow for modernizing legacy systems including assessment, migration strategy, implementation, and validation"
+version: "1.0"
+author: "Claude Code Workflow Engine"
+created_at: "2025-01-08"
+
+metadata:
+  category: "modernization"
+  complexity: "high"
+  estimated_duration: 7200  # 2 hours
+  suitable_for: ["legacy applications", "monolith to microservices", "technology migration", "platform modernization"]
+  prerequisites: ["legacy system documented", "business requirements clarified", "migration budget approved"]
+
+global_parameters:
+  modernization_type: "incremental"  # Options: incremental, big_bang, strangler_fig
+  target_architecture: "microservices"  # Options: microservices, serverless, cloud_native, hybrid
+  migration_strategy: "phased"  # Options: phased, parallel_run, cutover
+  downtime_tolerance: "minimal"  # Options: none, minimal, scheduled, extended
+  data_migration_required: true
+  compliance_requirements: ["SOX", "GDPR", "HIPAA"]
+  risk_tolerance: "low"
+
+hooks:
+  pre_workflow:
+    - "backup_legacy_system"
+    - "setup_migration_environment"
+    - "notify_stakeholders_start"
+  post_workflow:
+    - "archive_legacy_artifacts"
+    - "update_system_inventory"
+    - "conduct_post_migration_review"
+
+tasks:
+  - id: "legacy_system_assessment"
+    name: "Legacy System Comprehensive Assessment"
+    agent: "legacy-specialist"
+    description: "Thorough analysis of existing legacy system including architecture, dependencies, and technical debt"
+    parameters:
+      assessment_scope: "comprehensive"
+      architecture_analysis: true
+      dependency_mapping: true
+      technical_debt_assessment: true
+      performance_baseline_establishment: true
+      security_vulnerability_assessment: true
+      business_logic_documentation: true
+      data_model_analysis: true
+      integration_point_analysis: true
+      risk_assessment: true
+    execution_mode: "sequential"
+    timeout: 1800
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_assessment_report"
+        - "create_migration_risk_matrix"
+
+  - id: "modernization_strategy_design"
+    name: "Modernization Strategy and Architecture Design"
+    agent: "code-architect"
+    description: "Design target architecture and comprehensive modernization strategy"
+    dependencies:
+      - "legacy_system_assessment"
+    parameters:
+      design_scope: "target_architecture"
+      architecture_patterns_selection: true
+      technology_stack_selection: true
+      migration_pattern_design: true
+      data_migration_strategy: true
+      integration_strategy_design: true
+      security_architecture_design: true
+      scalability_planning: true
+      disaster_recovery_planning: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    hooks:
+      post_task:
+        - "validate_architecture_decisions"
+        - "create_migration_roadmap"
+
+  - id: "data_migration_planning"
+    name: "Data Migration Strategy and Planning"
+    agent: "data-engineer"
+    description: "Design comprehensive data migration strategy including ETL processes and data validation"
+    dependencies:
+      - "modernization_strategy_design"
+    parameters:
+      migration_scope: "comprehensive_data"
+      data_mapping_design: true
+      etl_pipeline_design: true
+      data_validation_framework: true
+      data_quality_assurance: true
+      incremental_migration_strategy: true
+      data_synchronization_planning: true
+      rollback_data_strategy: true
+      data_archival_strategy: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    conditions:
+      global_context:
+        key: "data_migration_required"
+        value: true
+
+  - id: "security_modernization_review"
+    name: "Security Modernization and Compliance Review"
+    agent: "security-audit-specialist"
+    description: "Review security implications of modernization and ensure compliance requirements are met"
+    dependencies:
+      - "modernization_strategy_design"
+    parameters:
+      security_scope: "modernization_security"
+      threat_model_update: true
+      compliance_gap_analysis: true
+      security_control_mapping: true
+      authentication_modernization_review: true
+      authorization_framework_review: true
+      data_protection_review: true
+      audit_logging_requirements: true
+      security_testing_strategy: true
+    execution_mode: "parallel"
+    timeout: 900
+    max_retries: 1
+    hooks:
+      post_task:
+        - "update_security_requirements"
+        - "create_security_migration_checklist"
+
+  - id: "pilot_implementation"
+    name: "Pilot Module Implementation and Testing"
+    agent: "legacy-specialist"
+    description: "Implement pilot module to validate modernization approach and identify issues"
+    dependencies:
+      - "data_migration_planning"
+      - "security_modernization_review"
+    parameters:
+      pilot_scope: "critical_module"
+      module_selection_criteria: true
+      implementation_approach: true
+      legacy_integration_maintenance: true
+      performance_comparison: true
+      functionality_validation: true
+      user_experience_testing: true
+      rollback_capability_testing: true
+    execution_mode: "sequential"
+    timeout: 2400
+    max_retries: 1
+    hooks:
+      pre_task:
+        - "setup_pilot_environment"
+        - "prepare_test_data"
+      post_task:
+        - "validate_pilot_success"
+        - "gather_lessons_learned"
+
+  - id: "performance_benchmarking"
+    name: "Performance Benchmarking and Optimization"
+    agent: "systems-engineer"
+    description: "Benchmark performance of modernized components against legacy system"
+    dependencies:
+      - "pilot_implementation"
+    parameters:
+      benchmarking_scope: "comprehensive"
+      performance_baseline_comparison: true
+      load_testing: true
+      stress_testing: true
+      scalability_testing: true
+      resource_utilization_analysis: true
+      bottleneck_identification: true
+      optimization_implementation: true
+      capacity_planning: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_performance_report"
+        - "validate_performance_targets"
+
+  - id: "integration_testing"
+    name: "Legacy-Modern System Integration Testing"
+    agent: "qa-test-engineer"
+    description: "Comprehensive testing of integration between legacy and modern components"
+    dependencies:
+      - "performance_benchmarking"
+    parameters:
+      testing_scope: "integration_comprehensive"
+      api_integration_testing: true
+      data_consistency_testing: true
+      transaction_integrity_testing: true
+      error_handling_testing: true
+      failover_testing: true
+      backward_compatibility_testing: true
+      user_journey_testing: true
+      regression_testing: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_integration_test_report"
+        - "validate_integration_requirements"
+
+  - id: "user_acceptance_testing"
+    name: "User Acceptance Testing and Training"
+    agent: "qa-test-engineer"
+    description: "Conduct user acceptance testing and provide training for the modernized system"
+    dependencies:
+      - "integration_testing"
+    parameters:
+      uat_scope: "comprehensive"
+      user_journey_validation: true
+      usability_testing: true
+      performance_user_validation: true
+      training_material_development: true
+      user_training_sessions: true
+      feedback_collection: true
+      change_management_support: true
+    execution_mode: "sequential"
+    timeout: 900
+    max_retries: 2
+    hooks:
+      post_task:
+        - "collect_user_feedback"
+        - "finalize_training_materials"
+
+  - id: "deployment_preparation"
+    name: "Production Deployment Preparation"
+    agent: "devops-engineer"
+    description: "Prepare for production deployment including infrastructure, monitoring, and rollback procedures"
+    dependencies:
+      - "user_acceptance_testing"
+    parameters:
+      deployment_scope: "production_ready"
+      infrastructure_provisioning: true
+      ci_cd_pipeline_setup: true
+      monitoring_alerting_setup: true
+      backup_procedures: true
+      rollback_procedures: true
+      disaster_recovery_testing: true
+      runbook_development: true
+      deployment_automation: true
+    execution_mode: "sequential"
+    timeout: 1200
+    max_retries: 2
+    hooks:
+      post_task:
+        - "validate_deployment_readiness"
+        - "conduct_deployment_rehearsal"
+
+  - id: "compliance_validation"
+    name: "Compliance and Regulatory Validation"
+    agent: "security-audit-specialist"
+    description: "Final validation of compliance requirements and regulatory adherence"
+    dependencies:
+      - "deployment_preparation"
+    parameters:
+      compliance_scope: "comprehensive"
+      regulatory_compliance_check: true
+      audit_trail_validation: true
+      data_governance_validation: true
+      access_control_validation: true
+      documentation_completeness: true
+      compliance_reporting: true
+      third_party_assessment: true
+    execution_mode: "sequential"
+    timeout: 900
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_compliance_report"
+        - "obtain_compliance_sign_off"
+
+  - id: "cutover_planning"
+    name: "Production Cutover Planning and Execution"
+    agent: "legacy-specialist"
+    description: "Plan and execute the cutover from legacy to modernized system"
+    dependencies:
+      - "compliance_validation"
+    parameters:
+      cutover_scope: "production"
+      cutover_strategy_finalization: true
+      data_synchronization: true
+      traffic_routing_configuration: true
+      monitoring_validation: true
+      rollback_readiness_check: true
+      stakeholder_communication: true
+      go_live_coordination: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 1
+    hooks:
+      pre_task:
+        - "final_system_backup"
+        - "activate_monitoring_alerts"
+      post_task:
+        - "validate_cutover_success"
+        - "initiate_hypercare_period"
+
+  - id: "post_migration_validation"
+    name: "Post-Migration Validation and Optimization"
+    agent: "systems-engineer"
+    description: "Validate successful migration and optimize the modernized system"
+    dependencies:
+      - "cutover_planning"
+    parameters:
+      validation_scope: "post_migration"
+      system_health_validation: true
+      performance_validation: true
+      data_integrity_validation: true
+      user_experience_validation: true
+      business_continuity_validation: true
+      optimization_opportunities: true
+      lessons_learned_documentation: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_migration_success_report"
+        - "plan_legacy_system_decommissioning"
+        - "schedule_post_migration_review"

@@ -1,0 +1,252 @@
+id: "code-quality-gate"
+name: "Code Quality Gate Validation"
+description: "Comprehensive code quality validation combining architecture review, security analysis, and test validation before merge"
+version: "1.0"
+author: "Claude Code Workflow Engine"
+created_at: "2025-01-08"
+
+metadata:
+  category: "quality_assurance"
+  complexity: "medium"
+  estimated_duration: 1800  # 30 minutes
+  suitable_for: ["pull requests", "feature branches", "release candidates"]
+  prerequisites: ["code complete", "basic tests passing"]
+
+global_parameters:
+  quality_threshold: 80
+  test_coverage_minimum: 85
+  security_scan_level: "medium"
+  code_review_required: true
+  automated_fix_enabled: true
+  documentation_check: true
+
+hooks:
+  pre_workflow:
+    - "checkout_branch"
+    - "install_dependencies"
+    - "setup_analysis_environment"
+  post_workflow:
+    - "cleanup_analysis_artifacts"
+    - "update_quality_metrics"
+    - "post_quality_report"
+
+tasks:
+  - id: "static_code_analysis"
+    name: "Static Code Analysis and Linting"
+    agent: "code-architect"
+    description: "Comprehensive static analysis including linting, complexity analysis, and code style validation"
+    parameters:
+      analysis_scope: "comprehensive"
+      linting_enabled: true
+      complexity_analysis: true
+      code_style_validation: true
+      type_checking: true
+      unused_code_detection: true
+      duplicate_code_detection: true
+      maintainability_metrics: true
+      cyclomatic_complexity_check: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_static_analysis_report"
+        - "apply_automated_fixes"
+
+  - id: "security_code_scan"
+    name: "Security Code Analysis"
+    agent: "security-audit-specialist"
+    description: "Security-focused code analysis to identify vulnerabilities and security anti-patterns"
+    parameters:
+      scan_scope: "code_security"
+      vulnerability_scanning: true
+      dependency_security_check: true
+      secrets_detection: true
+      sql_injection_detection: true
+      xss_vulnerability_check: true
+      authentication_security_review: true
+      data_validation_review: true
+      secure_coding_standards: true
+    execution_mode: "parallel"
+    timeout: 600
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_security_scan_report"
+        - "flag_critical_vulnerabilities"
+
+  - id: "test_suite_validation"
+    name: "Test Suite Validation and Coverage Analysis"
+    agent: "qa-test-engineer"
+    description: "Comprehensive testing validation including coverage analysis and test quality assessment"
+    parameters:
+      validation_scope: "comprehensive"
+      test_execution: true
+      coverage_analysis: true
+      test_quality_assessment: true
+      mutation_testing: false  # Optional, can be resource intensive
+      integration_test_validation: true
+      mocking_strategy_review: true
+      test_data_management_review: true
+      performance_test_validation: true
+    execution_mode: "parallel"
+    timeout: 900
+    max_retries: 2
+    hooks:
+      post_task:
+        - "generate_test_coverage_report"
+        - "update_test_metrics"
+
+  - id: "architecture_compliance_check"
+    name: "Architecture and Design Pattern Compliance"
+    agent: "code-architect"
+    description: "Validate adherence to architectural patterns and design principles"
+    dependencies:
+      - "static_code_analysis"
+    parameters:
+      compliance_scope: "architectural"
+      design_pattern_compliance: true
+      solid_principles_check: true
+      layered_architecture_validation: true
+      dependency_injection_review: true
+      api_design_compliance: true
+      database_design_review: true
+      error_handling_pattern_review: true
+      logging_strategy_validation: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 1
+    conditions:
+      previous_task_status:
+        task_id: "static_code_analysis"
+        status: "completed"
+
+  - id: "documentation_quality_check"
+    name: "Documentation Quality Assessment"
+    agent: "code-architect"
+    description: "Assess quality and completeness of code documentation"
+    dependencies:
+      - "architecture_compliance_check"
+    parameters:
+      documentation_scope: "comprehensive"
+      api_documentation_check: true
+      code_comments_quality: true
+      readme_completeness: true
+      inline_documentation_coverage: true
+      changelog_maintenance: true
+      architectural_documentation_review: true
+      developer_guide_validation: true
+    execution_mode: "sequential"
+    timeout: 300
+    max_retries: 1
+    conditions:
+      global_context:
+        key: "documentation_check"
+        value: true
+
+  - id: "performance_impact_analysis"
+    name: "Performance Impact Analysis"
+    agent: "systems-engineer"
+    description: "Analyze potential performance impact of code changes"
+    dependencies:
+      - "test_suite_validation"
+    parameters:
+      analysis_scope: "performance_impact"
+      benchmark_comparison: true
+      memory_usage_analysis: true
+      cpu_performance_check: true
+      database_query_optimization: true
+      caching_strategy_review: true
+      algorithmic_complexity_analysis: true
+      resource_utilization_check: true
+    execution_mode: "sequential"
+    timeout: 600
+    max_retries: 2
+
+  - id: "dependency_audit"
+    name: "Dependency Security and License Audit"
+    agent: "security-audit-specialist"
+    description: "Audit dependencies for security vulnerabilities and license compliance"
+    dependencies:
+      - "security_code_scan"
+    parameters:
+      audit_scope: "dependencies"
+      vulnerability_check: true
+      license_compliance_check: true
+      outdated_dependency_detection: true
+      dependency_tree_analysis: true
+      supply_chain_security_review: true
+      package_integrity_verification: true
+    execution_mode: "sequential"
+    timeout: 400
+    max_retries: 1
+
+  - id: "code_review_preparation"
+    name: "Automated Code Review Preparation"
+    agent: "code-architect"
+    description: "Prepare comprehensive analysis for human code review"
+    dependencies:
+      - "documentation_quality_check"
+      - "performance_impact_analysis"
+      - "dependency_audit"
+    parameters:
+      preparation_scope: "code_review"
+      change_impact_analysis: true
+      review_checklist_generation: true
+      complexity_hotspot_identification: true
+      refactoring_opportunity_detection: true
+      code_smell_detection: true
+      best_practice_compliance_check: true
+      risk_assessment: true
+    execution_mode: "sequential"
+    timeout: 300
+    max_retries: 1
+
+  - id: "quality_gate_evaluation"
+    name: "Final Quality Gate Evaluation"
+    agent: "qa-test-engineer"
+    description: "Evaluate all quality metrics against defined thresholds and make pass/fail decision"
+    dependencies:
+      - "code_review_preparation"
+    parameters:
+      evaluation_scope: "final_quality_gate"
+      threshold_validation: true
+      risk_assessment: true
+      quality_score_calculation: true
+      improvement_recommendations: true
+      merge_readiness_assessment: true
+      rollback_risk_evaluation: true
+    execution_mode: "sequential"
+    timeout: 300
+    max_retries: 1
+    hooks:
+      post_task:
+        - "generate_quality_gate_report"
+        - "update_merge_approval_status"
+        - "notify_development_team"
+
+  # Optional conditional task for failed quality gate
+  - id: "quality_improvement_recommendations"
+    name: "Quality Improvement Action Plan"
+    agent: "code-architect"
+    description: "Generate specific recommendations for addressing quality issues"
+    dependencies:
+      - "quality_gate_evaluation"
+    parameters:
+      recommendation_scope: "quality_improvement"
+      prioritized_action_items: true
+      fix_effort_estimation: true
+      automated_fix_suggestions: true
+      refactoring_recommendations: true
+      training_recommendations: true
+    execution_mode: "sequential"
+    timeout: 300
+    max_retries: 1
+    conditions:
+      previous_task_status:
+        task_id: "quality_gate_evaluation"
+        status: "failed"
+    hooks:
+      post_task:
+        - "create_improvement_tickets"
+        - "schedule_follow_up_review"

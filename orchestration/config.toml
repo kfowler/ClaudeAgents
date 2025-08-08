@@ -1,0 +1,75 @@
+# Claude Multi-Agent Orchestration Engine Configuration
+
+[server]
+host = "0.0.0.0"
+port = 8080
+worker_threads = 8
+max_connections = 10000
+request_timeout_ms = 30000
+keepalive_timeout_ms = 5000
+
+[database]
+url = "postgresql://orchestration:secure_password@localhost:5432/orchestration"
+max_connections = 100
+min_connections = 5
+acquire_timeout_ms = 5000
+idle_timeout_ms = 300000
+max_lifetime_ms = 1800000
+migrate_on_startup = true
+
+[redis]
+urls = ["redis://localhost:6379"]
+pool_size = 50
+timeout_ms = 5000
+retry_attempts = 3
+cluster_mode = false
+
+[message_queue]
+rabbitmq_url = "amqp://orchestration:secure_password@localhost:5672"
+kafka_brokers = ["localhost:9092"]
+default_queue = "orchestration"
+prefetch_count = 10
+ack_timeout_ms = 30000
+
+[message_queue.retry_policy]
+max_attempts = 3
+initial_delay_ms = 1000
+backoff_multiplier = 2.0
+max_delay_ms = 30000
+
+[orchestration]
+max_concurrent_tasks = 1000
+task_timeout_ms = 300000
+agent_startup_timeout_ms = 10000
+heartbeat_interval_ms = 5000
+load_balancing_strategy = "AdaptiveLoad"
+conflict_resolution_strategy = "WeightedVoting"
+
+[orchestration.resource_limits]
+max_memory_mb = 8192
+max_cpu_cores = 8.0
+max_tokens_per_minute = 100000
+max_agents_per_task = 10
+max_context_size_mb = 100
+
+[monitoring]
+prometheus_endpoint = "0.0.0.0:9090"
+jaeger_endpoint = "http://localhost:14268/api/traces"
+log_level = "info"
+metrics_interval_ms = 10000
+health_check_interval_ms = 30000
+performance_profiling = true
+
+[security]
+jwt_secret = "your-super-secret-jwt-key-here-change-this-in-production"
+jwt_expiry_hours = 24
+cors_origins = ["http://localhost:3000", "https://your-dashboard-domain.com"]
+tls_enabled = false
+cert_path = "/path/to/cert.pem"
+key_path = "/path/to/key.pem"
+
+[security.rate_limiting]
+requests_per_minute = 1000
+burst_size = 100
+per_ip_limit = 100
+per_user_limit = 1000
