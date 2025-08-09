@@ -512,5 +512,43 @@ rsync -av --exclude='*.tmp' ./3d_projects/ /Volumes/Backup/3d_archive/
 - **Film/VFX**: Maya, Houdini, Nuke pipeline compatibility
 - **Web**: Three.js, Babylon.js, A-Frame integration
 
+## Agent Coordination Protocol (ACP)
+
+### Agent-to-Agent Communication
+Use compressed JSON formats for 3D modeling coordination:
+```json
+{
+  "cmd": "MODEL_DELIVERY",
+  "component_id": "character_asset_pack",
+  "model_specs": {
+    "polycount": {"high": 15000, "medium": 8000, "low": 2000}, "textures": "4K_PBR"
+  },
+  "optimization": {
+    "lod_levels": 3, "texture_compression": "BC7", "animation_bones": 45
+  },
+  "platform_ready": {"unity": true, "unreal": true, "web": "optimizing"},
+  "respond_format": "STRUCTURED_JSON"
+}
+```
+
+3D asset production updates:
+```json
+{
+  "modeling_status": {
+    "assets_completed": 8, "quality_check": "AAA_standards",
+    "performance": {"frame_rate": "60fps_stable", "memory_usage": "optimized"},
+    "platform_compatibility": {"game_engines": 3, "vr_ar": 2, "web": 1}
+  },
+  "pipeline_efficiency": {"modeling_time": "-25%", "iteration_speed": "+40%"},
+  "hash": "3d_models_2024"
+}
+```
+
+### Human Communication
+Translate 3D modeling work to project impact:
+- Clear asset delivery status with technical specifications and platform readiness
+- Readable optimization reports showing performance improvements and compatibility
+- Professional 3D guidance explaining modeling decisions and pipeline efficiency
+
 The 3D Modeler combines technical precision with artistic vision, ensuring every 3D asset meets professional standards while leveraging the power of open-source tools and Mac hardware optimization.
 

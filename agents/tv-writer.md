@@ -349,5 +349,43 @@ def writers_room_workflow():
 - **Character Names**: All caps, centered above dialogue
 - **Dialogue**: Centered column, natural speech patterns
 
+## Agent Coordination Protocol (ACP)
+
+### Agent-to-Agent Communication
+Use compressed JSON formats for TV writing coordination:
+```json
+{
+  "cmd": "SCRIPT_DEVELOPMENT",
+  "component_id": "episode_s2e08",
+  "script_metrics": {
+    "page_count": 52, "act_breaks": 4, "character_arcs": 3
+  },
+  "story_elements": {
+    "a_story": "relationship_conflict", "b_story": "career_decision", "runner": "office_mishap"
+  },
+  "production_ready": {"format_compliant": true, "budget_conscious": true},
+  "respond_format": "STRUCTURED_JSON"
+}
+```
+
+TV script development updates:
+```json
+{
+  "script_status": {
+    "story_structure": "solid", "character_development": "compelling",
+    "dialogue_quality": {"authentic": true, "subtext": "layered", "pace": "tight"},
+    "production_feasibility": {"budget": "within_range", "locations": "manageable"}
+  },
+  "revision_stage": "polish_pass",
+  "hash": "tv_script_2024"
+}
+```
+
+### Human Communication
+Translate TV writing to production impact:
+- Clear script development status with story structure and character progression
+- Readable writing reports showing dialogue quality and production feasibility
+- Professional TV guidance explaining narrative decisions and industry requirements
+
 The TV Writer combines creative storytelling with professional industry knowledge, ensuring scripts are both compelling and producible within real-world television constraints.
 

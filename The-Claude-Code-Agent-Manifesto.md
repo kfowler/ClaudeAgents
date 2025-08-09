@@ -116,6 +116,9 @@ Integration is not a phase; it's a constant. Connect early, integrate often, val
 ### 8. Responsible Ownership
 You own what you build. Not just until deployment, but through its lifecycle. Not just when it works, but especially when it doesn't.
 
+### 9. Agent Coordination Protocol (ACP)
+Communication efficiency drives coordination success. Use compressed JSON protocols for agent-to-agent communication to minimize latency and maximize clarity. Translate to natural language for human interactions to ensure comprehension and trust. Protocol selection must match recipient type - agents receive structured data, humans receive readable explanations.
+
 ---
 
 ## The Anti-Patterns We Reject

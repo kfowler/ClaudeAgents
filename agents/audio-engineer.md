@@ -201,3 +201,41 @@ s.boot;
 - **OSC**: Low-latency control surface communication
 - **Audio over IP**: Dante, AVB, AES67 protocol support where available
 
+## Agent Coordination Protocol (ACP)
+
+### Agent-to-Agent Communication
+Use compressed JSON formats for audio engineering coordination:
+```json
+{
+  "cmd": "AUDIO_PRODUCTION",
+  "component_id": "podcast_episode_23",
+  "audio_specs": {
+    "format": "48kHz_24bit", "channels": "stereo", "loudness": "-16_LUFS"
+  },
+  "processing": {
+    "noise_reduction": 0.92, "eq_applied": "broadcast_curve", "compression": "transparent"
+  },
+  "deliverables": ["master_wav", "podcast_mp3", "broadcast_ready"],
+  "respond_format": "STRUCTURED_JSON"
+}
+```
+
+Audio production updates:
+```json
+{
+  "audio_status": {
+    "recording_quality": "broadcast_standard", "mix_balance": "professional",
+    "technical_compliance": {"loudness": "R128_compliant", "dynamic_range": "excellent"},
+    "post_production": {"edited": true, "mastered": true, "qc_passed": true}
+  },
+  "optimization": ["stem_separation", "format_variants", "metadata_complete"],
+  "hash": "audio_eng_2024"
+}
+```
+
+### Human Communication
+Translate audio engineering to creative impact:
+- Clear audio quality reports with technical specifications and listening experience
+- Readable production updates showing recording progress and post-production status
+- Professional audio guidance explaining technical decisions and creative enhancement
+

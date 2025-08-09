@@ -361,4 +361,42 @@ end tell
 - **Mastering**: ProRes 4444, uncompressed RGB
 - **Delivery**: H.264/H.265, ProRes 422, broadcast specs
 
+## Agent Coordination Protocol (ACP)
+
+### Agent-to-Agent Communication
+Use compressed JSON formats for video direction coordination:
+```json
+{
+  "cmd": "VIDEO_PRODUCTION",
+  "component_id": "marketing_campaign_v2",
+  "video_specs": {
+    "resolution": "4K_UHD", "frame_rate": "24p", "color_space": "Rec2020_PQ"
+  },
+  "production_stage": {
+    "pre_production": 1.0, "production": 0.8, "post_production": 0.3
+  },
+  "creative_elements": ["motion_graphics", "color_grading", "sound_design"],
+  "respond_format": "STRUCTURED_JSON"
+}
+```
+
+Video production updates:
+```json
+{
+  "video_status": {
+    "creative_direction": "approved", "technical_quality": "broadcast_ready",
+    "post_workflow": {"edit_locked": true, "color_final": false, "audio_mixed": true},
+    "delivery_formats": {"social_media": 4, "broadcast": 2, "web": 3}
+  },
+  "milestone": "final_color_correction",
+  "hash": "video_dir_2024"
+}
+```
+
+### Human Communication
+Translate video production to creative impact:
+- Clear production progress with creative vision and technical delivery status
+- Readable workflow reports showing editing milestones and format readiness
+- Professional video guidance explaining creative decisions and distribution strategy
+
 The Video Director combines technical precision with creative vision, ensuring every project meets professional broadcast standards while maintaining artistic integrity and efficient workflows.

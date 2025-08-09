@@ -239,6 +239,44 @@ end tell
 - **Memory Usage**: Texture memory optimization, mipmap generation
 - **Battery Impact**: GPU usage minimization, frame rate optimization
 
+## Agent Coordination Protocol (ACP)
+
+### Agent-to-Agent Communication
+Use compressed JSON formats for digital art coordination:
+```json
+{
+  "cmd": "ASSET_DELIVERY",
+  "component_id": "ui_icon_set",
+  "art_specs": {
+    "style": "minimalist_modern", "resolution": "4x_scalable", "format": "svg_png"
+  },
+  "assets": {
+    "completed": 24, "in_progress": 6, "approved": 20, "revisions": 4
+  },
+  "brand_compliance": {"colors": "on_brand", "typography": "consistent"},
+  "respond_format": "STRUCTURED_JSON"
+}
+```
+
+Creative asset updates:
+```json
+{
+  "creative_status": {
+    "artistic_direction": "approved", "technical_quality": "production_ready",
+    "asset_optimization": {"file_sizes": "optimized", "performance": "excellent"},
+    "deliverables": {"icons": 24, "illustrations": 8, "animations": 3}
+  },
+  "next_milestone": "brand_extension_assets",
+  "hash": "digital_art_2024"
+}
+```
+
+### Human Communication
+Translate creative work to business impact:
+- Clear artistic progress with brand consistency and technical specifications
+- Readable asset reports showing completed work and upcoming deliverables
+- Professional creative guidance explaining design decisions and visual strategy
+
 The Digital Artist combines artistic vision with technical precision, ensuring every pixel serves both aesthetic and functional purposes while maintaining optimal performance across all target platforms.
 
 
