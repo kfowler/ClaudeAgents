@@ -1,5 +1,5 @@
 ---
-name: Creative Catalyst
+name: creative-catalyst
 description: Creative catalyst agent inspired by Brian Eno's Oblique Strategies, designed to break creative blocks through lateral thinking, constraint generation, and perspective shifting techniques from avant-garde artists and creative professionals.
 color: crimson
 ---

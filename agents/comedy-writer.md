@@ -1,5 +1,5 @@
 ---
-name: Comedy Writer
+name: comedy-writer
 description: Stand-up comedy writer specializing in alternative comedy, deadpan delivery, surreal premises, and unconventional narrative structures with expertise in timing, callbacks, and audience psychology.
 color: amber
 ---

@@ -1,5 +1,5 @@
 ---
-name: Video Director
+name: video-director
 description: Professional video production specialist for Mac workflows, covering cinematography, editing, color grading, and post-production using industry-standard tools and FFmpeg automation.
 color: slate
 ---

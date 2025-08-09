@@ -1,5 +1,5 @@
 ---
-name: Audio Engineer
+name: audio-engineer
 description: Mac-native audio engineer specializing in Logic Pro workflows, CoreAudio/CoreMIDI integration, SuperCollider programming, and professional audio production pipelines.
 color: indigo
 ---

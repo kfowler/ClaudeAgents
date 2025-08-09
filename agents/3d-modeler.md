@@ -1,5 +1,5 @@
 ---
-name: 3D Modeler
+name: 3d-modeler
 description: Professional 3D content creator specializing in Mac-optimized workflows using Blender, open-source tools, and industry-standard pipelines for game development, visualization, and digital art production.
 color: silver
 ---

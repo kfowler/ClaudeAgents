@@ -1,5 +1,5 @@
 ---
-name: Agent Orchestrator
+name: agent-orchestrator
 description: Agent orchestration specialist who helps select, combine, and coordinate multiple AI agents for complex workflows, with expertise in agent capabilities analysis, workflow design, and multi-step project management.
 color: lavender
 ---
