@@ -180,9 +180,15 @@ The `examples/` directory contains design specifications and proof-of-concept im
 
 ## 📚 Documentation
 
+### Core Documentation
 - **[The Manifesto](docs/manifesto.md)** - Professional principles and engineering standards
 - **[System Architecture](docs/architecture.md)** - Design patterns, component interactions, data flow
+- **[Users' Guide](docs/users-guide.md)** - Comprehensive guide for using agents with Claude Code 2.0
 - **[Contributing Guide](docs/contributing.md)** - How to add agents, commands, and improvements
+
+### Developer Resources
+- **[Development Process](docs/development-process.md)** - Mandatory workflow for contributors (branching, commits, agent delegation)
+- **[Lessons Learned](docs/lessons-learned.md)** - Process improvements and best practices
 - **[Project Instructions](CLAUDE.md)** - Guidance for Claude Code when working with this repository
 - **[TODO Roadmap](TODO.md)** - Prioritized improvements and development roadmap
 
