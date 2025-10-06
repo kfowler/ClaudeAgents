@@ -33,17 +33,22 @@ Start with `product-strategist` for market validation, then use `project-orchest
 
 ### Primary Development Agents by Domain
 - **Web Applications**: `full-stack-architect` (React, Next.js, Svelte, backend APIs)
-- **Mobile Apps**: `mobile-developer` (iOS, Android, React Native, Flutter)
+  - **Note**: For React Native, use `mobile-developer` instead
+- **Mobile Apps**: `mobile-developer` (iOS, Android, React Native, Flutter, app store deployment)
 - **AI/ML Features**: `ai-ml-engineer` (LLM integration, RAG systems, vector databases)
-- **Database/Data**: `data-engineer` (PostgreSQL, data pipelines, analytics)
-- **Infrastructure**: `devops-engineer` (CI/CD, Docker, cloud deployment)
+- **Database/Data**: `data-engineer` (data pipelines, analytics, OLAP workloads)
+  - **Note**: Operational database management (OLTP, tuning, backups) will be handled by `database-admin` (Sprint 2)
+- **Application Infrastructure**: `devops-engineer` (CI/CD, Docker, Kubernetes, cloud deployment)
+  - **Note**: For OS-level configuration (systemd, kernel, firewall), use `linux-sysadmin`
+- **System Administration**: `linux-sysadmin` (OS hardening, system services, bare metal/VM setup)
 - **Systems Programming**: `systems-engineer` (Rust, C++, Go, performance optimization)
 
 ### Quality & Security Agents
 - **Security**: `security-audit-specialist` (vulnerability assessment, compliance)
 - **Testing**: `qa-test-engineer` (test strategies, implementation)
 - **Accessibility**: `accessibility-expert` (WCAG compliance, inclusive design)
-- **Code Quality**: `code-architect` (architecture review, maintainability)
+- **Code Quality**: `code-architect` (holistic architecture review, maintainability, readability)
+  - **Note**: For domain-specific code review, use the domain specialist first, then `code-architect` for comprehensive analysis
 
 ### Specialized Agents
 - **Decision Support**: `the-critic` (technical decision analysis)
@@ -73,16 +78,35 @@ This project is a collection of markdown-based agent and command definitions. Th
 ### Agent Selection Keywords
 - "new product", "startup idea" → `product-strategist`
 - "React", "Next.js", "web app" → `full-stack-architect`
-- "iOS", "Android", "mobile" → `mobile-developer`
+- **"React Native"** → `mobile-developer` (not `full-stack-architect`)
+- "iOS", "Android", "mobile", "app store" → `mobile-developer`
 - "AI", "LLM", "RAG" → `ai-ml-engineer`
 - "security audit", "vulnerability" → `security-audit-specialist`
 - "test", "QA" → `qa-test-engineer`
+- "CI/CD", "Docker", "Kubernetes", "deploy" → `devops-engineer`
+- "systemd", "kernel", "firewall", "OS hardening" → `linux-sysadmin`
+- "data pipeline", "ETL", "analytics" → `data-engineer`
+- "code review" (domain-specific) → domain specialist
+- "code review" (comprehensive) → `code-architect`
 
 ### Anti-Patterns to Avoid
 - Don't use overlapping agents simultaneously (e.g., multiple code reviewers)
 - Don't skip security/accessibility for production deployments
 - Don't implement AI features without `ai-ml-engineer`
 - Don't start complex projects without `project-orchestrator`
+- Don't use `full-stack-architect` for React Native (use `mobile-developer`)
+- Don't use `devops-engineer` for OS-level configuration (use `linux-sysadmin`)
+- Don't mix domain review and holistic review (use sequential: specialist → `code-architect`)
+
+### Agent Boundary Clarifications
+
+For detailed information on agent boundaries and delegation protocols, see [Agent Boundaries & Delegation Protocols](docs/architecture.md#agent-boundaries--delegation-protocols).
+
+**Key Boundaries**:
+1. **React Native**: Always `mobile-developer`, never `full-stack-architect`
+2. **Code Review**: Domain specialist first, then `code-architect` for holistic review
+3. **Infrastructure**: `devops-engineer` (app-level) vs `linux-sysadmin` (OS-level)
+4. **Database**: `data-engineer` (analytics/pipelines) vs `database-admin` (operations - Sprint 2)
 
 ## Git Workflow
 

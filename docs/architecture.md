@@ -276,6 +276,192 @@ Production-Ready Deliverable
 2. Add new validation steps
 3. Update requirements files as needed
 
+## Agent Boundaries & Delegation Protocols
+
+### Purpose
+
+Clear boundaries between agents prevent overlap, reduce confusion, and ensure the right specialist handles each task. This section documents critical boundary decisions and delegation protocols for common scenarios where responsibilities might overlap.
+
+### Boundary Decision Matrix
+
+| Technology/Task | Primary Agent | Delegates To | Delegation Trigger |
+|----------------|---------------|--------------|-------------------|
+| React Native | `mobile-developer` | N/A | Always owns React Native development |
+| Web React/Next.js | `full-stack-architect` | `mobile-developer` | Only if mobile-specific concerns arise |
+| Code Review (Domain) | Domain specialist | `code-architect` | After domain review for holistic analysis |
+| Code Review (Holistic) | `code-architect` | Domain specialists | For domain-specific deep dives |
+| App Infrastructure | `devops-engineer` | `linux-sysadmin` | When OS-level changes needed |
+| OS/System Administration | `linux-sysadmin` | `devops-engineer` | For application deployment concerns |
+| Data Pipelines/Analytics | `data-engineer` | `database-admin` (Sprint 2) | For operational DB tuning/maintenance |
+| Database Operations | `database-admin` (Sprint 2) | `data-engineer` | For analytical workloads/ETL design |
+
+### Detailed Boundary Specifications
+
+#### 1. React Native: Mobile vs Full-Stack
+
+**Primary Owner**: `mobile-developer`
+
+**Rationale**: React Native is fundamentally a mobile framework requiring deep knowledge of iOS/Android platforms, native modules, mobile UX patterns, and platform-specific deployment.
+
+**Delegation Rules**:
+- `mobile-developer` owns all React Native projects
+- `full-stack-architect` may consult on shared state management patterns
+- `full-stack-architect` delegates immediately if React Native is mentioned
+- Web-based React knowledge does NOT qualify for React Native ownership
+
+**Boundary Signals**:
+- Keywords: "React Native", "iOS", "Android", "mobile app", "Expo"
+- Context: Mobile platform requirements, app store deployment
+- Artifacts: `package.json` with React Native dependencies
+
+#### 2. Code Review: Specialist vs Architect
+
+**Two-Tier Review Pattern**:
+
+**Tier 1 - Domain Review** (Specialist agents):
+- Domain specialist reviews code in their expertise area
+- Focus: Domain logic, framework best practices, language idioms
+- Example: `full-stack-architect` reviews React component architecture
+- Example: `security-audit-specialist` reviews authentication implementation
+
+**Tier 2 - Holistic Review** (`code-architect`):
+- Reviews overall architecture, maintainability, readability
+- Focus: System boundaries, coupling/cohesion, technical debt
+- Cross-cutting concerns: naming, complexity, documentation
+- Final quality gate before merge
+
+**Delegation Protocol**:
+```
+User requests code review
+  ↓
+If domain-specific (React, security, AI) → Specialist review
+  ↓
+If comprehensive quality needed → code-architect review
+  ↓
+If both needed → Sequential: Specialist THEN code-architect
+```
+
+**When to Use Each**:
+- **Specialist Only**: Quick domain-specific review, PR feedback
+- **Architect Only**: Refactoring assessment, architecture analysis
+- **Both Sequential**: Production code, major features, public APIs
+
+#### 3. Infrastructure: DevOps vs System Administrator
+
+**Application-Level Infrastructure** (`devops-engineer`):
+- CI/CD pipelines (GitHub Actions, CircleCI)
+- Container orchestration (Docker, Kubernetes)
+- Cloud services (AWS ECS, Lambda, RDS)
+- Application deployment automation
+- Environment configuration (staging, production)
+- Application monitoring and observability
+
+**Operating System-Level Administration** (`linux-sysadmin`):
+- OS installation, configuration, hardening
+- System-level services (systemd, cron, syslog)
+- Kernel parameters and tuning
+- User/group management, permissions
+- System security (SELinux, AppArmor, firewall)
+- Bare metal or VM provisioning
+- System-level performance tuning
+
+**Delegation Rules**:
+- `devops-engineer` owns application deployment; calls `linux-sysadmin` for OS changes
+- `linux-sysadmin` owns system configuration; calls `devops-engineer` for app concerns
+- Both collaborate on: Docker base images, system resource limits, security policies
+
+**Boundary Signals**:
+- DevOps: "CI/CD", "deploy", "Docker", "Kubernetes", "cloud"
+- SysAdmin: "systemd", "kernel", "firewall", "OS hardening", "bare metal"
+
+#### 4. Database: Data Engineering vs Database Administration
+
+**Data Engineering** (`data-engineer`):
+- Data pipelines and ETL workflows
+- Analytics database design (data warehouses, OLAP)
+- Data modeling for analytics
+- Large-scale data processing (Spark, Airflow)
+- Business intelligence integration
+- Data quality and validation
+
+**Database Administration** (`database-admin` - Coming Sprint 2):
+- Operational database management (OLTP)
+- Performance tuning and query optimization
+- Backup/recovery and disaster recovery
+- Replication and high availability
+- Database security and access control
+- Capacity planning and resource management
+
+**Delegation Rules**:
+- `data-engineer` owns analytical workloads; delegates operational concerns
+- `database-admin` owns transactional databases; delegates analytical design
+- Both collaborate on: Data modeling, indexing strategies, migration planning
+
+**Current State** (Sprint 1):
+- `data-engineer` handles both areas temporarily
+- Sprint 2 will introduce `database-admin` agent
+- Existing `data-engineer` work will be reviewed for boundary compliance
+
+### Delegation Communication Protocol
+
+**Agent-to-Agent Handoff Format**:
+```json
+{
+  "delegation": {
+    "from": "full-stack-architect",
+    "to": "mobile-developer",
+    "reason": "React Native mobile app implementation",
+    "context": {
+      "requirement": "iOS and Android app with native camera access",
+      "completed_work": ["API design", "data model"],
+      "needs_attention": ["mobile UI", "native modules", "app store deployment"]
+    }
+  }
+}
+```
+
+**User Communication**:
+When delegating, agents must:
+1. Explain why delegation is happening
+2. Summarize work completed in current domain
+3. Introduce the specialist agent taking over
+4. Provide clear context for seamless handoff
+
+**Example**:
+> "I've designed the API structure for your application. However, since you're building this with React Native, I'm delegating to the `mobile-developer` agent who specializes in iOS and Android development. They'll handle the mobile-specific implementation, native module integration, and app store deployment. Here's the API specification to work with..."
+
+### Anti-Patterns: Common Boundary Violations
+
+**DON'T**:
+- ❌ `full-stack-architect` implementing React Native apps
+- ❌ Multiple agents reviewing the same code simultaneously
+- ❌ `devops-engineer` configuring kernel parameters
+- ❌ `linux-sysadmin` setting up CI/CD pipelines
+- ❌ `data-engineer` handling operational DB tuning (after Sprint 2)
+- ❌ Domain specialists doing holistic architecture review (that's `code-architect`)
+
+**DO**:
+- ✅ Recognize boundary crossing and delegate explicitly
+- ✅ Provide context when handing off between agents
+- ✅ Use sequential review (specialist → architect) for comprehensive quality
+- ✅ Collaborate at boundary interfaces (Docker images, data models)
+- ✅ Document which agent owns which component
+
+### Boundary Evolution
+
+As the agent ecosystem grows:
+- New agents may require boundary clarification (add here)
+- Technology evolution may shift boundaries (document changes)
+- User feedback may reveal unclear boundaries (refine definitions)
+- Sprint planning introduces new agents (update matrix and protocols)
+
+**Change Protocol**:
+1. Identify boundary ambiguity or overlap
+2. Document in this section with rationale
+3. Update `CLAUDE.md` agent selection guide
+4. Update affected agent definitions
+5. Communicate in sprint retrospectives
+
 ## Future Architecture Considerations
 
 ### Potential Enhancements
