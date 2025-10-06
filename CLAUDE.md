@@ -24,7 +24,7 @@ This repository contains specialized AI agent definitions and commands for Claud
 
 ### Key Decision Logic
 
-Agent selection is based on keyword matching, task type analysis, and domain expertise. Detailed documentation for agent selection logic and usage optimization is planned for the `docs/` directory (see TODO.md for roadmap).
+Agent selection is based on keyword matching, task type analysis, and domain expertise. See [System Architecture](docs/architecture.md) for detailed information on agent selection patterns and multi-agent orchestration.
 
 ## Agent Selection Guide
 
@@ -58,9 +58,10 @@ This project is a collection of markdown-based agent and command definitions. Th
 
 ### Working with the Repository
 
-1. **Adding New Agents**: Create a new `.md` file in `agents/` with proper YAML frontmatter
-2. **Adding Commands**: Create a new `.md` file in `commands/` defining the workflow
-3. **Testing Agents**: Use Claude Code to invoke agents directly and validate their behavior
+1. **Adding New Agents**: Use `agents/AGENT_TEMPLATE.md` as a starting point. See [Contributing Guide](docs/contributing.md) for detailed instructions.
+2. **Adding Commands**: Create a new `.md` file in appropriate `commands/` subdirectory. Reference existing agents for orchestration.
+3. **Testing Changes**: Run `python3 tools/validate_agents.py` and `python3 -m pytest tests/` before committing.
+4. **Documentation**: See `docs/` for architecture, contributing guidelines, and professional standards.
 
 ## Important Patterns
 

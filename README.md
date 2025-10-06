@@ -17,8 +17,11 @@ ClaudeAgents/
 │   └── validate_agents.py  # Agent consistency validation
 ├── examples/            # Design specifications and prototypes
 │   └── analysis/        # Project analysis system (prototype)
+├── docs/                # Comprehensive documentation
+│   ├── manifesto.md     # Professional principles
+│   ├── architecture.md  # System design and patterns
+│   └── contributing.md  # Contribution guidelines
 ├── CLAUDE.md           # Core project instructions for Claude Code
-├── The-Claude-Code-Agent-Manifesto.md  # Professional principles
 └── TODO.md             # Improvement roadmap and tasks
 ```
 
@@ -177,11 +180,11 @@ The `examples/` directory contains design specifications and proof-of-concept im
 
 ## 📚 Documentation
 
-- **[The Manifesto](The-Claude-Code-Agent-Manifesto.md)** - Professional principles and engineering standards
+- **[The Manifesto](docs/manifesto.md)** - Professional principles and engineering standards
+- **[System Architecture](docs/architecture.md)** - Design patterns, component interactions, data flow
+- **[Contributing Guide](docs/contributing.md)** - How to add agents, commands, and improvements
 - **[Project Instructions](CLAUDE.md)** - Guidance for Claude Code when working with this repository
 - **[TODO Roadmap](TODO.md)** - Prioritized improvements and development roadmap
-
-*Note: Comprehensive documentation in `docs/` directory is planned (see TODO.md for details)*
 
 ## 🏆 Success Metrics
 
@@ -193,11 +196,12 @@ Track agent effectiveness through:
 
 ## 🚦 Getting Started
 
-1. **Review available agents** in the `agents/` directory
-2. **Check commands** in `commands/` for pre-built workflows
-3. **Read The Manifesto** to understand professional standards
-4. **Use validation tools** in `tools/` to ensure consistency
-5. **Start with simple requests** and progress to multi-agent orchestration
+1. **Read [The Manifesto](docs/manifesto.md)** to understand professional standards
+2. **Review [System Architecture](docs/architecture.md)** for design overview
+3. **Browse available agents** in the `agents/` directory
+4. **Check commands** in `commands/` for pre-built workflows
+5. **See [Contributing Guide](docs/contributing.md)** to add your own agents
+6. **Start with simple requests** and progress to multi-agent orchestration
 
 Each agent is designed to deliver production-ready solutions with appropriate documentation, testing strategies, and deployment guidance for their domain.
 
