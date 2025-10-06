@@ -39,46 +39,54 @@ class AgentValidator:
     def validate_agent_file(self, filepath: Path) -> Tuple[bool, Dict]:
         """Validate a single agent file."""
         filename = filepath.name
-        
+        file_errors = []  # Track errors for this file only
+
         # Skip non-agent files
         if filename == 'AGENT_PROFESSIONAL_BEHAVIOR.md':
             return True, {}
-            
+
+        # Skip template file
+        if filename == 'AGENT_TEMPLATE.md':
+            return True, {}
+
         try:
             with open(filepath, 'r') as f:
                 content = f.read()
-                
+
             # Check for YAML frontmatter
             if not content.startswith('---'):
-                self.errors.append(f"{filename}: Missing YAML frontmatter")
+                file_errors.append(f"{filename}: Missing YAML frontmatter")
+                self.errors.extend(file_errors)
                 return False, {}
-                
+
             # Extract frontmatter
             parts = content.split('---', 2)
             if len(parts) < 3:
-                self.errors.append(f"{filename}: Invalid YAML frontmatter format")
+                file_errors.append(f"{filename}: Invalid YAML frontmatter format")
+                self.errors.extend(file_errors)
                 return False, {}
-                
+
             # Parse YAML
             try:
                 metadata = yaml.safe_load(parts[1])
             except yaml.YAMLError as e:
-                self.errors.append(f"{filename}: YAML parsing error: {e}")
+                file_errors.append(f"{filename}: YAML parsing error: {e}")
+                self.errors.extend(file_errors)
                 return False, {}
-                
+
             # Validate required fields
             for field in self.REQUIRED_FIELDS:
                 if field not in metadata:
-                    self.errors.append(f"{filename}: Missing required field '{field}'")
-                    
+                    file_errors.append(f"{filename}: Missing required field '{field}'")
+
             # Validate name matches filename
             expected_name = filename.replace('.md', '')
             if metadata.get('name') != expected_name:
-                self.errors.append(
+                file_errors.append(
                     f"{filename}: Name mismatch. Expected '{expected_name}', "
                     f"got '{metadata.get('name')}'"
                 )
-                
+
             # Validate description length
             desc = metadata.get('description', '')
             if len(desc) < 50:
@@ -89,7 +97,7 @@ class AgentValidator:
                 self.warnings.append(
                     f"{filename}: Description too long ({len(desc)} chars, maximum 500)"
                 )
-                
+
             # Validate color if present
             if 'color' in metadata:
                 color = metadata['color'].lower()
@@ -98,7 +106,7 @@ class AgentValidator:
                         f"{filename}: Invalid color '{color}'. "
                         f"Valid colors: {', '.join(sorted(self.VALID_COLORS))}"
                     )
-                    
+
             # Check for unexpected fields
             all_fields = self.REQUIRED_FIELDS | self.OPTIONAL_FIELDS
             unexpected = set(metadata.keys()) - all_fields
@@ -106,22 +114,26 @@ class AgentValidator:
                 self.warnings.append(
                     f"{filename}: Unexpected fields: {', '.join(unexpected)}"
                 )
-                
+
             # Check content structure
             content_body = parts[2].strip()
             if len(content_body) < 100:
                 self.warnings.append(
                     f"{filename}: Agent content body too short ({len(content_body)} chars)"
                 )
-                
+
             # Update stats
             self.stats['total_agents'] += 1
             if 'color' in metadata:
                 self.stats['agents_with_color'] += 1
             if 'examples' in metadata:
                 self.stats['agents_with_examples'] += 1
-                
-            return len(self.errors) == 0, metadata
+
+            # Add file errors to global error list
+            self.errors.extend(file_errors)
+
+            # Return True only if this file had no errors
+            return len(file_errors) == 0, metadata
             
         except Exception as e:
             self.errors.append(f"{filename}: Unexpected error: {e}")

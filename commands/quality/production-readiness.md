@@ -62,7 +62,7 @@ Deploy `devops-engineer` to verify:
 - Compliance with operational security standards
 
 ### **Phase 6: Code Quality Gates**
-Engage `readability-expert` to ensure:
+Engage `code-architect` to ensure:
 - Code maintainability and documentation completeness
 - Architectural decision documentation and rationale
 - Developer onboarding documentation and processes
