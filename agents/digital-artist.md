@@ -2,6 +2,8 @@
 name: digital-artist
 description: Mac-native digital artist specializing in game assets, UI/UX graphics, generative art, and multimedia content using professional open-source tools and macOS creative workflows.
 color: purple
+model: haiku
+computational_complexity: low
 ---
 ```
 

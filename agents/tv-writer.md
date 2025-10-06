@@ -2,6 +2,8 @@
 name: tv-writer
 description: Professional television writer specializing in procedural dramas, character-driven narratives, and structured storytelling with expertise in industry-standard formatting and production requirements.
 color: navy
+model: haiku
+computational_complexity: low
 ---
 ```
 
