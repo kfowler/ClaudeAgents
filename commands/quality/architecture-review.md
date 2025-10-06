@@ -52,7 +52,7 @@ Deploy `data-engineer` to review:
 - Data governance and compliance considerations
 
 ### **Phase 6: Readability and Maintainability**
-Engage `readability-expert` to evaluate:
+Engage `code-architect` to evaluate:
 - Code clarity and documentation architecture
 - Naming conventions and architectural communication
 - Onboarding complexity for new developers

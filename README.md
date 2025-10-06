@@ -13,15 +13,13 @@ ClaudeAgents/
 │   ├── deployment/      # Deploy prep, infrastructure setup
 │   ├── specialized/     # Language-specific tools (Rust, Python, etc.)
 │   └── workflows/       # Multi-agent orchestration patterns
-├── docs/                # Documentation
-│   ├── agent-selection.md    # Agent decision tree & selection logic
-│   ├── usage-guide.md         # Usage optimization strategies
-│   ├── architecture.md        # Technical architecture details
-│   └── integration.md         # Claude Code integration guide
-├── tools/               # Utilities and analysis tools
-│   ├── analysis/        # Project analysis system
+├── tools/               # Validation and utilities
 │   └── validate_agents.py  # Agent consistency validation
-└── CLAUDE.md           # Core project instructions for Claude Code
+├── examples/            # Design specifications and prototypes
+│   └── analysis/        # Project analysis system (prototype)
+├── CLAUDE.md           # Core project instructions for Claude Code
+├── The-Claude-Code-Agent-Manifesto.md  # Professional principles
+└── TODO.md             # Improvement roadmap and tasks
 ```
 
 ## 🚀 Quick Start
@@ -154,7 +152,7 @@ The system uses intelligent agent selection based on:
 - **Complexity**: Single agent vs multi-agent orchestration
 - **Domain**: Web, mobile, AI/ML, infrastructure, etc.
 
-See `docs/agent-selection.md` for the complete decision tree.
+Agent selection is based on keyword analysis, task type, and domain expertise.
 
 ## 🛠️ Tools & Utilities
 
@@ -170,19 +168,20 @@ python3 tools/validate_agents.py
 ```
 Validates all agent definitions for consistency and completeness.
 
-### Project Analysis
-The `tools/analysis/` directory contains the project analysis system for:
-- Technology stack detection
-- Dependency analysis
-- Code quality metrics
-- Agent recommendations
+### Examples and Prototypes
+The `examples/` directory contains design specifications and proof-of-concept implementations:
+- **Project analysis system**: Prototype for ML-based agent recommendations
+- **Implementation examples**: Design patterns for future features
+
+*Note: These are not production-ready. See examples/README.md for details.*
 
 ## 📚 Documentation
 
-- **[Agent Selection Guide](docs/agent-selection.md)** - How agents are chosen
-- **[Usage Optimization](docs/usage-guide.md)** - Best practices and patterns
-- **[Technical Architecture](docs/architecture.md)** - System design details
-- **[Integration Guide](docs/integration.md)** - Claude Code integration
+- **[The Manifesto](The-Claude-Code-Agent-Manifesto.md)** - Professional principles and engineering standards
+- **[Project Instructions](CLAUDE.md)** - Guidance for Claude Code when working with this repository
+- **[TODO Roadmap](TODO.md)** - Prioritized improvements and development roadmap
+
+*Note: Comprehensive documentation in `docs/` directory is planned (see TODO.md for details)*
 
 ## 🏆 Success Metrics
 
@@ -196,7 +195,7 @@ Track agent effectiveness through:
 
 1. **Review available agents** in the `agents/` directory
 2. **Check commands** in `commands/` for pre-built workflows
-3. **Read documentation** in `docs/` for detailed guides
+3. **Read The Manifesto** to understand professional standards
 4. **Use validation tools** in `tools/` to ensure consistency
 5. **Start with simple requests** and progress to multi-agent orchestration
 

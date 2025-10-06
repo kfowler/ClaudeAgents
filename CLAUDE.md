@@ -24,8 +24,7 @@ This repository contains specialized AI agent definitions and commands for Claud
 
 ### Key Decision Logic
 
-- **AGENT_DECISION_TREE.md**: Primary guide for automatic agent selection based on user requests
-- **USAGE_OPTIMIZATION.md**: Strategies for maximizing agent effectiveness and tracking metrics
+Agent selection is based on keyword matching, task type analysis, and domain expertise. Detailed documentation for agent selection logic and usage optimization is planned for the `docs/` directory (see TODO.md for roadmap).
 
 ## Agent Selection Guide
 
