@@ -1,12 +1,12 @@
 # Claude Code AI Agent System
 
-A comprehensive ecosystem of 28+ specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
+A comprehensive ecosystem of 29 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
 
 ## 📁 Repository Structure
 
 ```
 ClaudeAgents/
-├── agents/              # 28 specialized agent definitions
+├── agents/              # 29 specialized agent definitions
 ├── commands/            # Organized workflow commands
 │   ├── development/     # Code review, debugging, refactoring
 │   ├── quality/         # Testing, security, performance audits
@@ -47,6 +47,7 @@ ClaudeAgents/
 
 ### 🏗️ Core Development
 - **`full-stack-architect`** - Web applications (React, Next.js, Svelte + backends)
+- **`backend-api-engineer`** - Backend APIs (REST, GraphQL, microservices, server-side logic)
 - **`mobile-developer`** - iOS/Android (Swift, Kotlin, React Native, Flutter)
 - **`data-engineer`** - Databases, pipelines, analytics, ML infrastructure
 - **`devops-engineer`** - CI/CD, Docker, Kubernetes, cloud deployment

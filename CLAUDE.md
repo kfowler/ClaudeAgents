@@ -34,6 +34,8 @@ Start with `product-strategist` for market validation, then use `project-orchest
 ### Primary Development Agents by Domain
 - **Web Applications**: `full-stack-architect` (React, Next.js, Svelte, backend APIs)
   - **Note**: For React Native, use `mobile-developer` instead
+  - **Note**: For backend-only API development, use `backend-api-engineer`
+- **Backend APIs**: `backend-api-engineer` (REST, GraphQL, microservices, server-side logic)
 - **Mobile Apps**: `mobile-developer` (iOS, Android, React Native, Flutter, app store deployment)
 - **AI/ML Features**: `ai-ml-engineer` (LLM integration, RAG systems, vector databases)
 - **Database/Data**: `data-engineer` (data pipelines, analytics, OLAP workloads)
@@ -79,6 +81,8 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "new product", "startup idea" → `product-strategist`
 - "React", "Next.js", "web app" → `full-stack-architect`
 - **"React Native"** → `mobile-developer` (not `full-stack-architect`)
+- "backend API", "REST API", "GraphQL", "microservices" → `backend-api-engineer`
+- "server-side", "API design", "authentication" → `backend-api-engineer`
 - "iOS", "Android", "mobile", "app store" → `mobile-developer`
 - "AI", "LLM", "RAG" → `ai-ml-engineer`
 - "security audit", "vulnerability" → `security-audit-specialist`
@@ -104,9 +108,10 @@ For detailed information on agent boundaries and delegation protocols, see [Agen
 
 **Key Boundaries**:
 1. **React Native**: Always `mobile-developer`, never `full-stack-architect`
-2. **Code Review**: Domain specialist first, then `code-architect` for holistic review
-3. **Infrastructure**: `devops-engineer` (app-level) vs `linux-sysadmin` (OS-level)
-4. **Database**: `data-engineer` (analytics/pipelines) vs `database-admin` (operations - Sprint 2)
+2. **Backend APIs**: `backend-api-engineer` (backend-only) vs `full-stack-architect` (full-stack)
+3. **Code Review**: Domain specialist first, then `code-architect` for holistic review
+4. **Infrastructure**: `devops-engineer` (app-level) vs `linux-sysadmin` (OS-level)
+5. **Database**: `data-engineer` (analytics/pipelines) vs `database-admin` (operations - Sprint 2)
 
 ## Git Workflow
 
