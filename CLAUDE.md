@@ -49,6 +49,7 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **Security**: `security-audit-specialist` (vulnerability assessment, compliance)
 - **Testing**: `qa-test-engineer` (test strategies, implementation)
 - **Accessibility**: `accessibility-expert` (WCAG compliance, inclusive design)
+- **Frontend Performance**: `frontend-performance-specialist` (Core Web Vitals, bundle optimization, rendering performance)
 - **Code Quality**: `code-architect` (holistic architecture review, maintainability, readability)
   - **Note**: For domain-specific code review, use the domain specialist first, then `code-architect` for comprehensive analysis
 
@@ -87,6 +88,7 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "AI", "LLM", "RAG" → `ai-ml-engineer`
 - "security audit", "vulnerability" → `security-audit-specialist`
 - "test", "QA" → `qa-test-engineer`
+- "performance", "Core Web Vitals", "bundle size", "LCP", "optimize frontend" → `frontend-performance-specialist`
 - "CI/CD", "Docker", "Kubernetes", "deploy" → `devops-engineer`
 - "systemd", "kernel", "firewall", "OS hardening" → `linux-sysadmin`
 - "data pipeline", "ETL", "analytics" → `data-engineer`
