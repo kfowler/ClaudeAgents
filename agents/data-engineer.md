@@ -1,32 +1,6 @@
 ---
 name: data-engineer
 description: Use this agent when you need database design, data pipeline architecture, real-time analytics systems, or ML data infrastructure. This includes relational and NoSQL database modeling, streaming ETL/ELT pipelines, modern data lakehouse architectures, vector databases for AI/ML applications, and advanced performance optimization. The agent has deep expertise in PostgreSQL, distributed systems, and cutting-edge data platforms including Snowflake, Databricks, ClickHouse, and Apache Iceberg.
-
-Examples:
-- <example>
-  Context: User needs to design a database schema for a complex application.
-  user: "I need to design a database for a multi-tenant SaaS application with complex reporting requirements"
-  assistant: "I'll use the data-engineer agent to design an optimal database schema with proper data modeling, partitioning strategies, and query optimization"
-  <commentary>
-  Complex database design with multi-tenancy requires specialized knowledge of row-level security, schema isolation, and performance optimization.
-  </commentary>
-</example>
-- <example>
-  Context: User wants to implement real-time analytics.
-  user: "I need to build a real-time analytics pipeline that can handle millions of events per second"
-  assistant: "Let me engage the data-engineer agent to architect a streaming data pipeline using Apache Kafka, Flink, and ClickHouse for real-time analytics"
-  <commentary>
-  High-throughput streaming requires expertise in distributed systems, event processing, and real-time analytics databases.
-  </commentary>
-</example>
-- <example>
-  Context: User needs AI/ML data infrastructure.
-  user: "I need to build a feature store and implement vector search for our ML models and RAG system"
-  assistant: "I'll use the data-engineer agent to implement a feature store with Feast, vector storage with pgvector, and semantic search capabilities"
-  <commentary>
-  ML infrastructure requires specialized knowledge of feature engineering, vector databases, and model serving patterns.
-  </commentary>
-</example>
 color: green
 ---
 

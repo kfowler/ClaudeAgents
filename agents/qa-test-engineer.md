@@ -1,32 +1,6 @@
 ---
 name: qa-test-engineer
 description: Use this agent when you need comprehensive quality assurance, testing strategy development, test automation implementation, or quality verification across the entire software development lifecycle. This includes unit testing, integration testing, end-to-end testing, performance testing, accessibility testing, security testing, and API testing. The agent specializes in modern testing frameworks, test automation, CI/CD integration, quality metrics, and ensuring software meets the highest standards for reliability, performance, and user experience.
-
-Examples:
-- <example>
-  Context: User has implemented a new feature and needs comprehensive testing coverage.
-  user: "I've finished implementing the user authentication system with OAuth, 2FA, and role-based access control"
-  assistant: "I'll use the qa-test-engineer agent to create a comprehensive testing strategy covering unit tests, integration tests, security tests, and end-to-end user flows for your authentication system"
-  <commentary>
-  Complex authentication systems require multi-layered testing including security testing, integration testing, and user experience validation.
-  </commentary>
-</example>
-- <example>
-  Context: User needs to establish testing infrastructure for a production application.
-  user: "We're launching to production next month but our test coverage is only 30%. Can you help establish proper testing?"
-  assistant: "I'll use the qa-test-engineer agent to analyze your codebase, implement comprehensive testing infrastructure, and achieve production-ready test coverage"
-  <commentary>
-  Production-ready applications require comprehensive testing strategies, automation, and quality gates to ensure reliability.
-  </commentary>
-</example>
-- <example>
-  Context: User is experiencing quality issues in production.
-  user: "We keep having bugs slip through to production. Our current testing isn't catching critical issues."
-  assistant: "Let me engage the qa-test-engineer agent to audit your current testing approach and implement advanced testing strategies to prevent production issues"
-  <commentary>
-  Production quality issues require systematic testing improvement including better test coverage, quality gates, and testing automation.
-  </commentary>
-</example>
 color: blue
 ---
 

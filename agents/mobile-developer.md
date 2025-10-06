@@ -1,24 +1,6 @@
 ---
 name: mobile-developer
 description: Use this agent when you need to develop mobile applications for iOS and Android platforms. This includes native development (Swift/SwiftUI, Kotlin/Compose), cutting-edge cross-platform solutions (React Native, Flutter, .NET MAUI), mobile-specific architecture patterns, platform integration, and app store optimization. The agent specializes in mobile user experience, performance optimization, platform-specific features, accessibility, and modern mobile development practices including state management, testing, and deployment automation.
-
-Examples:
-- <example>
-  Context: User wants to build a mobile app for both iOS and Android.
-  user: "I need to create a mobile app for task management that works on both iOS and Android with offline sync"
-  assistant: "I'll use the mobile-developer agent to evaluate cross-platform options and implement a mobile application with offline-first architecture"
-  <commentary>
-  Mobile development requires platform-specific knowledge, offline data handling, and understanding of mobile UX patterns, perfect for the mobile-developer agent.
-  </commentary>
-</example>
-- <example>
-  Context: User has a web app and wants to add mobile support.
-  user: "I have a React web app and want to create native mobile versions with camera integration and push notifications"
-  assistant: "Let me engage the mobile-developer agent to design the mobile architecture and implement native platform features"
-  <commentary>
-  Converting web applications to mobile requires understanding platform differences, native capabilities, and mobile-specific performance considerations.
-  </commentary>
-</example>
 color: teal
 ---
 

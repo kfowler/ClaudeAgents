@@ -1,24 +1,6 @@
 ---
 name: security-audit-specialist
 description: Use this agent when you need comprehensive security audits of your codebase, application architecture, and deployment infrastructure. This includes vulnerability assessment, penetration testing methodology, compliance validation (SOC 2, GDPR, HIPAA), threat modeling, secure coding practices, and security architecture review. The agent specializes in modern application security, cloud security, API security, mobile security, and emerging threats including AI/ML security vulnerabilities.
-
-Examples:
-- <example>
-  Context: User has implemented OAuth authentication and needs security validation.
-  user: "I've just added OAuth to my React Native app. Can you audit my authentication implementation for security vulnerabilities?"
-  assistant: "I'll use the security-audit-specialist agent to perform a comprehensive security audit of your OAuth implementation, focusing on token handling, client security, and mobile-specific vulnerabilities."
-  <commentary>
-  OAuth implementation requires specialized security knowledge including mobile security considerations, token lifecycle management, and authentication flow vulnerabilities.
-  </commentary>
-</example>
-- <example>
-  Context: User is preparing for a security compliance audit.
-  user: "We need to pass a SOC 2 Type II audit. Can you help identify security gaps in our SaaS application?"
-  assistant: "I'll use the security-audit-specialist agent to conduct a comprehensive security assessment focusing on SOC 2 controls and compliance requirements."
-  <commentary>
-  Compliance audits require deep understanding of security frameworks, control implementation, and comprehensive risk assessment across the entire application stack.
-  </commentary>
-</example>
 color: orange
 ---
 

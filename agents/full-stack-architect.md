@@ -1,24 +1,6 @@
 ---
 name: full-stack-architect
-description: Use this agent when you need to design and implement full-stack web applications with hands-on technical execution. This agent handles the complete technical implementation of web applications: technology stack selection, architecture setup, coding both client and server components, and integration between layers. It focuses on cutting-edge web frameworks (React/Next.js 15+, Svelte/SvelteKit, Remix, Vue/Nuxt), modern backend APIs (Node.js, Python/FastAPI, Bun, Deno, Go, Rust), edge computing, real-time systems, and advanced database integration. For simple to moderate complexity web projects that don't require extensive multi-domain coordination, this agent provides complete full-stack implementation. For complex projects requiring orchestration across multiple domains, use project-orchestrator instead.
-
-Examples:
-- <example>
-  Context: The user wants to build a complete web application from scratch.
-  user: "I need to build a task management app with user authentication, real-time updates, and mobile responsiveness"
-  assistant: "I'll use the full-stack-architect agent to design the complete architecture and implement both frontend and backend components"
-  <commentary>
-  Since this requires coordinated full-stack development with multiple technical considerations, the full-stack-architect agent handles the entire application lifecycle.
-  </commentary>
-</example>
-- <example>
-  Context: The user needs to add a backend API to an existing frontend.
-  user: "I have a React frontend and need to add user authentication and data persistence"
-  assistant: "Let me engage the full-stack-architect agent to design the backend API and integrate it with your existing frontend"
-  <commentary>
-  The agent handles both the API design and the integration concerns between frontend and backend layers.
-  </commentary>
-</example>
+description: "Use this agent when you need to design and implement full-stack web applications with hands-on technical execution. This agent handles the complete technical implementation of web applications: technology stack selection, architecture setup, coding both client and server components, and integration between layers. It focuses on cutting-edge web frameworks (React/Next.js 15+, Svelte/SvelteKit, Remix, Vue/Nuxt), modern backend APIs (Node.js, Python/FastAPI, Bun, Deno, Go, Rust), edge computing, real-time systems, and advanced database integration. For simple to moderate complexity web projects that don't require extensive multi-domain coordination, this agent provides complete full-stack implementation. For complex projects requiring orchestration across multiple domains, use project-orchestrator instead."
 color: blue
 ---
 

@@ -1,32 +1,6 @@
 ---
 name: linux-sysadmin
 description: Use this agent when you need comprehensive Linux system administration expertise including server configuration, performance optimization, security hardening, automation, monitoring, and infrastructure management. This includes package management, user administration, network configuration, storage management, backup strategies, container orchestration, cloud-native operations, and enterprise-scale Linux infrastructure. The agent combines deep Unix/Linux fundamentals with modern DevOps practices and infrastructure-as-code approaches.
-
-Examples:
-- <example>
-  Context: User is experiencing severe performance issues on production Linux servers.
-  user: "Our web servers are running really slow and CPU usage is constantly high. Can you help diagnose and fix the performance issues?"
-  assistant: "I'll use the linux-sysadmin agent to perform comprehensive system performance analysis, identify bottlenecks, and implement optimization strategies for your production environment."
-  <commentary>
-  Server performance optimization requires deep knowledge of Linux internals, process management, resource monitoring, and system tuning techniques.
-  </commentary>
-</example>
-- <example>
-  Context: User needs to implement security hardening across their Linux infrastructure.
-  user: "We need to harden our Linux servers for compliance and security. Can you help implement security best practices?"
-  assistant: "I'll engage the linux-sysadmin agent to implement comprehensive security hardening including access controls, firewall configuration, audit logging, and compliance frameworks."
-  <commentary>
-  Linux security hardening requires expertise in access control systems, network security, logging frameworks, and regulatory compliance standards.
-  </commentary>
-</example>
-- <example>
-  Context: User wants to automate their infrastructure management and deployments.
-  user: "I'm tired of manually configuring servers. I need to automate our entire Linux infrastructure setup and application deployments."
-  assistant: "I'll use the linux-sysadmin agent to design and implement infrastructure automation using configuration management tools, CI/CD pipelines, and infrastructure-as-code practices."
-  <commentary>
-  Infrastructure automation requires expertise in configuration management, orchestration tools, scripting, and modern DevOps methodologies.
-  </commentary>
-</example>
 color: forest-green
 ---
 

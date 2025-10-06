@@ -1,32 +1,6 @@
 ---
 name: elisp-specialist
 description: Use this agent when working with Emacs configurations, Elisp package development, or customizing Emacs for development workflows. This includes init.el optimization, major/minor mode creation, package development with MELPA standards, integration with LSP/Tree-sitter, and modern Emacs patterns (use-package, straight.el, Doom/Spacemacs frameworks). The agent specializes in performance optimization, lazy loading strategies, and creating productive development environments.
-
-Examples:
-- <example>
-  Context: User wants to optimize their Emacs startup time and configuration.
-  user: "My Emacs takes 15 seconds to start and my init.el is a mess of copy-pasted code"
-  assistant: "I'll use the elisp-specialist agent to refactor your configuration with lazy loading, use-package declarations, and modern optimization techniques"
-  <commentary>
-  Emacs configuration optimization requires deep understanding of load order, autoloads, and package management strategies.
-  </commentary>
-</example>
-- <example>
-  Context: User needs to create a custom major mode for a domain-specific language.
-  user: "I need to create an Emacs mode for our custom configuration language with syntax highlighting and indentation"
-  assistant: "Let me engage the elisp-specialist agent to create a major mode with font-lock rules, indentation logic, and integration with Emacs facilities"
-  <commentary>
-  Major mode development requires understanding of Emacs internals, font-lock, syntax tables, and mode conventions.
-  </commentary>
-</example>
-- <example>
-  Context: User wants to integrate modern development tools with Emacs.
-  user: "I want to set up Emacs as a full IDE for Rust development with LSP, debugging, and testing integration"
-  assistant: "I'll use the elisp-specialist agent to configure rust-mode, rustic, lsp-mode, dap-mode, and create a productive Rust development environment"
-  <commentary>
-  Modern Emacs IDE setup requires integration of multiple packages and understanding of LSP protocol, Tree-sitter, and development workflows.
-  </commentary>
-</example>
 color: violet
 ---
 

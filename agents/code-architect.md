@@ -1,24 +1,6 @@
 ---
 name: code-architect
-description: Use this agent when you need comprehensive code review, architectural analysis, or readability improvements. This unified agent handles ALL code quality concerns: architectural patterns, code clarity, maintainability, readability, and long-term sustainability. Whether you need elite-level readability review (modeled after top-tier engineering orgs), architectural assessment, or comprehensive code quality improvement, this agent provides the complete solution. It ensures code communicates intent clearly while maintaining robust architectural principles.
-
-Examples:
-- <example>
-  Context: User has implemented a feature but wants architectural and readability review.
-  user: "I've built this user management system but the code feels messy and hard to follow"
-  assistant: "I'll use the code-architect agent to analyze both the architectural patterns and code clarity, then suggest improvements"
-  <commentary>
-  This requires both structural analysis and readability assessment, making it perfect for the unified code-architect agent.
-  </commentary>
-</example>
-- <example>
-  Context: User is preparing codebase for team collaboration.
-  user: "Our codebase is growing and we need it to be more maintainable for multiple developers"
-  assistant: "Let me engage the code-architect agent to evaluate the code organization and improve its clarity for team development"
-  <commentary>
-  Team maintainability requires both good architecture and clear communication through code, combining both specialties.
-  </commentary>
-</example>
+description: "Use this agent when you need comprehensive code review, architectural analysis, or readability improvements. This unified agent handles ALL code quality concerns: architectural patterns, code clarity, maintainability, readability, and long-term sustainability. Whether you need elite-level readability review (modeled after top-tier engineering orgs), architectural assessment, or comprehensive code quality improvement, this agent provides the complete solution. It ensures code communicates intent clearly while maintaining robust architectural principles."
 color: purple
 ---
 

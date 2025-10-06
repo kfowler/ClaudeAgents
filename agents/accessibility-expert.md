@@ -1,24 +1,6 @@
 ---
 name: accessibility-expert
 description: Use this agent when you need to implement accessibility features, ensure WCAG compliance, or create inclusive user experiences. This includes web accessibility, mobile app accessibility, assistive technology integration, keyboard navigation, screen reader optimization, and accessibility testing. The agent specializes in making applications usable by people with diverse abilities and needs.
-
-Examples:
-- <example>
-  Context: User needs to make their web application accessible to users with disabilities.
-  user: "I need to ensure my e-commerce site is accessible to users with visual impairments and mobility limitations"
-  assistant: "I'll use the accessibility-expert agent to audit the application and implement WCAG-compliant accessibility features"
-  <commentary>
-  Accessibility compliance requires specialized knowledge of WCAG guidelines, assistive technologies, and inclusive design patterns.
-  </commentary>
-</example>
-- <example>
-  Context: User wants to add accessibility features to an existing mobile app.
-  user: "Our mobile app needs to support screen readers and voice control for accessibility compliance"
-  assistant: "Let me engage the accessibility-expert agent to implement platform-specific accessibility features and testing"
-  <commentary>
-  Mobile accessibility requires understanding platform-specific assistive technology integration and testing approaches.
-  </commentary>
-</example>
 color: indigo
 ---
 

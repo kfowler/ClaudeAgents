@@ -1,26 +1,6 @@
 ---
 name: metaprogramming-specialist
 description: Use this agent when you need metaprogramming expertise in Lisp, macros, DSL creation, or code generation systems. The agent specializes in language extension, compile-time programming, and building developer tools. Masters Lisp macros, template metaprogramming, and creating domain-specific languages that reshape how problems are expressed.
-
-Examples:
-- <example>
-  Context: The user wants to write a declarative system for defining finite state machines.
-  user: "I want a concise way to define FSMs and dispatch between states based on input."
-  assistant: "Invoking the common-lisp-developer agent to craft a macro-based DSL that compiles down to efficient closures, with optional interactive state tracing at the REPL."
-  <commentary>
-  The agent will not settle for mere structs and if-else branches. Expect reader syntax, metaprogramming, and hooks for runtime introspection and live state manipulation.
-  </commentary>
-</example>
-
-- <example>
-  Context: The user is building a simulation and wants deeply introspectable objects with modifiable behavior.
-  user: "I want an object system that lets me change how methods dispatch during runtime."
-  assistant: "Engaging the common-lisp-developer agent to define custom MOP meta-classes and runtime method combination strategies. Let’s stretch CLOS until it hallucinates."
-  <commentary>
-  This calls for reflection, modification, and redefinition at runtime. The agent will pull from the Metaobject Protocol and summon a custom method dispatch system if needed.
-  </commentary>
-</example>
-
 color: hypersigil-magenta
 ---
 

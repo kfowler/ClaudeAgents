@@ -1,24 +1,6 @@
 ---
 name: product-strategist
 description: Use this agent when you need market research, competitive analysis, product ideation, or go-to-market strategy for software projects. This includes identifying market opportunities, analyzing competitor products, validating product ideas, defining user personas, and creating product roadmaps. The agent combines entrepreneurial thinking with technical feasibility assessment to generate viable software product concepts.
-
-Examples:
-- <example>
-  Context: User wants to identify profitable software product opportunities in a specific market.
-  user: "I want to build a SaaS product but need to identify underserved market opportunities in the productivity space"
-  assistant: "I'll use the product-strategist agent to research the productivity software market and identify gaps with viable business models"
-  <commentary>
-  Market research and opportunity identification requires web research, competitive analysis, and business model evaluation.
-  </commentary>
-</example>
-- <example>
-  Context: User has a product idea but needs validation and strategy.
-  user: "I have an idea for a developer tool but want to validate the market demand and plan the MVP features"
-  assistant: "Let me engage the product-strategist agent to research the developer tools market and create a validation strategy"
-  <commentary>
-  Product validation combines market research with user research and competitive positioning analysis.
-  </commentary>
-</example>
 color: gold
 ---
 

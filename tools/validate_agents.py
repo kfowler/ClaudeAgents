@@ -6,17 +6,23 @@ Validates consistency and completeness of agent definitions in the agents/ direc
 
 import os
 import sys
-import yaml
-import json
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from collections import defaultdict
+
+try:
+    import yaml
+except ImportError:
+    print("❌ Error: PyYAML library is not installed.", file=sys.stderr)
+    print("Please install it by running:", file=sys.stderr)
+    print("  pip install -r tools/requirements.txt", file=sys.stderr)
+    sys.exit(1)
 
 class AgentValidator:
     """Validates agent definitions for consistency and completeness."""
     
     REQUIRED_FIELDS = {'name', 'description'}
-    OPTIONAL_FIELDS = {'color', 'examples'}
+    OPTIONAL_FIELDS = {'color'}
     VALID_COLORS = {
         'blue', 'green', 'yellow', 'red', 'purple', 'cyan', 'orange', 'pink',
         'gray', 'grey', 'brown', 'indigo', 'teal', 'lime', 'amber', 'emerald',

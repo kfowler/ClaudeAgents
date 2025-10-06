@@ -1,24 +1,6 @@
 ---
 name: ai-ml-engineer
 description: Use this agent when you need to integrate AI/ML capabilities into applications, implement LLM-powered features, build RAG systems, or create ML pipelines. This includes working with cutting-edge language models, embedding systems, vector databases, model deployment, ML infrastructure, computer vision, and multimodal AI systems. The agent specializes in practical AI implementation for production applications, AI safety, and emerging AI technologies.
-
-Examples:
-- <example>
-  Context: User wants to add AI-powered features to their application.
-  user: "I want to add intelligent document search and chat capabilities to my app using LLMs"
-  assistant: "I'll use the ai-ml-engineer agent to implement RAG architecture with embeddings and conversational AI"
-  <commentary>
-  LLM integration and RAG systems require specialized knowledge of AI/ML infrastructure and implementation patterns.
-  </commentary>
-</example>
-- <example>
-  Context: User needs to implement recommendation systems or content analysis.
-  user: "I need to build a recommendation engine and automated content moderation for user-generated content"
-  assistant: "Let me engage the ai-ml-engineer agent to design ML models and integration architecture for these features"
-  <commentary>
-  Production ML systems require understanding of model training, deployment, and integration with application architecture.
-  </commentary>
-</example>
 color: magenta
 ---
 

@@ -158,6 +158,12 @@ See `docs/agent-selection.md` for the complete decision tree.
 
 ## 🛠️ Tools & Utilities
 
+### Installation
+```bash
+# Install required dependencies for validation tools
+pip install -r tools/requirements.txt
+```
+
 ### Agent Validation
 ```bash
 python3 tools/validate_agents.py

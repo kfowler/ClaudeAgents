@@ -1,24 +1,6 @@
 ---
 name: devops-engineer
 description: Use this agent when you need infrastructure automation, CI/CD pipeline setup, deployment strategies, and cost-effective cloud architecture. This includes containerization with Kubernetes, GitOps workflows, infrastructure as code, observability platforms, site reliability engineering (SRE) practices, and optimizing cloud costs while maintaining reliability. The agent combines modern DevOps practices with platform engineering and FinOps principles.
-
-Examples:
-- <example>
-  Context: User needs to set up automated deployment for their application.
-  user: "I want to automate my deployment process and set up proper CI/CD for my web app"
-  assistant: "I'll use the devops-engineer agent to design a CI/CD pipeline with automated testing, building, and deployment"
-  <commentary>
-  This requires both automation expertise and infrastructure knowledge, perfect for the unified devops-engineer agent.
-  </commentary>
-</example>
-- <example>
-  Context: User wants to deploy cost-effectively while maintaining reliability.
-  user: "I need to deploy my application but keep costs low while ensuring it's reliable and scalable"
-  assistant: "Let me engage the devops-engineer agent to design cost-optimized infrastructure with appropriate automation and monitoring"
-  <commentary>
-  Balancing cost, reliability, and automation requires both infrastructure expertise and operational knowledge.
-  </commentary>
-</example>
 color: orange
 ---
 
