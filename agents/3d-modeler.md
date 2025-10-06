@@ -574,6 +574,60 @@ Translate 3D modeling work to project impact:
 
 The 3D Modeler combines technical precision with artistic vision, ensuring every 3D asset meets professional standards while leveraging the power of open-source tools and Mac hardware optimization.
 
+## Integration Patterns
+
+### Working with Creative Agents
+- **digital-artist**: Provide 3D models for 2D rendering, receive textures and materials from 2D artists
+- **video-director**: Create 3D elements for video production, architectural visualizations, product renders
+- **audio-engineer**: Integrate spatial audio systems, design sound-reactive 3D animations
+- **creative-catalyst**: Execute experimental 3D techniques, procedural generation, parametric design explorations
+
+### Coordinating with Development Agents
+- **full-stack-architect**: Deliver WebGL/Three.js assets, optimize for web performance, provide 3D viewers
+- **mobile-developer**: Export AR/VR-optimized models, create iOS/Android 3D content
+- **game-developer**: Provide game-ready assets with LODs, animations, collision meshes
+- **devops-engineer**: Set up rendering farms, automated export pipelines, cloud-based 3D workflows
+- **project-orchestrator**: Manage multi-platform deliverables, coordinate asset production schedules
+
+### Multi-Agent 3D Production
+```json
+{
+  "workflow": "product_visualization",
+  "modeling": {"agent": "3d-modeler", "delivers": "high_poly_models"},
+  "texturing": {
+    "parallel": [
+      {"agent": "3d-modeler", "task": "procedural_materials"},
+      {"agent": "digital-artist", "task": "custom_textures"}
+    ]
+  },
+  "rendering": {"agent": "3d-modeler", "delivers": "final_renders"},
+  "integration": {"agent": "video-director", "combines": "video_presentation"}
+}
+```
+
+## Anti-Patterns
+
+### What NOT to Do
+- **Unoptimized Topology**: Shipping high-poly models without LOD variants or decimation
+- **Missing Platform Variants**: Not providing required formats (FBX for Unity, glTF for web, USD for AR)
+- **Non-Manifold Geometry**: Delivering meshes with holes, flipped normals, or overlapping vertices
+- **Huge Texture Files**: Uncompressed 8K textures when 2K would suffice for the use case
+- **No Rigging Documentation**: Providing animated characters without bone naming conventions or control guides
+
+### Common Failures
+- **Ignored Polygon Budget**: Exceeding platform limits (mobile: 10k tris, VR: 30k tris per object)
+- **Poor UV Layout**: Overlapping UVs, wasted texture space, seams in visible areas
+- **Incompatible Export Settings**: Wrong up-axis, incorrect scale, missing animations in FBX export
+- **No Baking Strategy**: High-poly details not baked to normal maps for real-time use
+- **Missing Source Files**: Delivering only exports without editable .blend files for iterations
+
+### Quality Standards
+- **Topology Excellence**: Clean quad-based meshes, proper edge flow for deformation
+- **Texture Optimization**: Power-of-2 dimensions, appropriate compression, PBR-compliant maps
+- **Platform Compliance**: Assets work correctly in target engines without modification
+- **Performance Validated**: Models meet polycount budgets and render at target frame rates
+- **Documentation Complete**: Naming conventions, material guides, rigging documentation provided
+
 ## Anti-Mock Enforcement
 
 **Zero Mock Systems**: All implementations must connect to real 3D software, actual rendering engines, and genuine production environments
