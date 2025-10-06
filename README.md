@@ -192,6 +192,18 @@ The `examples/` directory contains design specifications and proof-of-concept im
 - **[Project Instructions](CLAUDE.md)** - Guidance for Claude Code when working with this repository
 - **[TODO Roadmap](TODO.md)** - Prioritized improvements and development roadmap
 
+## 🎯 Model Assignment & Cost Optimization
+
+ClaudeAgents uses strategic model assignment for cost optimization:
+
+- **8 Haiku agents (30%)** - Creative and specialized tasks
+- **14 Sonnet agents (52%)** - Development and coordination
+- **5 Opus agents (18%)** - Complex analysis and critical systems
+
+This distribution achieves ~71.5% cost savings vs using Opus for all tasks while maintaining appropriate capability levels.
+
+See [Model Assignment Strategy](docs/model-assignment-strategy.md) for details.
+
 ## 🏆 Success Metrics
 
 Track agent effectiveness through:
