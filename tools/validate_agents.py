@@ -19,8 +19,25 @@ except ImportError:
     sys.exit(1)
 
 class AgentValidator:
-    """Validates agent definitions for consistency and completeness."""
-    
+    """
+    Validates agent definitions for consistency and completeness.
+
+    This validator ensures all agent files in the agents/ directory follow
+    the required structure and metadata standards. It checks YAML frontmatter,
+    validates required fields, and reports errors and warnings.
+
+    Attributes:
+        agents_dir (Path): Directory containing agent definition files
+        errors (List[str]): Critical validation errors that must be fixed
+        warnings (List[str]): Non-critical issues that should be addressed
+        stats (Dict): Statistics about agents (counts, colors, etc.)
+
+    Example:
+        >>> validator = AgentValidator('agents')
+        >>> valid = validator.validate_all_agents()
+        >>> validator.print_report()
+    """
+
     REQUIRED_FIELDS = {'name', 'description'}
     OPTIONAL_FIELDS = {'color'}
     VALID_COLORS = {
@@ -31,13 +48,37 @@ class AgentValidator:
     }
     
     def __init__(self, agents_dir: str = 'agents'):
+        """
+        Initialize the validator.
+
+        Args:
+            agents_dir: Path to directory containing agent files (default: 'agents')
+        """
         self.agents_dir = Path(agents_dir)
         self.errors: List[str] = []
         self.warnings: List[str] = []
         self.stats: Dict = defaultdict(int)
         
     def validate_agent_file(self, filepath: Path) -> Tuple[bool, Dict]:
-        """Validate a single agent file."""
+        """
+        Validate a single agent file for structure and metadata correctness.
+
+        Checks:
+        - YAML frontmatter exists and is valid
+        - Required fields (name, description) are present
+        - Agent name matches filename
+        - Description length is appropriate (50-500 chars)
+        - Color is valid (if specified)
+        - Content body is substantial
+
+        Args:
+            filepath: Path to agent markdown file
+
+        Returns:
+            Tuple of (is_valid, metadata_dict)
+            - is_valid: True if file passed all validation checks
+            - metadata_dict: Parsed YAML frontmatter (empty if validation failed)
+        """
         filename = filepath.name
         file_errors = []  # Track errors for this file only
 
@@ -140,7 +181,15 @@ class AgentValidator:
             return False, {}
             
     def validate_all_agents(self) -> bool:
-        """Validate all agent files in the directory."""
+        """
+        Validate all agent files in the configured directory.
+
+        Processes all .md files in the agents directory, validates each one,
+        and checks for system-wide issues like duplicate agent names.
+
+        Returns:
+            True if all validations passed, False if any errors were found
+        """
         if not self.agents_dir.exists():
             self.errors.append(f"Agents directory '{self.agents_dir}' does not exist")
             return False
@@ -176,7 +225,18 @@ class AgentValidator:
         return len(self.errors) == 0
         
     def print_report(self):
-        """Print validation report."""
+        """
+        Print formatted validation report to stdout.
+
+        Displays:
+        - All errors (critical issues that must be fixed)
+        - All warnings (non-critical issues to address)
+        - Statistics (agent counts, color distribution, etc.)
+        - Overall validation status
+
+        Returns:
+            True if no errors found, False otherwise
+        """
         print("=" * 60)
         print("AGENT VALIDATION REPORT")
         print("=" * 60)
@@ -212,7 +272,13 @@ class AgentValidator:
 
 
 def main():
-    """Main entry point."""
+    """
+    Main entry point for command-line validation.
+
+    Changes to repository root directory, creates validator,
+    runs validation on all agents, prints report, and exits
+    with appropriate status code (0 for success, 1 for errors).
+    """
     # Change to repository root if needed
     script_dir = Path(__file__).parent.parent
     os.chdir(script_dir)

@@ -1,12 +1,29 @@
 #!/usr/bin/env python3
 """
-Integration tests for agent validation and structure.
+Integration tests for agent validation and system integrity.
 
-These tests verify that:
-- All agent files can be parsed
-- All required frontmatter fields are present
-- All agent references in commands are valid
-- No duplicate agent names exist
+This test suite ensures the Claude Code Agent System maintains quality
+and consistency across all agent definitions, commands, and documentation.
+
+Test Coverage:
+    - Agent file parsing and YAML frontmatter validation
+    - Required metadata fields (name, description)
+    - Name/filename consistency
+    - No duplicate agent names
+    - Agent references in commands are valid
+    - Validator error tracking accuracy
+
+Usage:
+    # Run all tests
+    python3 tests/test_agent_integration.py -v
+
+    # Run specific test class
+    python3 -m pytest tests/test_agent_integration.py::TestAgentIntegration -v
+
+    # Run with pytest
+    pytest tests/ -v --cov=tools
+
+These tests run automatically in CI/CD on every push and pull request.
 """
 
 import os
@@ -27,11 +44,21 @@ from tools.validate_agents import AgentValidator
 
 
 class TestAgentIntegration(unittest.TestCase):
-    """Integration tests for agent system."""
+    """
+    Integration tests for agent system integrity.
+
+    Validates that all agents follow required structure and that
+    cross-references between agents and commands are valid.
+    """
 
     @classmethod
     def setUpClass(cls):
-        """Set up test fixtures."""
+        """
+        Set up test fixtures that are shared across all test methods.
+
+        Establishes paths to agents/ and commands/ directories
+        for validation throughout the test suite.
+        """
         cls.repo_root = Path(__file__).parent.parent
         cls.agents_dir = cls.repo_root / 'agents'
         cls.commands_dir = cls.repo_root / 'commands'
@@ -137,6 +164,10 @@ class TestAgentIntegration(unittest.TestCase):
 
         # Check command files for agent references
         for command_file in self.commands_dir.rglob('*.md'):
+            # Skip template files
+            if command_file.name == 'COMMAND_TEMPLATE.md':
+                continue
+
             with self.subTest(command=command_file.name):
                 with open(command_file, 'r') as f:
                     content = f.read()
@@ -208,10 +239,19 @@ class TestAgentIntegration(unittest.TestCase):
 
 
 class TestValidatorErrorTracking(unittest.TestCase):
-    """Test that validator correctly tracks errors per file."""
+    """
+    Test validator error tracking accuracy.
+
+    Ensures the validator correctly reports validation status
+    on a per-file basis and aggregates errors properly.
+    """
 
     def setUp(self):
-        """Set up test fixtures."""
+        """
+        Set up test fixtures for each test method.
+
+        Creates paths needed for validator testing.
+        """
         self.repo_root = Path(__file__).parent.parent
         self.agents_dir = self.repo_root / 'agents'
 

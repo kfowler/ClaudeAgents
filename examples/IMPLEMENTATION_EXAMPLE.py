@@ -1,6 +1,33 @@
 """
-Practical Implementation Example: AI-Enhanced Agent Selection System
-This demonstrates how the proposed AI/ML enhancements would work in practice.
+PROOF OF CONCEPT: AI-Enhanced Agent Selection System
+
+⚠️  STATUS: Design Specification / Prototype - NOT PRODUCTION READY
+
+This file demonstrates how machine learning could enhance agent selection
+in future versions of the Claude Code Agent System. It explores using:
+- Sentence embeddings for semantic similarity matching
+- Performance metrics and user feedback for agent ranking
+- Project context analysis for intelligent recommendations
+- ML-based clustering and classification
+
+IMPORTANT NOTES:
+1. This is a DESIGN EXPLORATION, not a working implementation
+2. Dependencies are NOT installed by default (numpy, scikit-learn, sentence-transformers)
+3. Missing module: project_analyzer.py (referenced but not implemented)
+4. This code is preserved as a reference for future development
+5. See examples/README.md for full context
+
+DO NOT USE IN PRODUCTION. For the current production agent selection
+system, see docs/architecture.md for the keyword-based approach.
+
+If you want to complete this implementation:
+- Install ML dependencies: pip install numpy scikit-learn sentence-transformers
+- Implement missing project_analyzer.py module
+- Add comprehensive tests
+- Submit PR when fully functional
+
+Last Updated: 2025-10-06
+Purpose: Design reference for future ML-based agent selection
 """
 
 import numpy as np
