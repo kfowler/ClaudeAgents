@@ -1,12 +1,12 @@
 # Claude Code AI Agent System
 
-A comprehensive ecosystem of 29 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
+A comprehensive ecosystem of 32 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
 
 ## 📁 Repository Structure
 
 ```
 ClaudeAgents/
-├── agents/              # 29 specialized agent definitions
+├── agents/              # 32 specialized agent definitions
 ├── commands/            # Organized workflow commands
 │   ├── development/     # Code review, debugging, refactoring
 │   ├── quality/         # Testing, security, performance audits
@@ -49,8 +49,11 @@ ClaudeAgents/
 - **`full-stack-architect`** - Web applications (React, Next.js, Svelte + backends)
 - **`backend-api-engineer`** - Backend APIs (REST, GraphQL, microservices, server-side logic)
 - **`mobile-developer`** - iOS/Android (Swift, Kotlin, React Native, Flutter)
-- **`data-engineer`** - Databases, pipelines, analytics, ML infrastructure
+- **`data-engineer`** - Data pipelines, analytics, ML infrastructure
+- **`database-administrator`** - Production database operations, performance tuning, backup/recovery
+- **`cloud-architect`** - Multi-cloud strategy, AWS/Azure/GCP architecture, cost optimization
 - **`devops-engineer`** - CI/CD, Docker, Kubernetes, cloud deployment
+- **`linux-sysadmin`** - System administration, OS hardening, server configuration
 
 ### 🤖 AI & Machine Learning
 - **`ai-ml-engineer`** - LLM integration, RAG systems, vector databases
@@ -61,6 +64,7 @@ ClaudeAgents/
 - **`security-audit-specialist`** - Vulnerability assessment, compliance
 - **`qa-test-engineer`** - Testing strategies, automation, quality assurance
 - **`accessibility-expert`** - WCAG compliance, inclusive design
+- **`frontend-performance-specialist`** - Core Web Vitals, bundle optimization, rendering performance
 - **`code-architect`** - Architecture review, code quality, maintainability
 
 ### 🎨 Creative & Specialized
@@ -197,11 +201,11 @@ The `examples/` directory contains design specifications and proof-of-concept im
 
 ClaudeAgents uses strategic model assignment for cost optimization:
 
-- **8 Haiku agents (30%)** - Creative and specialized tasks
-- **14 Sonnet agents (52%)** - Development and coordination
-- **5 Opus agents (18%)** - Complex analysis and critical systems
+- **8 Haiku agents (25%)** - Creative and specialized tasks
+- **18 Sonnet agents (56%)** - Development and coordination
+- **6 Opus agents (19%)** - Complex analysis and critical systems
 
-This distribution achieves ~71.5% cost savings vs using Opus for all tasks while maintaining appropriate capability levels.
+This distribution achieves ~72.3% cost savings vs using Opus for all tasks while maintaining appropriate capability levels.
 
 See [Model Assignment Strategy](docs/model-assignment-strategy.md) for details.
 
