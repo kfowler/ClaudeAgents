@@ -237,6 +237,139 @@ class TestAgentIntegration(unittest.TestCase):
                     f"{agent_file.name} has empty content body"
                 )
 
+    def test_all_agents_have_model_assignment(self):
+        """Test that all agents have a model field assigned."""
+        for agent_file in self.agents_dir.glob('*.md'):
+            if agent_file.name in ['AGENT_PROFESSIONAL_BEHAVIOR.md', 'AGENT_TEMPLATE.md']:
+                continue
+
+            with self.subTest(agent=agent_file.name):
+                with open(agent_file, 'r') as f:
+                    content = f.read()
+
+                parts = content.split('---', 2)
+                self.assertGreaterEqual(len(parts), 3, f"{agent_file.name} missing frontmatter")
+
+                metadata = yaml.safe_load(parts[1])
+                self.assertIn(
+                    'model',
+                    metadata,
+                    f"{agent_file.name} missing 'model' field in frontmatter"
+                )
+                self.assertIsNotNone(
+                    metadata['model'],
+                    f"{agent_file.name} has null 'model' field"
+                )
+
+    def test_model_values_are_valid(self):
+        """Test that model field values are valid (haiku, sonnet, or opus)."""
+        valid_models = {'haiku', 'sonnet', 'opus'}
+
+        for agent_file in self.agents_dir.glob('*.md'):
+            if agent_file.name in ['AGENT_PROFESSIONAL_BEHAVIOR.md', 'AGENT_TEMPLATE.md']:
+                continue
+
+            with self.subTest(agent=agent_file.name):
+                with open(agent_file, 'r') as f:
+                    content = f.read()
+
+                parts = content.split('---', 2)
+                metadata = yaml.safe_load(parts[1])
+
+                if 'model' in metadata:
+                    model_value = metadata['model']
+                    self.assertIn(
+                        model_value,
+                        valid_models,
+                        f"{agent_file.name} has invalid model value: '{model_value}'. "
+                        f"Must be one of {valid_models}"
+                    )
+
+    def test_all_agents_have_complexity(self):
+        """Test that all agents have a computational_complexity field."""
+        for agent_file in self.agents_dir.glob('*.md'):
+            if agent_file.name in ['AGENT_PROFESSIONAL_BEHAVIOR.md', 'AGENT_TEMPLATE.md']:
+                continue
+
+            with self.subTest(agent=agent_file.name):
+                with open(agent_file, 'r') as f:
+                    content = f.read()
+
+                parts = content.split('---', 2)
+                self.assertGreaterEqual(len(parts), 3, f"{agent_file.name} missing frontmatter")
+
+                metadata = yaml.safe_load(parts[1])
+                self.assertIn(
+                    'computational_complexity',
+                    metadata,
+                    f"{agent_file.name} missing 'computational_complexity' field in frontmatter"
+                )
+                self.assertIsNotNone(
+                    metadata['computational_complexity'],
+                    f"{agent_file.name} has null 'computational_complexity' field"
+                )
+
+    def test_complexity_values_are_valid(self):
+        """Test that computational_complexity field values are valid (low, medium, or high)."""
+        valid_complexity = {'low', 'medium', 'high'}
+
+        for agent_file in self.agents_dir.glob('*.md'):
+            if agent_file.name in ['AGENT_PROFESSIONAL_BEHAVIOR.md', 'AGENT_TEMPLATE.md']:
+                continue
+
+            with self.subTest(agent=agent_file.name):
+                with open(agent_file, 'r') as f:
+                    content = f.read()
+
+                parts = content.split('---', 2)
+                metadata = yaml.safe_load(parts[1])
+
+                if 'computational_complexity' in metadata:
+                    complexity_value = metadata['computational_complexity']
+                    self.assertIn(
+                        complexity_value,
+                        valid_complexity,
+                        f"{agent_file.name} has invalid computational_complexity value: '{complexity_value}'. "
+                        f"Must be one of {valid_complexity}"
+                    )
+
+    def test_model_complexity_correlation(self):
+        """Test that model assignment correlates with computational_complexity.
+
+        Expected correlation:
+        - haiku should have low complexity
+        - sonnet should have medium complexity
+        - opus should have high complexity
+        """
+        expected_correlation = {
+            'haiku': 'low',
+            'sonnet': 'medium',
+            'opus': 'high'
+        }
+
+        for agent_file in self.agents_dir.glob('*.md'):
+            if agent_file.name in ['AGENT_PROFESSIONAL_BEHAVIOR.md', 'AGENT_TEMPLATE.md']:
+                continue
+
+            with self.subTest(agent=agent_file.name):
+                with open(agent_file, 'r') as f:
+                    content = f.read()
+
+                parts = content.split('---', 2)
+                metadata = yaml.safe_load(parts[1])
+
+                if 'model' in metadata and 'computational_complexity' in metadata:
+                    model = metadata['model']
+                    complexity = metadata['computational_complexity']
+                    expected_complexity = expected_correlation.get(model)
+
+                    self.assertEqual(
+                        complexity,
+                        expected_complexity,
+                        f"{agent_file.name} has model='{model}' but complexity='{complexity}'. "
+                        f"Expected complexity='{expected_complexity}' for model '{model}'"
+                    )
+
 
 class TestValidatorErrorTracking(unittest.TestCase):
     """

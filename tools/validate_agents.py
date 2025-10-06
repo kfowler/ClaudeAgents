@@ -39,13 +39,15 @@ class AgentValidator:
     """
 
     REQUIRED_FIELDS = {'name', 'description'}
-    OPTIONAL_FIELDS = {'color'}
+    OPTIONAL_FIELDS = {'color', 'model', 'computational_complexity'}
     VALID_COLORS = {
         'blue', 'green', 'yellow', 'red', 'purple', 'cyan', 'orange', 'pink',
         'gray', 'grey', 'brown', 'indigo', 'teal', 'lime', 'amber', 'emerald',
         'violet', 'fuchsia', 'rose', 'slate', 'zinc', 'neutral', 'stone',
         'crimson', 'lavender', 'navy', 'silver'
     }
+    VALID_MODELS = {'haiku', 'sonnet', 'opus'}
+    VALID_COMPLEXITY = {'low', 'medium', 'high'}
     
     def __init__(self, agents_dir: str = 'agents'):
         """
@@ -148,6 +150,24 @@ class AgentValidator:
                         f"Valid colors: {', '.join(sorted(self.VALID_COLORS))}"
                     )
 
+            # Validate model if present
+            if 'model' in metadata:
+                model = metadata['model'].lower()
+                if model not in self.VALID_MODELS:
+                    self.warnings.append(
+                        f"{filename}: Invalid model '{model}'. "
+                        f"Valid models: {', '.join(sorted(self.VALID_MODELS))}"
+                    )
+
+            # Validate computational_complexity if present
+            if 'computational_complexity' in metadata:
+                complexity = metadata['computational_complexity'].lower()
+                if complexity not in self.VALID_COMPLEXITY:
+                    self.warnings.append(
+                        f"{filename}: Invalid computational_complexity '{complexity}'. "
+                        f"Valid values: {', '.join(sorted(self.VALID_COMPLEXITY))}"
+                    )
+
             # Check for unexpected fields
             all_fields = self.REQUIRED_FIELDS | self.OPTIONAL_FIELDS
             unexpected = set(metadata.keys()) - all_fields
@@ -169,6 +189,20 @@ class AgentValidator:
                 self.stats['agents_with_color'] += 1
             if 'examples' in metadata:
                 self.stats['agents_with_examples'] += 1
+
+            # Track model assignment stats
+            if 'model' in metadata:
+                self.stats['agents_with_model'] += 1
+                model = metadata['model'].lower()
+                if model in self.VALID_MODELS:
+                    self.stats[f'model_{model}'] += 1
+
+            # Track computational complexity stats
+            if 'computational_complexity' in metadata:
+                self.stats['agents_with_complexity'] += 1
+                complexity = metadata['computational_complexity'].lower()
+                if complexity in self.VALID_COMPLEXITY:
+                    self.stats[f'complexity_{complexity}'] += 1
 
             # Add file errors to global error list
             self.errors.extend(file_errors)
@@ -258,6 +292,24 @@ class AgentValidator:
         print(f"  • Unique colors used: {self.stats['unique_colors']}")
         if self.stats['most_used_color']:
             print(f"  • Most used color: {self.stats['most_used_color']}")
+
+        # Model assignment statistics
+        print(f"\n📊 MODEL ASSIGNMENT PROGRESS:")
+        print(f"  • Agents with model assigned: {self.stats.get('agents_with_model', 0)}/{self.stats['total_agents']}")
+        if self.stats.get('agents_with_model', 0) > 0:
+            print(f"  • Model distribution:")
+            print(f"    - Haiku (fast, simple):  {self.stats.get('model_haiku', 0)}")
+            print(f"    - Sonnet (balanced):     {self.stats.get('model_sonnet', 0)}")
+            print(f"    - Opus (complex):        {self.stats.get('model_opus', 0)}")
+
+        # Computational complexity statistics
+        print(f"\n📊 COMPUTATIONAL COMPLEXITY:")
+        print(f"  • Agents with complexity assigned: {self.stats.get('agents_with_complexity', 0)}/{self.stats['total_agents']}")
+        if self.stats.get('agents_with_complexity', 0) > 0:
+            print(f"  • Complexity distribution:")
+            print(f"    - Low:    {self.stats.get('complexity_low', 0)}")
+            print(f"    - Medium: {self.stats.get('complexity_medium', 0)}")
+            print(f"    - High:   {self.stats.get('complexity_high', 0)}")
             
         if not self.errors and not self.warnings:
             print("\n✅ All agents are valid and consistent!")
