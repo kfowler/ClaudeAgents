@@ -224,6 +224,44 @@ python3 tools/validate_agents.py
 ```
 Validates all agent definitions for consistency and completeness.
 
+### Agent Registry (NEW - Phase 1)
+Fast agent discovery through semantic indexing:
+```bash
+# View registry statistics
+python3 tools/agent_registry.py stats
+
+# Search for agents
+python3 tools/agent_registry.py search "react mobile app"
+
+# Find by capability/keyword/domain
+python3 tools/agent_registry.py find optimization
+```
+
+**Features:**
+- O(1) capability-based lookup (vs O(n) scanning)
+- Semantic search with relevance scoring
+- 1,290 keywords indexed across 50 agents
+- Multi-index: capabilities, keywords, domains
+
+### Telemetry (Optional - Privacy-First)
+Opt-in usage tracking to improve agent quality:
+```bash
+# Enable telemetry (disabled by default)
+python3 tools/telemetry.py enable
+
+# View your usage statistics
+python3 tools/telemetry.py summary
+
+# Disable telemetry
+python3 tools/telemetry.py disable
+```
+
+**Privacy Promise:**
+- No PII, code snippets, or project details
+- All data stored locally in `~/.claude-telemetry/`
+- Completely optional and transparent
+- See [Telemetry Guide](docs/telemetry-guide.md) for details
+
 ### Examples and Prototypes
 The `examples/` directory contains design specifications and proof-of-concept implementations:
 - **Project analysis system**: Prototype for ML-based agent recommendations
@@ -243,6 +281,8 @@ The `examples/` directory contains design specifications and proof-of-concept im
 - **[Development Process](docs/development-process.md)** - Mandatory workflow for contributors (branching, commits, agent delegation)
 - **[Lessons Learned](docs/lessons-learned.md)** - Process improvements and best practices
 - **[Project Instructions](CLAUDE.md)** - Guidance for Claude Code when working with this repository
+- **[Strategic Roadmap](docs/ROADMAP.md)** - 6-month strategic plan with phases and milestones
+- **[Telemetry Guide](docs/telemetry-guide.md)** - Optional privacy-first usage tracking
 - **[TODO Roadmap](TODO.md)** - Prioritized improvements and development roadmap
 
 ## 🎯 Model Assignment & Cost Optimization
