@@ -127,7 +127,7 @@ ClaudeAgents/
 "Use the-critic to evaluate PostgreSQL vs MongoDB for real-time analytics"
 ```
 
-## 📋 Available Commands (37 total)
+## 📋 Available Commands (40 total)
 
 ### Development Commands (`commands/development/`)
 - `code-review` - Comprehensive code review
@@ -144,6 +144,8 @@ ClaudeAgents/
 - `architecture-review` - Architecture assessment
 - `production-readiness` - Deployment checklist
 - `dependency-audit` - Dependency security check
+- `code-quality-review` - Comprehensive code quality assessment
+- `performance-optimization` - Complete performance optimization workflow
 
 ### Deployment Commands (`commands/deployment/`)
 - `deploy-prep` - Deployment preparation
