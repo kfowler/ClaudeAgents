@@ -1,16 +1,17 @@
 # Claude Code AI Agent System
 
-A comprehensive ecosystem of 32 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
+A comprehensive ecosystem of 35 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
 
 ## 📁 Repository Structure
 
 ```
 ClaudeAgents/
-├── agents/              # 32 specialized agent definitions
+├── agents/              # 35 specialized agent definitions
 ├── commands/            # Organized workflow commands
 │   ├── development/     # Code review, debugging, refactoring
 │   ├── quality/         # Testing, security, performance audits
 │   ├── deployment/      # Deploy prep, infrastructure setup
+│   ├── seo/             # SEO auditing and optimization
 │   ├── specialized/     # Language-specific tools (Rust, Python, etc.)
 │   └── workflows/       # Multi-agent orchestration patterns
 ├── tools/               # Validation and utilities
@@ -66,6 +67,11 @@ ClaudeAgents/
 - **`accessibility-expert`** - WCAG compliance, inclusive design
 - **`frontend-performance-specialist`** - Core Web Vitals, bundle optimization, rendering performance
 - **`code-architect`** - Architecture review, code quality, maintainability
+
+### 🔍 SEO & Optimization
+- **`seo-meta-optimizer`** - Meta tags, Open Graph, structured data, CTR optimization
+- **`seo-technical-auditor`** - Crawlability, indexability, sitemaps, mobile-friendliness
+- **`seo-performance-specialist`** - Core Web Vitals for rankings, TTFB, mobile-first performance
 
 ### 🎨 Creative & Specialized
 - **`digital-artist`** - UI/UX graphics, game assets, visual design
@@ -201,11 +207,11 @@ The `examples/` directory contains design specifications and proof-of-concept im
 
 ClaudeAgents uses strategic model assignment for cost optimization:
 
-- **8 Haiku agents (25%)** - Creative and specialized tasks
-- **18 Sonnet agents (56%)** - Development and coordination
-- **6 Opus agents (19%)** - Complex analysis and critical systems
+- **9 Haiku agents (26%)** - Creative and specialized tasks
+- **20 Sonnet agents (57%)** - Development and coordination
+- **6 Opus agents (17%)** - Complex analysis and critical systems
 
-This distribution achieves ~72.3% cost savings vs using Opus for all tasks while maintaining appropriate capability levels.
+This distribution achieves ~72.8% cost savings vs using Opus for all tasks while maintaining appropriate capability levels.
 
 See [Model Assignment Strategy](docs/model-assignment-strategy.md) for details.
 
