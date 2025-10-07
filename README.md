@@ -127,7 +127,7 @@ ClaudeAgents/
 "Use the-critic to evaluate PostgreSQL vs MongoDB for real-time analytics"
 ```
 
-## 📋 Available Commands (42 total)
+## 📋 Available Commands (43 total)
 
 ### Development Commands (`commands/development/`)
 - `code-review` - Comprehensive code review
@@ -169,6 +169,7 @@ ClaudeAgents/
 - `crisis-manager` - Emergency response
 - `ai-code-battle` - Code comparison
 - `optimize-performance` - Performance tuning
+- `microservices-architecture` - Complete microservices design with service mesh
 
 ### SEO Commands (`commands/seo/`)
 - `comprehensive-seo-audit` - Full site SEO health check (seo-technical-auditor, seo-meta-optimizer, seo-performance-specialist)
