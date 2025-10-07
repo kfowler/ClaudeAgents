@@ -1,1 +1,5 @@
-PyYAML>=6.0
+# ClaudeAgents Tools - Core Dependencies
+# Install with: pip install -r requirements.txt
+
+# YAML parsing for agent definitions
+PyYAML==6.0.1
