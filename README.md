@@ -143,7 +143,7 @@ ClaudeAgents/
 "Use the-critic to evaluate PostgreSQL vs MongoDB for real-time analytics"
 ```
 
-## 📋 Available Commands (50 total)
+## 📋 Available Commands (51 total)
 
 ### Development Commands (`commands/development/`)
 - `code-review` - Comprehensive code review
@@ -202,9 +202,10 @@ ClaudeAgents/
 - `requirements-analysis` - Complete BRD creation (business-analyst, product-manager, technical-writer)
 - `product-roadmap` - Strategic product planning (product-manager, business-analyst, product-strategist)
 
-### Vertical Workflow Packages (`commands/vertical/`) **NEW - Phase 2**
+### Vertical Workflow Packages (`commands/vertical/`) **NEW - Phase 2 & 3**
 - `saas-mvp` - Complete SaaS product development (8-12 hours, 6-8 agents, market strategy to production deployment)
 - `ecommerce-platform` - E-commerce store launch (10-14 hours, 7-9 agents, mobile storefront to PCI compliance)
+- `fintech-compliance` - **NEW (Phase 3)** - FinTech compliance & regulatory workflow (12-16 hours, 8-10 agents, PCI DSS/SOC 2/BSA-AML/GDPR/PSD2)
 
 ## 🔍 Agent Selection Guide
 
@@ -285,6 +286,26 @@ python3 tools/intelligent_orchestrator.py "optimize frontend performance"
 - Generates workflow with reasoning and success criteria
 - Estimates duration and defines prerequisites
 
+### Agent Emergence Tracking (NEW - Phase 3)
+Organic agent evolution through usage pattern tracking:
+```bash
+# View emergence tracking dashboard
+python3 tools/agent_emergence.py dashboard
+
+# See patterns approaching promotion threshold
+python3 tools/agent_emergence.py candidates
+
+# Promote emergent agent to permanent status
+python3 tools/agent_emergence.py promote <agent-name>
+```
+
+**Features:**
+- Tracks agent usage gaps and combination patterns
+- Auto-synthesizes composite agents when threshold met (10+ uses, 70%+ satisfaction, 5+ distinct use cases)
+- Identifies unmet needs organically from real usage
+- Prevents agent proliferation (only promotes validated patterns)
+- Storage in `~/.claude-telemetry/emergence/`
+
 ### Examples and Prototypes
 The `examples/` directory contains design specifications and proof-of-concept implementations:
 - **Project analysis system**: Prototype for ML-based agent recommendations
@@ -305,6 +326,7 @@ The `examples/` directory contains design specifications and proof-of-concept im
 - **[Lessons Learned](docs/lessons-learned.md)** - Process improvements and best practices
 - **[Project Instructions](CLAUDE.md)** - Guidance for Claude Code when working with this repository
 - **[Strategic Roadmap](docs/ROADMAP.md)** - 6-month strategic plan with phases and milestones
+- **[Agent Tiers](docs/agent-tiers.md)** - **NEW (Phase 3)** - Quality-based 3-tier organization system (Core, Extended, Experimental)
 - **[Telemetry Guide](docs/telemetry-guide.md)** - Optional privacy-first usage tracking
 - **[TODO Roadmap](TODO.md)** - Prioritized improvements and development roadmap
 
