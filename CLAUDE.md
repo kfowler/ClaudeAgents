@@ -43,6 +43,12 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **Application Infrastructure**: `devops-engineer` (CI/CD, Docker, Kubernetes, cloud deployment)
   - **Note**: For OS-level configuration (systemd, kernel, firewall), use `linux-sysadmin`
 - **System Administration**: `linux-sysadmin` (OS hardening, system services, bare metal/VM setup)
+- **Platform Specialists**:
+  - `macos-specialist` (macOS administration, MDM, Homebrew, Apple Silicon optimization, enterprise Mac fleet)
+  - `windows-specialist` (Windows Server, Active Directory, Group Policy, PowerShell DSC, enterprise Windows)
+- **Technology Specialists**:
+  - `postgresql-expert` (PostgreSQL optimization, replication, high availability, query tuning, extensions)
+  - `kafka-expert` (Kafka architecture, stream processing, event-driven systems, Kafka Streams/Connect)
 - **Systems Programming**: `systems-engineer` (Rust, C++, Go, performance optimization)
 
 ### Quality & Security Agents
@@ -135,6 +141,10 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "camera work", "lighting design", "shot composition", "visual storytelling", "cinematography" → `cinematographer`
 - "choreography", "dance", "movement design", "physical storytelling", "performance" → `choreographer`
 - "poetry", "verse", "literary devices", "sonnet", "haiku", "free verse" → `poet`
+- "macOS", "Homebrew", "Xcode", "Apple Silicon", "MDM", "Jamf", "Mac fleet" → `macos-specialist`
+- "Windows Server", "Active Directory", "Group Policy", "PowerShell", "SCCM", "Intune" → `windows-specialist`
+- "PostgreSQL", "query optimization", "EXPLAIN", "pgvector", "PostGIS", "TimescaleDB", "pg tuning" → `postgresql-expert`
+- "Kafka", "stream processing", "event-driven", "Kafka Streams", "Kafka Connect", "ksqlDB" → `kafka-expert`
 
 ### Anti-Patterns to Avoid
 - Don't use overlapping agents simultaneously (e.g., multiple code reviewers)
