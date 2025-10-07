@@ -1,12 +1,12 @@
 # Claude Code AI Agent System
 
-A comprehensive ecosystem of 44 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
+A comprehensive ecosystem of 43 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
 
 ## 📁 Repository Structure
 
 ```
 ClaudeAgents/
-├── agents/              # 44 specialized agent definitions
+├── agents/              # 43 specialized agent definitions
 ├── commands/            # Organized workflow commands
 │   ├── development/     # Code review, debugging, refactoring
 │   ├── quality/         # Testing, security, performance audits
@@ -44,7 +44,6 @@ ClaudeAgents/
 ### 📊 Strategy & Planning
 - **`product-strategist`** - Market research, competitive analysis, product ideation
 - **`project-orchestrator`** - Complex project coordination, multi-agent orchestration
-- **`agent-orchestrator`** - Agent selection and workflow optimization
 
 ### 🏗️ Core Development
 - **`full-stack-architect`** - Web applications (React, Next.js, Svelte + backends)
