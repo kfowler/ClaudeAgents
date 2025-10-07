@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 38 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, and more.
+This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 41 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, SEO optimization, and more.
 
 ## Architecture & Structure
 
@@ -57,6 +57,9 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **SEO Metadata**: `seo-meta-optimizer` (meta tags, Open Graph, structured data, CTR optimization)
 - **Technical SEO**: `seo-technical-auditor` (crawlability, indexability, sitemaps, mobile-friendliness)
 - **SEO Performance**: `seo-performance-specialist` (Core Web Vitals for rankings, TTFB, mobile-first)
+- **SEO Keywords**: `seo-keyword-strategist` (keyword research, search intent, competitive analysis, keyword clustering)
+- **SEO Content**: `seo-content-optimizer` (on-page optimization, readability, E-E-A-T, featured snippets)
+- **SEO Architecture**: `seo-structure-architect` (site architecture, internal linking, URL structure, content silos)
 
 ### Business Operations Agents
 - **Requirements**: `business-analyst` (requirements gathering, stakeholder management, BRD, user stories)
@@ -102,6 +105,9 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "SEO", "search rankings", "meta tags", "Open Graph" → `seo-meta-optimizer`
 - "SEO audit", "crawlability", "indexability", "sitemap" → `seo-technical-auditor`
 - "SEO performance", "Core Web Vitals SEO", "mobile-first ranking" → `seo-performance-specialist`
+- "keyword research", "search intent", "keyword clustering", "keyword gap" → `seo-keyword-strategist`
+- "on-page SEO", "content optimization", "readability", "E-E-A-T", "featured snippets" → `seo-content-optimizer`
+- "site architecture", "internal linking", "URL structure", "content silos", "topic clusters" → `seo-structure-architect`
 - "CI/CD", "Docker", "Kubernetes", "deploy" → `devops-engineer`
 - "systemd", "kernel", "firewall", "OS hardening" → `linux-sysadmin`
 - "data pipeline", "ETL", "analytics" → `data-engineer`
