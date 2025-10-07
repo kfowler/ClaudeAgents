@@ -127,7 +127,7 @@ ClaudeAgents/
 "Use the-critic to evaluate PostgreSQL vs MongoDB for real-time analytics"
 ```
 
-## 📋 Available Commands (40 total)
+## 📋 Available Commands (42 total)
 
 ### Development Commands (`commands/development/`)
 - `code-review` - Comprehensive code review
@@ -136,6 +136,8 @@ ClaudeAgents/
 - `documentation-generator` - Auto-generate docs
 - `git-workflow` - Git operations
 - `cross-paradigm-translator` - Language translation
+- `api-design` - REST/GraphQL API design with OpenAPI specs
+- `database-design` - Database schema design with migrations and indexing
 
 ### Quality Commands (`commands/quality/`)
 - `security-audit` - Security vulnerability scan
