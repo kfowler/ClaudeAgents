@@ -63,6 +63,7 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **Legacy Systems**: `legacy-specialist` (migration, compatibility)
 - **Functional Programming**: `functional-programmer` (Haskell, Clojure, F#)
 - **Metaprogramming**: `metaprogramming-specialist` (Lisp, macros, DSLs)
+- **Documentation**: `technical-writer` (API docs, user guides, tutorials, developer documentation)
 - **Creative**: `digital-artist`, `video-director`, `3d-modeler`, `comedy-writer`, `audio-engineer`, `tv-writer`
 
 ## Development Commands
@@ -100,6 +101,8 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "CI/CD", "Docker", "Kubernetes", "deploy" → `devops-engineer`
 - "systemd", "kernel", "firewall", "OS hardening" → `linux-sysadmin`
 - "data pipeline", "ETL", "analytics" → `data-engineer`
+- "documentation", "API docs", "user guide", "tutorial", "README" → `technical-writer`
+- "developer docs", "SDK docs", "technical writing", "documentation site" → `technical-writer`
 - "code review" (domain-specific) → domain specialist
 - "code review" (comprehensive) → `code-architect`
 
