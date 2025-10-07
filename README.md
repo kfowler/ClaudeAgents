@@ -1,12 +1,12 @@
 # Claude Code AI Agent System
 
-A comprehensive ecosystem of 51 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
+A comprehensive ecosystem of 61 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
 
 ## 📁 Repository Structure
 
 ```
 ClaudeAgents/
-├── agents/              # 51 specialized agent definitions
+├── agents/              # 61 specialized agent definitions
 ├── commands/            # Organized workflow commands
 │   ├── development/     # Code review, debugging, refactoring
 │   ├── quality/         # Testing, security, performance audits
@@ -49,8 +49,6 @@ ClaudeAgents/
 - **`full-stack-architect`** - Web applications (React, Next.js, Svelte + backends)
 - **`backend-api-engineer`** - Backend APIs (REST, GraphQL, microservices, server-side logic)
 - **`mobile-developer`** - iOS/Android (Swift, Kotlin, React Native, Flutter)
-- **`data-engineer`** - Data pipelines, analytics, ML infrastructure
-- **`database-administrator`** - Production database operations, performance tuning, backup/recovery
 - **`game-development-engineer`** - Unity/Unreal Engine, 2D/3D games, mobile/VR/AR, multiplayer
 
 ### 🏭 Infrastructure & Platform
@@ -60,6 +58,14 @@ ClaudeAgents/
 - **`platform-engineering-specialist`** - Internal Developer Platforms (IDPs), Backstage, golden paths, developer experience
 - **`edge-computing-specialist`** - Cloudflare Workers, Deno Deploy, Vercel Edge, <50ms global latency
 - **`linux-sysadmin`** - System administration, OS hardening, server configuration
+- **`macos-specialist`** - macOS administration, MDM integration, Homebrew, Apple Silicon optimization, enterprise Mac fleets
+- **`windows-specialist`** - Windows Server, Active Directory, Group Policy, PowerShell DSC, enterprise Windows infrastructure
+
+### 💾 Database & Streaming
+- **`data-engineer`** - Data pipelines, analytics, ML infrastructure
+- **`database-administrator`** - Production database operations, performance tuning, backup/recovery
+- **`postgresql-expert`** - Advanced PostgreSQL optimization, query tuning, replication, high availability, pgvector/PostGIS/TimescaleDB
+- **`kafka-expert`** - Apache Kafka architecture, stream processing, event-driven systems, Kafka Streams/Connect, real-time pipelines
 
 ### 🤖 AI & Machine Learning
 - **`ai-ml-engineer`** - LLM integration, RAG systems, vector databases
