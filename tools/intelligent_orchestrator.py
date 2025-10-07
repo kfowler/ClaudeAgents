@@ -17,7 +17,142 @@ import re
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple, Set
 from dataclasses import dataclass, field
+from enum import Enum
 from agent_registry import AgentRegistry, AgentMetadata
+
+
+class AgentTier(Enum):
+    """Agent quality tiers"""
+    CORE = 1        # Top 10-15 agents, battle-tested
+    EXTENDED = 2    # 25-30 agents, domain-specific
+    EXPERIMENTAL = 3  # 10-15 agents, emerging
+    UNKNOWN = 4     # Not yet assigned
+
+
+class TierManager:
+    """
+    Manages agent tier assignments.
+
+    Note: Tier assignments are provisional until telemetry data collected.
+    Final assignments will be data-driven (usage, satisfaction, etc.)
+    """
+
+    # Provisional tier assignments (from docs/agent-tiers.md)
+    CORE_AGENTS = {
+        "project-orchestrator",
+        "full-stack-architect",
+        "backend-api-engineer",
+        "mobile-developer",
+        "security-audit-specialist",
+        "qa-test-engineer",
+        "code-architect",
+        "devops-engineer",
+        "data-engineer",
+        "the-critic",
+        "the-skeptic",
+        "product-strategist",
+    }
+
+    EXTENDED_AGENTS = {
+        # Development specialists
+        "systems-engineer",
+        "functional-programmer",
+        "game-development-engineer",
+        "blockchain-web3-engineer",
+        "embedded-iot-developer",
+        # Quality specialists
+        "frontend-performance-specialist",
+        "accessibility-expert",
+        "debugging-specialist",
+        "test-automation-engineer",
+        # Infrastructure specialists
+        "cloud-architect",
+        "infrastructure-as-code-specialist",
+        "platform-engineering-specialist",
+        "edge-computing-specialist",
+        "observability-engineer",
+        "incident-coordinator",
+        "database-administrator",
+        "linux-sysadmin",
+        # SEO specialists
+        "seo-meta-optimizer",
+        "seo-technical-auditor",
+        "seo-performance-specialist",
+        "seo-keyword-strategist",
+        "seo-content-optimizer",
+        "seo-structure-architect",
+        # Business & Operations
+        "business-analyst",
+        "product-manager",
+        "technical-writer",
+        # Specialized
+        "platform-integrator",
+        "legacy-specialist",
+        "merge-conflict-resolver",
+        "ai-ml-engineer",
+    }
+
+    EXPERIMENTAL_AGENTS = {
+        # Creative & Specialized
+        "creative-catalyst",
+        "digital-artist",
+        "video-director",
+        "audio-engineer",
+        "3d-modeler",
+        "comedy-writer",
+        "tv-writer",
+        # Niche Development
+        "elisp-specialist",
+        "metaprogramming-specialist",
+    }
+
+    @classmethod
+    def get_tier(cls, agent_name: str) -> AgentTier:
+        """Get tier for agent"""
+        if agent_name in cls.CORE_AGENTS:
+            return AgentTier.CORE
+        elif agent_name in cls.EXTENDED_AGENTS:
+            return AgentTier.EXTENDED
+        elif agent_name in cls.EXPERIMENTAL_AGENTS:
+            return AgentTier.EXPERIMENTAL
+        else:
+            return AgentTier.UNKNOWN
+
+    @classmethod
+    def filter_by_tier(
+        cls,
+        agents: List[str],
+        max_tier: AgentTier = AgentTier.EXTENDED
+    ) -> List[str]:
+        """
+        Filter agents by tier, keeping only those at or above max_tier.
+
+        Args:
+            agents: List of agent names
+            max_tier: Maximum tier to allow (CORE, EXTENDED, or EXPERIMENTAL)
+
+        Returns:
+            Filtered list of agents
+        """
+        return [
+            agent for agent in agents
+            if cls.get_tier(agent).value <= max_tier.value
+        ]
+
+    @classmethod
+    def sort_by_tier(cls, agents: List[str]) -> List[str]:
+        """
+        Sort agents by tier (Core first, then Extended, then Experimental).
+        Preserves order within each tier.
+        """
+        # Group by tier
+        core = [a for a in agents if cls.get_tier(a) == AgentTier.CORE]
+        extended = [a for a in agents if cls.get_tier(a) == AgentTier.EXTENDED]
+        experimental = [a for a in agents if cls.get_tier(a) == AgentTier.EXPERIMENTAL]
+        unknown = [a for a in agents if cls.get_tier(a) == AgentTier.UNKNOWN]
+
+        # Combine in tier order
+        return core + extended + experimental + unknown
 
 
 @dataclass
@@ -277,11 +412,11 @@ class IntentParser:
 
     # Quality requirement keywords
     QUALITY_KEYWORDS = {
-        "security": ["secure", "security", "auth", "authentication", "encryption"],
+        "security": ["secure", "security", "auth", "authentication", "encryption", "compliance", "audit"],
         "performance": ["fast", "performance", "optimize", "speed", "efficient"],
-        "accessibility": ["accessible", "a11y", "wcag", "aria", "screen reader"],
-        "testing": ["test", "coverage", "quality", "reliable"],
-        "seo": ["seo", "search", "ranking", "visibility"],
+        "accessibility": ["accessible", "accessibility", "a11y", "wcag", "aria", "screen reader", "inclusive"],
+        "testing": ["test", "coverage", "quality", "reliable", "qa"],
+        "seo": ["seo", "search", "ranking", "visibility", "google"],
     }
 
     def parse(self, user_request: str) -> UserIntent:
@@ -418,6 +553,10 @@ class IntelligentOrchestrator:
             if agent not in seen:
                 seen.add(agent)
                 result.append(agent)
+
+        # Sort by tier (Core > Extended > Experimental)
+        # This ensures higher-quality agents are prioritized
+        result = TierManager.sort_by_tier(result)
 
         return result
 
@@ -572,9 +711,16 @@ class IntelligentOrchestrator:
         print("INTELLIGENT WORKFLOW ORCHESTRATION")
         print("="*60)
 
-        print("\n📋 Selected Agents:")
+        print("\n📋 Selected Agents (sorted by tier):")
         for i, agent in enumerate(workflow.agents, 1):
-            print(f"  {i}. {agent}")
+            tier = TierManager.get_tier(agent)
+            tier_badge = {
+                AgentTier.CORE: "⭐ CORE",
+                AgentTier.EXTENDED: "✓ EXTENDED",
+                AgentTier.EXPERIMENTAL: "🧪 EXPERIMENTAL",
+                AgentTier.UNKNOWN: "? UNKNOWN"
+            }[tier]
+            print(f"  {i}. {agent} [{tier_badge}]")
 
         print("\n🧠 Reasoning:")
         for reason in workflow.reasoning:
