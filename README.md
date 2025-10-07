@@ -1,12 +1,12 @@
 # Claude Code AI Agent System
 
-A comprehensive ecosystem of 43 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
+A comprehensive ecosystem of 50 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
 
 ## 📁 Repository Structure
 
 ```
 ClaudeAgents/
-├── agents/              # 43 specialized agent definitions
+├── agents/              # 50 specialized agent definitions
 ├── commands/            # Organized workflow commands
 │   ├── development/     # Code review, debugging, refactoring
 │   ├── quality/         # Testing, security, performance audits
@@ -51,14 +51,23 @@ ClaudeAgents/
 - **`mobile-developer`** - iOS/Android (Swift, Kotlin, React Native, Flutter)
 - **`data-engineer`** - Data pipelines, analytics, ML infrastructure
 - **`database-administrator`** - Production database operations, performance tuning, backup/recovery
+- **`game-development-engineer`** - Unity/Unreal Engine, 2D/3D games, mobile/VR/AR, multiplayer
+
+### 🏭 Infrastructure & Platform
 - **`cloud-architect`** - Multi-cloud strategy, AWS/Azure/GCP architecture, cost optimization
 - **`devops-engineer`** - CI/CD, Docker, Kubernetes, cloud deployment
+- **`infrastructure-as-code-specialist`** - Terraform, Pulumi, multi-cloud IaC, state management, policy as code
+- **`platform-engineering-specialist`** - Internal Developer Platforms (IDPs), Backstage, golden paths, developer experience
+- **`edge-computing-specialist`** - Cloudflare Workers, Deno Deploy, Vercel Edge, <50ms global latency
 - **`linux-sysadmin`** - System administration, OS hardening, server configuration
 
 ### 🤖 AI & Machine Learning
 - **`ai-ml-engineer`** - LLM integration, RAG systems, vector databases
 - **`systems-engineer`** - Rust, C++, Go, performance-critical systems
 - **`metaprogramming-specialist`** - Lisp, macros, DSLs, code generation
+
+### ₿ Blockchain & Web3
+- **`blockchain-web3-engineer`** - Solidity smart contracts, Solana/Rust, DeFi, NFTs, dApp development, Web3 security
 
 ### 🚨 Operational Excellence
 - **`debugging-specialist`** - Advanced debugging across all languages, root cause analysis, memory/performance profiling
@@ -68,6 +77,7 @@ ClaudeAgents/
 ### 🔒 Quality & Security
 - **`security-audit-specialist`** - Vulnerability assessment, compliance
 - **`qa-test-engineer`** - Testing strategies, automation, quality assurance
+- **`test-automation-engineer`** - Playwright/Cypress E2E, visual regression, API testing, CI/CD integration
 - **`accessibility-expert`** - WCAG compliance, inclusive design
 - **`frontend-performance-specialist`** - Core Web Vitals, bundle optimization, rendering performance
 - **`code-architect`** - Architecture review, code quality, maintainability
@@ -97,6 +107,7 @@ ClaudeAgents/
 - **`functional-programmer`** - Haskell, Clojure, F#, type systems
 - **`legacy-specialist`** - Legacy code migration, compatibility
 - **`platform-integrator`** - Native platform APIs (macOS, Windows, Linux)
+- **`embedded-iot-developer`** - C/C++ firmware, ESP32/STM32/Arduino, RTOS, MQTT/BLE, power optimization
 - **`elisp-specialist`** - Emacs configuration, package development
 - **`merge-conflict-resolver`** - Git conflicts, code integration
 
@@ -235,11 +246,11 @@ The `examples/` directory contains design specifications and proof-of-concept im
 
 ClaudeAgents uses strategic model assignment for cost optimization:
 
-- **9 Haiku agents (21%)** - Creative and specialized tasks
-- **28 Sonnet agents (65%)** - Development, coordination, and operational excellence
-- **6 Opus agents (14%)** - Complex analysis and critical systems
+- **9 Haiku agents (18%)** - Creative and specialized tasks
+- **32 Sonnet agents (64%)** - Development, coordination, and operational excellence
+- **9 Opus agents (18%)** - Complex analysis and critical systems
 
-This distribution achieves ~75.9% cost savings vs using Opus for all tasks while maintaining appropriate capability levels.
+This distribution achieves ~75% cost savings vs using Opus for all tasks while maintaining appropriate capability levels.
 
 See [Model Assignment Strategy](docs/model-assignment-strategy.md) for details.
 
