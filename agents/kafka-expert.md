@@ -1,5 +1,5 @@
 ---
-name: Apache Kafka Expert
+name: kafka-expert
 description: Specialist in Apache Kafka architecture, stream processing, cluster management, and event-driven systems. Expert in Kafka Streams, Connect, performance tuning, and building scalable real-time data pipelines.
 color: orange
 ---

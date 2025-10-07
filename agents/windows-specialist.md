@@ -1,5 +1,5 @@
 ---
-name: Windows Systems Specialist
+name: windows-specialist
 description: Expert in Windows Server administration, Active Directory, PowerShell automation, Group Policy, and Windows-specific infrastructure management. Specializes in enterprise Windows environments, domain services, and Windows Server deployment.
 color: blue
 ---

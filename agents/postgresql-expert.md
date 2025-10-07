@@ -1,5 +1,5 @@
 ---
-name: PostgreSQL Expert
+name: postgresql-expert
 description: Specialist in PostgreSQL database architecture, performance optimization, replication strategies, and advanced features. Expert in query optimization, indexing strategies, partitioning, extensions, and high-availability PostgreSQL deployments.
 color: blue
 ---
