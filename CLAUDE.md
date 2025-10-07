@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 41 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, SEO optimization, and more.
+This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 49 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, SEO optimization, creative production, and more.
 
 ## Architecture & Structure
 
@@ -66,12 +66,20 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **Documentation**: `technical-writer` (API docs, user guides, tutorials, developer documentation)
 - **Product Management**: `product-manager` (roadmap planning, feature prioritization, OKRs, product metrics)
 
+### Creative & Artistic Agents
+- **Music**: `music-composer` (orchestral scores, film/game soundtracks, adaptive music, thematic development)
+- **Visual Arts**: `digital-artist` (game assets, UI/UX graphics, generative art), `cinematographer` (camera work, lighting, visual storytelling)
+- **Sound**: `audio-engineer` (mixing, mastering, production), `sound-designer` (SFX, foley, spatial audio, game audio)
+- **Writing**: `screenwriter` (feature films, three-act structure), `tv-writer` (episodic content), `poet` (verse forms, literary devices), `comedy-writer` (stand-up, timing)
+- **Interactive Media**: `game-designer` (mechanics, level design, player psychology), `narrative-designer` (branching stories, game lore, dialogue systems)
+- **Performance**: `choreographer` (dance composition, movement design), `video-director` (video production, cinematography)
+- **3D Arts**: `3d-modeler` (modeling, texturing, rendering)
+
 ### Specialized Agents
 - **Decision Support**: `the-critic` (technical decision analysis)
 - **Legacy Systems**: `legacy-specialist` (migration, compatibility)
 - **Functional Programming**: `functional-programmer` (Haskell, Clojure, F#)
 - **Metaprogramming**: `metaprogramming-specialist` (Lisp, macros, DSLs)
-- **Creative**: `digital-artist`, `video-director`, `3d-modeler`, `comedy-writer`, `audio-engineer`, `tv-writer`
 
 ## Development Commands
 
@@ -119,6 +127,14 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "backlog management", "sprint planning", "product metrics" → `product-manager`
 - "code review" (domain-specific) → domain specialist
 - "code review" (comprehensive) → `code-architect`
+- "compose music", "orchestral score", "film score", "game music", "soundtrack" → `music-composer`
+- "game mechanics", "level design", "player experience", "game balance", "progression" → `game-designer`
+- "screenplay", "feature film", "script", "character development", "three-act structure" → `screenwriter`
+- "interactive story", "branching narrative", "game lore", "dialogue tree", "quest design" → `narrative-designer`
+- "sound effects", "foley", "spatial audio", "game audio", "FMOD", "Wwise" → `sound-designer`
+- "camera work", "lighting design", "shot composition", "visual storytelling", "cinematography" → `cinematographer`
+- "choreography", "dance", "movement design", "physical storytelling", "performance" → `choreographer`
+- "poetry", "verse", "literary devices", "sonnet", "haiku", "free verse" → `poet`
 
 ### Anti-Patterns to Avoid
 - Don't use overlapping agents simultaneously (e.g., multiple code reviewers)
