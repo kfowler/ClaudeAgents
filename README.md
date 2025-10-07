@@ -1,12 +1,12 @@
 # Claude Code AI Agent System
 
-A comprehensive ecosystem of 50 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
+A comprehensive ecosystem of 51 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
 
 ## 📁 Repository Structure
 
 ```
 ClaudeAgents/
-├── agents/              # 50 specialized agent definitions
+├── agents/              # 51 specialized agent definitions
 ├── commands/            # Organized workflow commands
 │   ├── development/     # Code review, debugging, refactoring
 │   ├── quality/         # Testing, security, performance audits
@@ -114,6 +114,7 @@ ClaudeAgents/
 ### ⚖️ Decision Support
 - **`the-critic`** - Technical decision analysis, architectural critique
 - **`creative-catalyst`** - Creative problem-solving, lateral thinking
+- **`the-skeptic`** - **NEW (Phase 3)** - Questions automation necessity, recommends alternatives, radical honesty about AI limitations
 
 ## 💡 Usage Examples
 
@@ -142,7 +143,7 @@ ClaudeAgents/
 "Use the-critic to evaluate PostgreSQL vs MongoDB for real-time analytics"
 ```
 
-## 📋 Available Commands (49 total)
+## 📋 Available Commands (50 total)
 
 ### Development Commands (`commands/development/`)
 - `code-review` - Comprehensive code review
@@ -189,6 +190,7 @@ ClaudeAgents/
 - `ai-code-battle` - Code comparison
 - `optimize-performance` - Performance tuning
 - `microservices-architecture` - Complete microservices design with service mesh
+- `debate` - **NEW (Phase 3)** - Agent conflict theater for technical decisions (45-90 min, surfaces hidden tradeoffs)
 
 ### SEO Commands (`commands/seo/`)
 - `comprehensive-seo-audit` - Full site SEO health check (seo-technical-auditor, seo-meta-optimizer, seo-performance-specialist)
@@ -311,8 +313,8 @@ The `examples/` directory contains design specifications and proof-of-concept im
 ClaudeAgents uses strategic model assignment for cost optimization:
 
 - **9 Haiku agents (18%)** - Creative and specialized tasks
-- **32 Sonnet agents (64%)** - Development, coordination, and operational excellence
-- **9 Opus agents (18%)** - Complex analysis and critical systems
+- **32 Sonnet agents (63%)** - Development, coordination, and operational excellence
+- **10 Opus agents (19%)** - Complex analysis and critical systems (includes the-skeptic)
 
 This distribution achieves ~75% cost savings vs using Opus for all tasks while maintaining appropriate capability levels.
 
