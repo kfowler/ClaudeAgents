@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 25+ specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, and more.
+This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 38 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, and more.
 
 ## Architecture & Structure
 
@@ -58,12 +58,16 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **Technical SEO**: `seo-technical-auditor` (crawlability, indexability, sitemaps, mobile-friendliness)
 - **SEO Performance**: `seo-performance-specialist` (Core Web Vitals for rankings, TTFB, mobile-first)
 
+### Business Operations Agents
+- **Requirements**: `business-analyst` (requirements gathering, stakeholder management, BRD, user stories)
+- **Documentation**: `technical-writer` (API docs, user guides, tutorials, developer documentation)
+- **Product Management**: `product-manager` (roadmap planning, feature prioritization, OKRs, product metrics)
+
 ### Specialized Agents
 - **Decision Support**: `the-critic` (technical decision analysis)
 - **Legacy Systems**: `legacy-specialist` (migration, compatibility)
 - **Functional Programming**: `functional-programmer` (Haskell, Clojure, F#)
 - **Metaprogramming**: `metaprogramming-specialist` (Lisp, macros, DSLs)
-- **Documentation**: `technical-writer` (API docs, user guides, tutorials, developer documentation)
 - **Creative**: `digital-artist`, `video-director`, `3d-modeler`, `comedy-writer`, `audio-engineer`, `tv-writer`
 
 ## Development Commands
@@ -103,6 +107,10 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "data pipeline", "ETL", "analytics" → `data-engineer`
 - "documentation", "API docs", "user guide", "tutorial", "README" → `technical-writer`
 - "developer docs", "SDK docs", "technical writing", "documentation site" → `technical-writer`
+- "requirements", "BRD", "user stories", "stakeholder management" → `business-analyst`
+- "business requirements", "process analysis", "use cases" → `business-analyst`
+- "product roadmap", "feature prioritization", "OKR", "product strategy" → `product-manager`
+- "backlog management", "sprint planning", "product metrics" → `product-manager`
 - "code review" (domain-specific) → domain specialist
 - "code review" (comprehensive) → `code-architect`
 
