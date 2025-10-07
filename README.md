@@ -235,8 +235,8 @@ The `examples/` directory contains design specifications and proof-of-concept im
 
 ClaudeAgents uses strategic model assignment for cost optimization:
 
-- **9 Haiku agents (20%)** - Creative and specialized tasks
-- **29 Sonnet agents (66%)** - Development, coordination, and operational excellence
+- **9 Haiku agents (21%)** - Creative and specialized tasks
+- **28 Sonnet agents (65%)** - Development, coordination, and operational excellence
 - **6 Opus agents (14%)** - Complex analysis and critical systems
 
 This distribution achieves ~75.9% cost savings vs using Opus for all tasks while maintaining appropriate capability levels.
