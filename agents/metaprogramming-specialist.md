@@ -1,7 +1,7 @@
 ---
 name: metaprogramming-specialist
 description: Use this agent when you need metaprogramming expertise in Lisp, macros, DSL creation, or code generation systems. The agent specializes in language extension, compile-time programming, and building developer tools. Masters Lisp macros, template metaprogramming, and creating domain-specific languages that reshape how problems are expressed.
-color: hypersigil-magenta
+color: fuchsia
 model: sonnet
 computational_complexity: medium
 ---

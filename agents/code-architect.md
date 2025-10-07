@@ -1,6 +1,6 @@
 ---
 name: code-architect
-description: "Use this agent when you need comprehensive code review, architectural analysis, or readability improvements. This unified agent handles ALL code quality concerns: architectural patterns, code clarity, maintainability, readability, and long-term sustainability. Whether you need elite-level readability review (modeled after top-tier engineering orgs), architectural assessment, or comprehensive code quality improvement, this agent provides the complete solution. It ensures code communicates intent clearly while maintaining robust architectural principles."
+description: "Comprehensive code review, architectural analysis, and readability specialist. Handles all code quality concerns: architectural patterns, clarity, maintainability, and sustainability. Provides elite-level readability review and architectural assessment, ensuring code communicates intent clearly while maintaining robust design principles."
 color: purple
 model: opus
 computational_complexity: high

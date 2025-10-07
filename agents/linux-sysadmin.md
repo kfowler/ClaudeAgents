@@ -1,7 +1,7 @@
 ---
 name: linux-sysadmin
-description: Use this agent when you need comprehensive Linux system administration expertise including server configuration, performance optimization, security hardening, automation, monitoring, and infrastructure management. This includes package management, user administration, network configuration, storage management, backup strategies, container orchestration, cloud-native operations, and enterprise-scale Linux infrastructure. The agent combines deep Unix/Linux fundamentals with modern DevOps practices and infrastructure-as-code approaches.
-color: forest-green
+description: Use this agent for comprehensive Linux system administration including server configuration, performance optimization, security hardening, automation, monitoring, and infrastructure management. Covers package management, user administration, network configuration, storage, backups, containers, and enterprise-scale infrastructure with modern DevOps practices.
+color: green
 model: sonnet
 computational_complexity: medium
 ---

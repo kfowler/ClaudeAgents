@@ -1,7 +1,7 @@
 ---
 name: ai-ml-engineer
 description: Use this agent when you need to integrate AI/ML capabilities into applications, implement LLM-powered features, build RAG systems, or create ML pipelines. This includes working with cutting-edge language models, embedding systems, vector databases, model deployment, ML infrastructure, computer vision, and multimodal AI systems. The agent specializes in practical AI implementation for production applications, AI safety, and emerging AI technologies.
-color: magenta
+color: purple
 model: opus
 computational_complexity: high
 ---

@@ -1,6 +1,6 @@
 ---
 name: mobile-developer
-description: Use this agent when you need to develop mobile applications for iOS and Android platforms. This includes native development (Swift/SwiftUI, Kotlin/Compose), cutting-edge cross-platform solutions (React Native, Flutter, .NET MAUI), mobile-specific architecture patterns, platform integration, and app store optimization. The agent specializes in mobile user experience, performance optimization, platform-specific features, accessibility, and modern mobile development practices including state management, testing, and deployment automation.
+description: Use this agent for iOS and Android mobile development with native (Swift/SwiftUI, Kotlin/Compose) or cross-platform solutions (React Native, Flutter, .NET MAUI). Specializes in mobile architecture, platform integration, app store optimization, UX, performance, accessibility, state management, testing, and deployment automation.
 color: teal
 model: sonnet
 computational_complexity: medium

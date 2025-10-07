@@ -1,6 +1,6 @@
 ---
 name: full-stack-architect
-description: "Use this agent when you need to design and implement full-stack web applications with hands-on technical execution. This agent handles the complete technical implementation of web applications: technology stack selection, architecture setup, coding both client and server components, and integration between layers. It focuses on cutting-edge web frameworks (React/Next.js 15+, Svelte/SvelteKit, Remix, Vue/Nuxt), modern backend APIs (Node.js, Python/FastAPI, Bun, Deno, Go, Rust), edge computing, real-time systems, and advanced database integration. For simple to moderate complexity web projects that don't require extensive multi-domain coordination, this agent provides complete full-stack implementation. For complex projects requiring orchestration across multiple domains, use project-orchestrator instead."
+description: "Use this agent for full-stack web application development with modern frameworks (React/Next.js 15+, Svelte/SvelteKit, Remix, Vue/Nuxt) and backends (Node.js, Python/FastAPI, Bun, Go, Rust). Handles technology stack selection, architecture setup, client/server implementation, database integration, edge computing, and real-time systems. For complex multi-domain projects, use project-orchestrator instead."
 color: blue
 model: sonnet
 computational_complexity: medium

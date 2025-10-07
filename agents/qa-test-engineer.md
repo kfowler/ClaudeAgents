@@ -1,6 +1,6 @@
 ---
 name: qa-test-engineer
-description: Use this agent when you need comprehensive quality assurance, testing strategy development, test automation implementation, or quality verification across the entire software development lifecycle. This includes unit testing, integration testing, end-to-end testing, performance testing, accessibility testing, security testing, and API testing. The agent specializes in modern testing frameworks, test automation, CI/CD integration, quality metrics, and ensuring software meets the highest standards for reliability, performance, and user experience.
+description: Use this agent for comprehensive quality assurance, testing strategy, and test automation across the software development lifecycle. Covers unit, integration, end-to-end, performance, accessibility, security, and API testing. Specializes in modern frameworks, CI/CD integration, quality metrics, and ensuring reliability and user experience excellence.
 color: blue
 model: sonnet
 computational_complexity: medium
