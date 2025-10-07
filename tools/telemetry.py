@@ -212,6 +212,61 @@ class TelemetryCollector:
 
         return events
 
+    def _calculate_performance_metrics(self, summary: Dict, events: List[Dict]):
+        """Calculate detailed performance metrics including percentiles"""
+        # Collect all durations
+        durations = [
+            e["duration_seconds"] for e in events
+            if e.get("duration_seconds") is not None
+        ]
+
+        if not durations:
+            return
+
+        # Sort for percentile calculation
+        sorted_durations = sorted(durations)
+        n = len(sorted_durations)
+
+        # Calculate percentiles
+        summary["performance"]["avg_duration"] = sum(durations) / n
+        summary["performance"]["median_duration"] = self._percentile(sorted_durations, 50)
+        summary["performance"]["p95_duration"] = self._percentile(sorted_durations, 95)
+        summary["performance"]["p99_duration"] = self._percentile(sorted_durations, 99)
+
+        # Find fastest and slowest agents (by average duration)
+        agent_durations = {
+            name: stats["avg_duration"]
+            for name, stats in summary["agents"].items()
+            if stats["avg_duration"] > 0
+        }
+
+        if agent_durations:
+            fastest = min(agent_durations.items(), key=lambda x: x[1])
+            slowest = max(agent_durations.items(), key=lambda x: x[1])
+            summary["performance"]["fastest_agent"] = {
+                "name": fastest[0],
+                "avg_duration": fastest[1]
+            }
+            summary["performance"]["slowest_agent"] = {
+                "name": slowest[0],
+                "avg_duration": slowest[1]
+            }
+
+    def _percentile(self, sorted_values: List[float], percentile: int) -> float:
+        """Calculate percentile from sorted values"""
+        if not sorted_values:
+            return 0.0
+
+        k = (len(sorted_values) - 1) * (percentile / 100)
+        f = int(k)
+        c = f + 1 if f < len(sorted_values) - 1 else f
+
+        # Linear interpolation
+        if f == c:
+            return sorted_values[f]
+        else:
+            return sorted_values[f] * (c - k) + sorted_values[c] * (k - f)
+
     def generate_summary(self) -> Dict:
         """Generate summary statistics from all events"""
         events = self.load_events()
@@ -224,6 +279,14 @@ class TelemetryCollector:
                 "total_feedback": 0,
                 "satisfied_count": 0,
                 "satisfaction_rate": 0.0
+            },
+            "performance": {
+                "avg_duration": 0.0,
+                "median_duration": 0.0,
+                "p95_duration": 0.0,
+                "p99_duration": 0.0,
+                "fastest_agent": None,
+                "slowest_agent": None
             },
             "period": {
                 "first_event": None,
@@ -290,6 +353,9 @@ class TelemetryCollector:
                 summary["satisfaction"]["total_feedback"]
             )
 
+        # Calculate performance metrics
+        self._calculate_performance_metrics(summary, events)
+
         # Save summary
         with open(self.summary_file, 'w') as f:
             json.dump(summary, f, indent=2)
@@ -336,6 +402,22 @@ class TelemetryCollector:
         print(f"  • Feedback received: {sat['total_feedback']}")
         print(f"  • Satisfied: {sat['satisfied_count']}")
         print(f"  • Satisfaction rate: {sat['satisfaction_rate']*100:.1f}%")
+
+        print(f"\n⚡ Performance Metrics:")
+        perf = summary["performance"]
+        if perf["avg_duration"] > 0:
+            print(f"  • Average duration: {perf['avg_duration']:.1f}s")
+            print(f"  • Median (p50): {perf['median_duration']:.1f}s")
+            print(f"  • 95th percentile: {perf['p95_duration']:.1f}s")
+            print(f"  • 99th percentile: {perf['p99_duration']:.1f}s")
+            if perf["fastest_agent"]:
+                print(f"  • Fastest agent: {perf['fastest_agent']['name']} "
+                      f"({perf['fastest_agent']['avg_duration']:.1f}s avg)")
+            if perf["slowest_agent"]:
+                print(f"  • Slowest agent: {perf['slowest_agent']['name']} "
+                      f"({perf['slowest_agent']['avg_duration']:.1f}s avg)")
+        else:
+            print(f"  • No performance data available yet")
 
         print("\n" + "="*60 + "\n")
 
