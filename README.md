@@ -250,13 +250,13 @@ python3 tools/agent_registry.py find optimization
 - 1,290 keywords indexed across 50 agents
 - Multi-index: capabilities, keywords, domains
 
-### Telemetry (Optional - Privacy-First)
-Opt-in usage tracking to improve agent quality:
+### Telemetry (Optional - Privacy-First, Enhanced Phase 3)
+Opt-in usage tracking with comprehensive performance metrics:
 ```bash
 # Enable telemetry (disabled by default)
 python3 tools/telemetry.py enable
 
-# View your usage statistics
+# View your usage statistics with performance metrics
 python3 tools/telemetry.py summary
 
 # Disable telemetry
@@ -269,8 +269,13 @@ python3 tools/telemetry.py disable
 - Completely optional and transparent
 - See [Telemetry Guide](docs/telemetry-guide.md) for details
 
-### Intelligent Orchestrator (NEW - Phase 2)
-Context-aware agent selection that eliminates manual agent hunting:
+**Performance Metrics (NEW):**
+- Percentile analysis (p50, p95, p99 duration)
+- Fastest/slowest agent identification
+- Performance trend tracking for optimization
+
+### Intelligent Orchestrator (NEW - Phase 2, Enhanced Phase 3)
+Context-aware agent selection with tier-based prioritization:
 ```bash
 # Auto-select agents based on project and request
 python3 tools/intelligent_orchestrator.py "implement authentication with security best practices"
@@ -283,6 +288,8 @@ python3 tools/intelligent_orchestrator.py "optimize frontend performance"
 - Detects project type (web, mobile, data, ml, backend)
 - Parses intent from natural language (implement, review, debug, optimize)
 - Selects core + quality + support agents automatically
+- **Tier-based prioritization** (Core > Extended > Experimental)
+- Shows tier badges in output (⭐ CORE, ✓ EXTENDED, 🧪 EXPERIMENTAL)
 - Generates workflow with reasoning and success criteria
 - Estimates duration and defines prerequisites
 
@@ -305,6 +312,25 @@ python3 tools/agent_emergence.py promote <agent-name>
 - Identifies unmet needs organically from real usage
 - Prevents agent proliferation (only promotes validated patterns)
 - Storage in `~/.claude-telemetry/emergence/`
+
+### Analytics Dashboard (NEW - Phase 3)
+Comprehensive visualization and analysis of agent usage patterns:
+```bash
+# View formatted analytics dashboard
+python3 tools/analytics_dashboard.py
+
+# Export analytics report as JSON
+python3 tools/analytics_dashboard.py json
+```
+
+**Features:**
+- **Agent Rankings**: Top agents by usage, success rate, and tier
+- **Tier Analysis**: Distribution and performance by tier (Core, Extended, Experimental)
+- **Performance Trends**: Fastest/slowest agents, outlier detection
+- **Quality Metrics**: High performers (>95% success) and underperformers (<75%)
+- **Emergence Insights**: Top composite patterns, promotion candidates
+- **Recommendations**: Tier promotions/demotions, performance optimization targets
+- **Multi-format output**: Human-readable dashboard or JSON export
 
 ### Examples and Prototypes
 The `examples/` directory contains design specifications and proof-of-concept implementations:
