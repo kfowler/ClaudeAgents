@@ -53,6 +53,11 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **Code Quality**: `code-architect` (holistic architecture review, maintainability, readability)
   - **Note**: For domain-specific code review, use the domain specialist first, then `code-architect` for comprehensive analysis
 
+### SEO & Optimization Agents
+- **SEO Metadata**: `seo-meta-optimizer` (meta tags, Open Graph, structured data, CTR optimization)
+- **Technical SEO**: `seo-technical-auditor` (crawlability, indexability, sitemaps, mobile-friendliness)
+- **SEO Performance**: `seo-performance-specialist` (Core Web Vitals for rankings, TTFB, mobile-first)
+
 ### Specialized Agents
 - **Decision Support**: `the-critic` (technical decision analysis)
 - **Legacy Systems**: `legacy-specialist` (migration, compatibility)
@@ -89,6 +94,9 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "security audit", "vulnerability" → `security-audit-specialist`
 - "test", "QA" → `qa-test-engineer`
 - "performance", "Core Web Vitals", "bundle size", "LCP", "optimize frontend" → `frontend-performance-specialist`
+- "SEO", "search rankings", "meta tags", "Open Graph" → `seo-meta-optimizer`
+- "SEO audit", "crawlability", "indexability", "sitemap" → `seo-technical-auditor`
+- "SEO performance", "Core Web Vitals SEO", "mobile-first ranking" → `seo-performance-specialist`
 - "CI/CD", "Docker", "Kubernetes", "deploy" → `devops-engineer`
 - "systemd", "kernel", "firewall", "OS hardening" → `linux-sysadmin`
 - "data pipeline", "ETL", "analytics" → `data-engineer`
