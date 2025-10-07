@@ -142,7 +142,7 @@ ClaudeAgents/
 "Use the-critic to evaluate PostgreSQL vs MongoDB for real-time analytics"
 ```
 
-## 📋 Available Commands (47 total)
+## 📋 Available Commands (49 total)
 
 ### Development Commands (`commands/development/`)
 - `code-review` - Comprehensive code review
@@ -199,6 +199,10 @@ ClaudeAgents/
 ### Business Commands (`commands/business/`)
 - `requirements-analysis` - Complete BRD creation (business-analyst, product-manager, technical-writer)
 - `product-roadmap` - Strategic product planning (product-manager, business-analyst, product-strategist)
+
+### Vertical Workflow Packages (`commands/vertical/`) **NEW - Phase 2**
+- `saas-mvp` - Complete SaaS product development (8-12 hours, 6-8 agents, market strategy to production deployment)
+- `ecommerce-platform` - E-commerce store launch (10-14 hours, 7-9 agents, mobile storefront to PCI compliance)
 
 ## 🔍 Agent Selection Guide
 
@@ -261,6 +265,23 @@ python3 tools/telemetry.py disable
 - All data stored locally in `~/.claude-telemetry/`
 - Completely optional and transparent
 - See [Telemetry Guide](docs/telemetry-guide.md) for details
+
+### Intelligent Orchestrator (NEW - Phase 2)
+Context-aware agent selection that eliminates manual agent hunting:
+```bash
+# Auto-select agents based on project and request
+python3 tools/intelligent_orchestrator.py "implement authentication with security best practices"
+
+# Analyzes your project structure and selects optimal agents
+python3 tools/intelligent_orchestrator.py "optimize frontend performance"
+```
+
+**Features:**
+- Detects project type (web, mobile, data, ml, backend)
+- Parses intent from natural language (implement, review, debug, optimize)
+- Selects core + quality + support agents automatically
+- Generates workflow with reasoning and success criteria
+- Estimates duration and defines prerequisites
 
 ### Examples and Prototypes
 The `examples/` directory contains design specifications and proof-of-concept implementations:
