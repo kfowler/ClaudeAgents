@@ -1,28 +1,29 @@
 ---
 name: database-optimization
-description: "Comprehensive database performance optimization workflow coordinating PostgreSQL expert, data engineer, and DevOps for query tuning, indexing, replication, and operational excellence"
+description: "Comprehensive database optimization and quality review covering performance tuning, security hardening, schema quality, operational excellence, and data integrity for production-grade database systems"
 agents:
   - postgresql-expert
   - data-engineer
   - devops-engineer
+  - security-audit-specialist
 complexity: high
-duration: 6-9 hours
+duration: 8-12 hours
 ---
 
-# Database Optimization Workflow
+# Database Optimization & Quality Review
 
 **Command:** `/database-optimization`
-**Agents:** `postgresql-expert`, `data-engineer`, `devops-engineer`
+**Agents:** `postgresql-expert`, `data-engineer`, `devops-engineer`, `security-audit-specialist`
 **Complexity:** High
-**Duration:** 6-9 hours
+**Duration:** 8-12 hours (full review) or 6-8 hours (performance focus)
 
 ## Overview
 
-Comprehensive database performance optimization workflow that coordinates database specialists, data engineers, and DevOps to identify bottlenecks, optimize queries, tune configuration, implement replication, and establish monitoring for production-ready database operations.
+Comprehensive database optimization and quality assessment workflow that coordinates database specialists, data engineers, DevOps, and security experts to identify bottlenecks, optimize performance, validate security, assess schema quality, ensure data integrity, and establish operational excellence for production-ready database systems.
 
 ## What This Command Does
 
-This command orchestrates complete database optimization across 5 phases:
+This command orchestrates complete database optimization and quality review across 7 phases:
 
 ### Phase 1: Performance Audit & Problem Identification (1.5-2 hours)
 **Lead:** `postgresql-expert`, **Supporting:** `data-engineer`
@@ -262,6 +263,67 @@ Operational Procedures:
 - Post-optimization performance report (improvements achieved)
 - Knowledge transfer documentation (how to interpret metrics, tune database)
 
+### Phase 6: Security Assessment & Hardening (1.5-2 hours)
+**Lead:** `security-audit-specialist`, **Supporting:** `postgresql-expert`
+
+Authentication & Access Control:
+- Review authentication mechanisms (password policies, MFA, certificate authentication)
+- Audit user accounts, roles, and privilege assignments (principle of least privilege)
+- Identify overprivileged accounts (users with SUPERUSER, DBA, root access)
+- Validate network security (firewall rules, VPC isolation, private subnets)
+- Review connection encryption (SSL/TLS enforcement, certificate validation)
+
+Data Protection:
+- Assess encryption at rest (transparent data encryption, encrypted volumes)
+- Validate backup encryption and secure storage
+- Review data masking for non-production environments
+- Assess SQL injection vulnerability surface (prepared statements, input validation)
+- Audit logging configuration and retention policies
+
+Compliance & Governance:
+- Review compliance requirements (PCI DSS, HIPAA, GDPR, SOC 2)
+- Validate audit trail implementation
+- Assess data retention and deletion policies
+- Review access control matrix
+- Document security policies and procedures
+
+**Deliverables:**
+- User privilege audit report identifying overprivileged accounts
+- Security vulnerability findings with CVSS scores and remediation steps
+- Access control matrix showing who can access what data
+- Encryption status report (in-transit, at-rest, backup encryption)
+- Compliance gap analysis against required standards
+- Security hardening checklist with implementation priorities
+
+### Phase 7: Schema Quality & Data Integrity (1.5-2 hours)
+**Lead:** `data-engineer`, **Supporting:** `postgresql-expert`
+
+Schema Design Assessment:
+- Assess normalization levels and identify denormalization trade-offs
+- Review data type choices for efficiency and correctness
+- Validate constraint usage (primary keys, foreign keys, unique, check)
+- Evaluate naming conventions and schema organization consistency
+- Identify missing foreign key relationships
+- Review temporal data handling (timestamps, soft deletes, audit trails)
+- Identify schema anti-patterns (EAV, over-normalization, polymorphic associations)
+
+Data Quality Validation:
+- Validate referential integrity (orphaned records, dangling foreign keys)
+- Identify NULL values in critical columns without NOT NULL constraints
+- Assess data consistency across related tables
+- Review data validation rules and check constraints
+- Identify duplicate records and data quality issues
+- Evaluate data lineage and transformation documentation
+- Assess data governance policies
+
+**Deliverables:**
+- Schema quality scorecard with normalization assessment
+- Data type optimization recommendations
+- Missing constraint recommendations
+- Data integrity violation report
+- Data quality monitoring queries
+- Schema refactoring recommendations for identified anti-patterns
+
 ## Expected Outcomes
 
 ### Performance Improvements
@@ -272,6 +334,22 @@ Operational Procedures:
 - **Index efficiency**: >95% of queries using indexes (reduce sequential scans)
 - **Replication lag**: <1s for synchronous, <5s for asynchronous replicas
 - **Bloat reduction**: <20% table/index bloat (from 50%+ untuned)
+
+### Security & Compliance
+- **Access control**: Zero overprivileged accounts, principle of least privilege
+- **Encryption**: 100% data encrypted at rest and in transit
+- **Vulnerability remediation**: All critical vulnerabilities patched
+- **Compliance**: GDPR, HIPAA, PCI DSS, SOC 2 requirements met
+- **Audit trails**: Complete audit logging for compliance
+- **SQL injection protection**: 100% prepared statements
+
+### Data Quality
+- **Referential integrity**: Zero orphaned records
+- **Data consistency**: 100% constraint enforcement
+- **Schema quality**: Properly normalized (3NF) or justified denormalization
+- **Naming conventions**: Consistent across all database objects
+- **Data validation**: Check constraints for business rules
+- **Documentation**: Complete schema and data lineage documentation
 
 ### Operational Excellence
 - **Monitoring**: Real-time dashboards for all key metrics
@@ -288,25 +366,36 @@ Operational Procedures:
 - **Reduced costs**: Smaller database instances (better resource utilization)
 - **Better reliability**: 99.95%+ uptime with automatic failover
 - **Easier scaling**: Read replicas handle growth
-- **Faster development**: Developers can query faster (development databases)
+- **Compliance ready**: Meet regulatory requirements
+- **Reduced risk**: Security vulnerabilities eliminated
+- **Faster development**: Clean schema, optimized queries
 
 ## Usage
 
 ```bash
+# Full database quality review and optimization (all phases)
+/database-optimization --comprehensive=true
+
+# Performance-focused optimization only
+/database-optimization --focus=performance
+
+# Security and compliance review
+/database-optimization --focus=security --compliance=hipaa,gdpr
+
+# Schema quality and data integrity assessment
+/database-optimization --focus=schema-quality
+
 # Optimize PostgreSQL database with slow queries
 /database-optimization --database=postgresql --issue=slow-queries
 
 # Setup replication and high availability
 /database-optimization --database=postgresql --setup=replication
 
-# Comprehensive optimization (all phases)
-/database-optimization --database=postgresql --comprehensive=true
-
 # Optimize for read-heavy workload
 /database-optimization --workload=read-heavy --replicas=3
 
-# Optimize for write-heavy workload with connection pooling
-/database-optimization --workload=write-heavy --pooling=pgbouncer
+# Pre-production readiness assessment
+/database-optimization --assessment=production-readiness
 ```
 
 ## Prerequisites
@@ -340,6 +429,24 @@ Operational Procedures:
 - [ ] Backup and restore tested (PITR, pg_basebackup)
 - [ ] Disaster recovery runbook documented
 - [ ] Failover testing completed (manual failover successful)
+
+### Security & Compliance
+- [ ] User privileges audited and minimized
+- [ ] Encryption enabled (at-rest, in-transit, backups)
+- [ ] Critical vulnerabilities remediated
+- [ ] SQL injection protection verified
+- [ ] Compliance requirements validated (GDPR, HIPAA, etc.)
+- [ ] Audit logging configured and tested
+- [ ] Access control matrix documented
+
+### Schema & Data Quality
+- [ ] Schema normalization validated (3NF or justified denormalization)
+- [ ] Data types optimized for storage and performance
+- [ ] Referential integrity enforced (foreign keys, constraints)
+- [ ] Orphaned records identified and cleaned
+- [ ] Naming conventions standardized
+- [ ] Data validation rules implemented
+- [ ] Schema documentation generated
 
 ### Monitoring & Operations
 - [ ] Grafana dashboards deployed (query, connections, replication, system)
@@ -493,10 +600,11 @@ Operational Procedures:
 
 ## Related Commands
 
-- `/database-design` - Design new database schema
+- `/database-design` - Design new database schema from scratch
 - `/api-design` - Optimize API data access patterns
-- `/quality:performance-audit` - Comprehensive performance review
-- `/security-audit` - Database security assessment
+- `/quality:performance-audit` - Application-level performance review
+- `/quality:security-audit` - Application security assessment
+- `/quality:production-readiness` - Pre-deployment checklist
 
 ## Notes
 
@@ -552,4 +660,8 @@ Operational Procedures:
 - Single point of failure, read scalability limits
 - Solution: Setup read replicas, automatic failover
 
-This workflow ensures databases are optimized, reliable, and operationally excellent for production workloads.
+**When to Use This vs `/database-design`:**
+- **Use `/database-design`**: When creating a NEW database schema from scratch
+- **Use `/database-optimization`**: For EXISTING databases that need performance tuning, security hardening, quality assessment, or operational improvements
+
+This workflow ensures databases are optimized, secure, reliable, and operationally excellent for production workloads.
