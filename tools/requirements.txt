@@ -1,5 +1,30 @@
 # ClaudeAgents Tools - Core Dependencies
-# Install with: pip install -r requirements.txt
+# Install with: pip install -r tools/requirements.txt
+
+# ============================================================
+# Core Platform Dependencies (Required)
+# ============================================================
 
 # YAML parsing for agent definitions
 PyYAML==6.0.1
+
+# ============================================================
+# Cognitive Code Archaeology Dependencies
+# ============================================================
+
+# Core dependencies (required for archaeology tools)
+numpy>=1.21.0,<2.0.0  # Embedding operations, vector math
+requests>=2.28.0      # GitHub API integration
+
+# Optional dependencies (recommended for enhanced functionality)
+# Install with: pip install -r tools/requirements.txt --optional
+faiss-cpu>=1.7.4      # Fast vector similarity search (optional, for 10k+ documents)
+anthropic>=0.18.0     # Claude API integration (optional, future embeddings)
+rich>=13.0.0          # Beautiful terminal formatting (optional, CLI enhancement)
+
+# ============================================================
+# Development Dependencies (for contributors)
+# ============================================================
+
+pytest>=7.4.0         # Testing framework
+pytest-cov>=4.1.0     # Test coverage reporting
