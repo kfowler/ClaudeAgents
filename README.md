@@ -28,16 +28,44 @@ ClaudeAgents/
 
 ## 🚀 Quick Start
 
-### For New Projects
-1. **Start with Strategy**: Use `product-strategist` for market validation
-2. **Plan Execution**: Use `project-orchestrator` to break down complex requirements
-3. **Implement**: Deploy specialized agents based on technology needs
-4. **Validate**: Use quality agents for security, testing, and accessibility
+**New to ClaudeAgents?** Get started in 3 minutes:
 
-### For Existing Projects
-1. **Analyze Current State**: Use `code-architect` for architecture review
-2. **Identify Improvements**: Deploy domain-specific agents for enhancements
-3. **Ensure Quality**: Use `qa-test-engineer` and `security-audit-specialist`
+👉 **[Read the Quick Start Guide](docs/QUICKSTART.md)** - Your first workflow in <5 minutes
+
+**Find a Workflow:**
+- 📋 **[Command Catalog](docs/COMMAND_CATALOG.md)** - Browse all 59 workflows by category
+- 🔍 **Search by problem** - "I need to build an API" → `/api-design`
+- 🎯 **Search by technology** - "React, PostgreSQL" → relevant workflows
+
+**Common Scenarios:**
+- Building a web app? → `/saas-mvp` (8-12 hours, full-stack)
+- Need an API? → `/api-design` (4-6 hours, REST/GraphQL)
+- Testing strategy? → `/quality:testing-strategy` (4-8 hours, comprehensive)
+- Performance issues? → `/quality:performance-optimization` (2-3 hours audit)
+- Security audit? → `/security-audit` (4-6 hours, vulnerability assessment)
+
+💡 **Pro Tip:** Start with a workflow (commands/), then explore individual agents for custom orchestration.
+
+## 📚 Documentation
+
+**Getting Started:**
+- 🚀 **[Quick Start Guide](docs/QUICKSTART.md)** - Your first workflow in 3 minutes
+- 📋 **[Command Catalog](docs/COMMAND_CATALOG.md)** - All 59 workflows searchable by category
+- 🎯 **[Workflow Examples](docs/WORKFLOW_EXAMPLES.md)** - Real case studies with metrics *(coming soon)*
+
+**Core Documentation:**
+- **[The Manifesto](docs/manifesto.md)** - Professional principles and engineering standards
+- **[System Architecture](docs/architecture.md)** - Design patterns, component interactions
+- **[Users' Guide](docs/users-guide.md)** - Comprehensive guide for using agents
+- **[Contributing Guide](docs/contributing.md)** - How to add agents and improvements
+
+**Developer Resources:**
+- **[Agent Tiers](docs/agent-tiers.md)** - Quality-based 3-tier organization
+- **[Telemetry Guide](docs/telemetry-guide.md)** - Privacy-first usage tracking
+- **[Development Process](docs/development-process.md)** - Contributor workflow
+
+**Privacy & Trust:**
+- **[Telemetry Privacy](docs/TELEMETRY_PRIVACY.md)** - What we collect, why, and how to opt-in
 
 ## 🎯 Agent Categories
 
@@ -158,7 +186,7 @@ ClaudeAgents/
 "Use the-critic to evaluate PostgreSQL vs MongoDB for real-time analytics"
 ```
 
-## 📋 Available Commands (58 total)
+## 📋 Available Commands (59 total)
 
 ### Development Commands (`commands/development/`)
 - `api-design` - REST/GraphQL API design with OpenAPI specs
@@ -370,23 +398,6 @@ The `examples/` directory contains design specifications and proof-of-concept im
 
 *Note: These are not production-ready. See examples/README.md for details.*
 
-## 📚 Documentation
-
-### Core Documentation
-- **[The Manifesto](docs/manifesto.md)** - Professional principles and engineering standards
-- **[System Architecture](docs/architecture.md)** - Design patterns, component interactions, data flow
-- **[Users' Guide](docs/users-guide.md)** - Comprehensive guide for using agents with Claude Code 2.0
-- **[Contributing Guide](docs/contributing.md)** - How to add agents, commands, and improvements
-
-### Developer Resources
-- **[Development Process](docs/development-process.md)** - Mandatory workflow for contributors (branching, commits, agent delegation)
-- **[Lessons Learned](docs/lessons-learned.md)** - Process improvements and best practices
-- **[Project Instructions](CLAUDE.md)** - Guidance for Claude Code when working with this repository
-- **[Strategic Roadmap](docs/ROADMAP.md)** - 6-month strategic plan with phases and milestones
-- **[Agent Tiers](docs/agent-tiers.md)** - **NEW (Phase 3)** - Quality-based 3-tier organization system (Core, Extended, Experimental)
-- **[Telemetry Guide](docs/telemetry-guide.md)** - Optional privacy-first usage tracking
-- **[TODO Roadmap](TODO.md)** - Prioritized improvements and development roadmap
-
 ## 🎯 Model Assignment & Cost Optimization
 
 ClaudeAgents uses strategic model assignment for cost optimization:
@@ -406,15 +417,6 @@ Track agent effectiveness through:
 - **Code Quality Scores**: Maintainability, security, performance
 - **Integration Success**: Seamless agent handoffs
 - **Development Velocity**: Time from concept to production
-
-## 🚦 Getting Started
-
-1. **Read [The Manifesto](docs/manifesto.md)** to understand professional standards
-2. **Review [System Architecture](docs/architecture.md)** for design overview
-3. **Browse available agents** in the `agents/` directory
-4. **Check commands** in `commands/` for pre-built workflows
-5. **See [Contributing Guide](docs/contributing.md)** to add your own agents
-6. **Start with simple requests** and progress to multi-agent orchestration
 
 Each agent is designed to deliver production-ready solutions with appropriate documentation, testing strategies, and deployment guidance for their domain.
 
