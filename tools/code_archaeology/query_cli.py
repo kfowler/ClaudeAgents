@@ -32,6 +32,7 @@ try:
     from .git_analyzer import GitArchaeologist
     from .github_integrator import GitHubArchaeologist
     from .context_synthesizer import ContextSynthesizer, Answer, SearchableIndex
+    from .analytics import CCAAnalytics, QueryCategory
 except ImportError:
     # Running as script, adjust imports
     import sys
@@ -40,6 +41,7 @@ except ImportError:
     from git_analyzer import GitArchaeologist
     from github_integrator import GitHubArchaeologist
     from context_synthesizer import ContextSynthesizer, Answer, SearchableIndex
+    from analytics import CCAAnalytics, QueryCategory
 
 
 class ArchaeologyCLI:
@@ -58,6 +60,8 @@ class ArchaeologyCLI:
         self.index: Optional[SearchableIndex] = None
         self.console = Console() if HAS_RICH else None
         self.history: List[Answer] = []
+        self.analytics = CCAAnalytics()
+        self.analysis_start_time = None
 
     def _print(self, message: str, style: str = ""):
         """Print with optional rich formatting."""
@@ -82,6 +86,9 @@ class ArchaeologyCLI:
         self._print("\n🔍 Cognitive Code Archaeology", style="bold blue")
         self._print("=" * 60 + "\n")
 
+        # Track analysis start
+        self.analysis_start_time = time.time()
+
         if self.console and HAS_RICH:
             with Progress(
                 SpinnerColumn(),
@@ -92,6 +99,13 @@ class ArchaeologyCLI:
                 task1 = progress.add_task("Analyzing git history...", total=None)
                 git_arch = GitArchaeologist(str(self.repo_path))
                 history = git_arch.analyze_repo()
+
+                # Track analysis in analytics
+                self.analytics.analysis_started(
+                    commits_count=history.total_commits,
+                    github_enriched=self.github_repo is not None
+                )
+
                 progress.update(task1, completed=True)
                 self._print(f"  ✓ Found {history.total_commits} commits", style="green")
 
@@ -131,11 +145,24 @@ class ArchaeologyCLI:
                     self.index = synthesizer.build_searchable_index(minimal_enriched)
                 progress.update(task3, completed=True)
                 self._print(f"  ✓ Indexed {self.index.size} documents\n", style="green")
+
+                # Track analysis completion
+                self.analytics.analysis_completed(
+                    commits_count=history.total_commits,
+                    github_enriched=enriched is not None
+                )
         else:
             # Simple progress without rich
             print("Analyzing git history...")
             git_arch = GitArchaeologist(str(self.repo_path))
             history = git_arch.analyze_repo()
+
+            # Track analysis in analytics
+            self.analytics.analysis_started(
+                commits_count=history.total_commits,
+                github_enriched=self.github_repo is not None
+            )
+
             print(f"  ✓ Found {history.total_commits} commits")
 
             enriched = None
@@ -165,6 +192,12 @@ class ArchaeologyCLI:
                 )
                 self.index = synthesizer.build_searchable_index(minimal_enriched)
             print(f"  ✓ Indexed {self.index.size} documents\n")
+
+            # Track analysis completion
+            self.analytics.analysis_completed(
+                commits_count=history.total_commits,
+                github_enriched=enriched is not None
+            )
 
     def format_answer(self, answer: Answer) -> str:
         """Format answer for display."""
@@ -219,11 +252,46 @@ class ArchaeologyCLI:
         if not self.index:
             raise RuntimeError("Index not initialized. Call initialize() first.")
 
+        # Track query start time
+        query_start = time.time()
+
         synthesizer = ContextSynthesizer()
         answer = synthesizer.synthesize_answer(self.index, question)
         self.history.append(answer)
 
+        # Track query execution
+        query_time = time.time() - query_start
+        category = self.analytics._categorize_query(question)
+
+        self.analytics.query_executed(
+            category=category,
+            response_time_seconds=query_time,
+            confidence=answer.confidence,
+            credibility=answer.credibility_score,
+            citation_count=len(answer.citations),
+            estimated_time_saved_minutes=self._estimate_time_saved(category)
+        )
+
         return answer
+
+    def _estimate_time_saved(self, category: QueryCategory) -> int:
+        """
+        Estimate time saved by CCA vs manual investigation.
+
+        Returns time in minutes based on query category.
+        """
+        # Conservative estimates based on case studies
+        estimates = {
+            QueryCategory.ARCHITECTURE_DECISION: 120,  # 2 hours vs 8 hours
+            QueryCategory.TECHNICAL_DEBT: 90,  # 1.5 hours vs 6 hours
+            QueryCategory.FEATURE_EVOLUTION: 60,  # 1 hour vs 4 hours
+            QueryCategory.CODE_CONTEXT: 30,  # 30 min vs 2 hours
+            QueryCategory.TEAM_KNOWLEDGE: 45,  # 45 min vs 3 hours
+            QueryCategory.BUG_INVESTIGATION: 90,  # 1.5 hours vs 6 hours
+            QueryCategory.ONBOARDING: 120,  # 2 hours vs 8 hours
+            QueryCategory.OTHER: 30,  # 30 min default
+        }
+        return estimates.get(category, 30)
 
     def interactive_mode(self):
         """Run interactive REPL for queries."""
