@@ -1,12 +1,12 @@
 # Claude Code AI Agent System
 
-A comprehensive ecosystem of 61 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
+A comprehensive ecosystem of 65 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
 
 ## 📁 Repository Structure
 
 ```
 ClaudeAgents/
-├── agents/              # 61 specialized agent definitions
+├── agents/              # 65 specialized agent definitions
 ├── commands/            # Organized workflow commands
 │   ├── development/     # Code review, debugging, refactoring
 │   ├── quality/         # Testing, security, performance audits
@@ -79,9 +79,13 @@ ClaudeAgents/
 - **`debugging-specialist`** - Advanced debugging across all languages, root cause analysis, memory/performance profiling
 - **`observability-engineer`** - Full-stack observability, distributed tracing, SLO/SLI engineering, error budgets
 - **`incident-coordinator`** - Incident response, war room coordination, postmortems, on-call engineering
+- **`site-reliability-engineer`** - SRE methodology, error budgets, toil reduction, capacity planning, operational maturity
+- **`developer-experience-engineer`** - API/SDK usability, developer onboarding, error message design, tooling ergonomics, DX metrics
 
 ### 🔒 Quality & Security
 - **`security-audit-specialist`** - Vulnerability assessment, compliance
+- **`dependency-security-specialist`** - Supply chain security, SBOM generation (CycloneDX/SPDX), license compliance, SLSA framework
+- **`compliance-automation-engineer`** - SOC 2, HIPAA, PCI-DSS, GDPR automation, continuous compliance, audit readiness
 - **`qa-test-engineer`** - Testing strategies, automation, quality assurance
 - **`test-automation-engineer`** - Playwright/Cypress E2E, visual regression, API testing, CI/CD integration
 - **`accessibility-expert`** - WCAG compliance, inclusive design

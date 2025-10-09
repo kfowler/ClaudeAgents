@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 49 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, SEO optimization, creative production, and more.
+This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 65 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, SEO optimization, creative production, and more.
 
 ## Architecture & Structure
 
@@ -53,11 +53,17 @@ Start with `product-strategist` for market validation, then use `project-orchest
 
 ### Quality & Security Agents
 - **Security**: `security-audit-specialist` (vulnerability assessment, compliance)
+- **Supply Chain Security**: `dependency-security-specialist` (SBOM generation, license compliance, dependency scanning, SLSA framework)
 - **Testing**: `qa-test-engineer` (test strategies, implementation)
 - **Accessibility**: `accessibility-expert` (WCAG compliance, inclusive design)
 - **Frontend Performance**: `frontend-performance-specialist` (Core Web Vitals, bundle optimization, rendering performance)
 - **Code Quality**: `code-architect` (holistic architecture review, maintainability, readability)
   - **Note**: For domain-specific code review, use the domain specialist first, then `code-architect` for comprehensive analysis
+- **Compliance**: `compliance-automation-engineer` (SOC 2, HIPAA, PCI-DSS, GDPR automation, continuous compliance)
+
+### Operational Excellence Agents
+- **Site Reliability**: `site-reliability-engineer` (SRE methodology, error budgets, SLO/SLI engineering, toil reduction)
+- **Developer Experience**: `developer-experience-engineer` (API usability, SDK design, onboarding optimization, DX metrics)
 
 ### SEO & Optimization Agents
 - **SEO Metadata**: `seo-meta-optimizer` (meta tags, Open Graph, structured data, CTR optimization)
@@ -145,6 +151,10 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "Windows Server", "Active Directory", "Group Policy", "PowerShell", "SCCM", "Intune" → `windows-specialist`
 - "PostgreSQL", "query optimization", "EXPLAIN", "pgvector", "PostGIS", "TimescaleDB", "pg tuning" → `postgresql-expert`
 - "Kafka", "stream processing", "event-driven", "Kafka Streams", "Kafka Connect", "ksqlDB" → `kafka-expert`
+- "SRE", "error budget", "SLO", "SLI", "toil reduction", "reliability", "operational excellence" → `site-reliability-engineer`
+- "supply chain security", "SBOM", "dependency scanning", "license compliance", "SLSA", "vulnerability management" → `dependency-security-specialist`
+- "developer experience", "API usability", "SDK design", "DX metrics", "onboarding", "API ergonomics" → `developer-experience-engineer`
+- "SOC 2", "HIPAA", "PCI-DSS", "GDPR", "compliance automation", "audit readiness", "continuous compliance" → `compliance-automation-engineer`
 
 ### Anti-Patterns to Avoid
 - Don't use overlapping agents simultaneously (e.g., multiple code reviewers)
