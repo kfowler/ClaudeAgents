@@ -1,12 +1,12 @@
 # Claude Code AI Agent System
 
-A comprehensive ecosystem of 65 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
+A comprehensive ecosystem of 71 specialized AI agents for autonomous software development with Claude Code. Each agent is an expert in their domain, working individually or in coordination to deliver production-ready solutions.
 
 ## 📁 Repository Structure
 
 ```
 ClaudeAgents/
-├── agents/              # 65 specialized agent definitions
+├── agents/              # 71 specialized agent definitions
 ├── commands/            # Organized workflow commands
 │   ├── development/     # Code review, debugging, refactoring
 │   ├── quality/         # Testing, security, performance audits
@@ -67,8 +67,13 @@ ClaudeAgents/
 - **`postgresql-expert`** - Advanced PostgreSQL optimization, query tuning, replication, high availability, pgvector/PostGIS/TimescaleDB
 - **`kafka-expert`** - Apache Kafka architecture, stream processing, event-driven systems, Kafka Streams/Connect, real-time pipelines
 
-### 🤖 AI & Machine Learning
-- **`ai-ml-engineer`** - LLM integration, RAG systems, vector databases
+### 🤖 AI & Machine Learning (Pattern-Based Specialists)
+- **`llm-integration-architect`** - Multi-model LLM integration, intelligent routing, cost optimization, vendor-neutral architecture
+- **`prompt-engineering-specialist`** - Advanced prompting techniques, chain-of-thought, few-shot learning, prompt optimization across all LLMs
+- **`rag-systems-engineer`** - Retrieval-Augmented Generation architecture, vector databases, hybrid search, document processing pipelines
+- **`fine-tuning-specialist`** - LLM fine-tuning (LoRA, QLoRA), dataset engineering, RLHF/DPO, custom model deployment
+- **`inference-optimization-specialist`** - Self-hosted LLM deployment, quantization, GPU optimization, vLLM, TensorRT-LLM, cost-efficient serving
+- **`generative-image-specialist`** - Image generation (Stable Diffusion, DALL-E, Midjourney), LoRA training, ControlNet, ComfyUI workflows
 - **`systems-engineer`** - Rust, C++, Go, performance-critical systems
 - **`metaprogramming-specialist`** - Lisp, macros, DSLs, code generation
 

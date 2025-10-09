@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 65 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, SEO optimization, creative production, and more.
+This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 71 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, SEO optimization, creative production, and more.
 
 ## Architecture & Structure
 
@@ -37,7 +37,14 @@ Start with `product-strategist` for market validation, then use `project-orchest
   - **Note**: For backend-only API development, use `backend-api-engineer`
 - **Backend APIs**: `backend-api-engineer` (REST, GraphQL, microservices, server-side logic)
 - **Mobile Apps**: `mobile-developer` (iOS, Android, React Native, Flutter, app store deployment)
-- **AI/ML Features**: `ai-ml-engineer` (LLM integration, RAG systems, vector databases)
+- **AI/ML Integration**: Pattern-based AI specialists (vendor-neutral, durable expertise)
+  - `llm-integration-architect` (multi-model integration, routing, cost optimization, reliability patterns)
+  - `prompt-engineering-specialist` (advanced prompting, chain-of-thought, few-shot, optimization)
+  - `rag-systems-engineer` (RAG architecture, vector databases, hybrid search, document processing)
+  - `fine-tuning-specialist` (LoRA, QLoRA, dataset engineering, custom model deployment)
+  - `inference-optimization-specialist` (self-hosted LLM, quantization, GPU optimization, vLLM)
+  - `generative-image-specialist` (Stable Diffusion, DALL-E, Midjourney, LoRA training, ComfyUI)
+  - **Note**: We use pattern-based specialists (not vendor-specific) for durability and vendor-neutrality
 - **Database/Data**: `data-engineer` (data pipelines, analytics, OLAP workloads)
   - **Note**: Operational database management (OLTP, tuning, backups) will be handled by `database-admin` (Sprint 2)
 - **Application Infrastructure**: `devops-engineer` (CI/CD, Docker, Kubernetes, cloud deployment)
@@ -155,6 +162,12 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "supply chain security", "SBOM", "dependency scanning", "license compliance", "SLSA", "vulnerability management" → `dependency-security-specialist`
 - "developer experience", "API usability", "SDK design", "DX metrics", "onboarding", "API ergonomics" → `developer-experience-engineer`
 - "SOC 2", "HIPAA", "PCI-DSS", "GDPR", "compliance automation", "audit readiness", "continuous compliance" → `compliance-automation-engineer`
+- "multi-model LLM", "model routing", "LLM cost optimization", "fallback chains", "LiteLLM", "vendor-neutral AI" → `llm-integration-architect`
+- "prompt engineering", "chain-of-thought", "few-shot learning", "prompt optimization", "constitutional AI", "system prompts" → `prompt-engineering-specialist`
+- "RAG", "vector database", "retrieval augmented generation", "semantic search", "document chunking", "hybrid search", "reranking" → `rag-systems-engineer`
+- "fine-tuning", "LoRA", "QLoRA", "LLM training", "dataset curation", "RLHF", "DPO", "custom models" → `fine-tuning-specialist`
+- "LLM inference", "quantization", "vLLM", "TensorRT-LLM", "llama.cpp", "GPU optimization", "self-hosted LLM" → `inference-optimization-specialist`
+- "image generation", "Stable Diffusion", "DALL-E", "Midjourney", "LoRA training", "ControlNet", "ComfyUI", "diffusion models" → `generative-image-specialist`
 
 ### Anti-Patterns to Avoid
 - Don't use overlapping agents simultaneously (e.g., multiple code reviewers)
