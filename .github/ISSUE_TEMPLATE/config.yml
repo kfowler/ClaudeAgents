@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📚 Documentation
+    url: https://github.com/anthropics/claude-code
+    about: Browse the official Claude Code documentation
+  - name: 💬 Community Discussions
+    url: https://community.anthropic.com
+    about: Ask questions and discuss with the community
+  - name: 🔒 Security Issues
+    url: https://github.com/anthropics/claude-code/security/advisories
+    about: Report security vulnerabilities privately
