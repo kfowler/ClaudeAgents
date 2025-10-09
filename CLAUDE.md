@@ -146,6 +146,18 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "backlog management", "sprint planning", "product metrics" → `product-manager`
 - "code review" (domain-specific) → domain specialist
 - "code review" (comprehensive) → `code-architect`
+
+### Command Selection Keywords
+- "cognitive load", "complexity metrics", "code comprehension", "developer ergonomics" → `/quality:cognitive-load-optimization`
+- "technical debt cost", "debt quantification", "business impact", "debt measurement" → `/development:tech-debt-impact-measurement`
+- "production learning", "postmortem automation", "incident insights", "organizational memory" → `/operations:production-learning-loop`
+- "observability setup", "monitoring stack", "Prometheus", "Grafana", "distributed tracing" → `/operations:monitoring-stack-setup`
+- "incident response", "war room", "on-call", "production incident", "incident management" → `/operations:incident-response-workflow`
+- "disaster recovery", "business continuity", "RTO", "RPO", "DR planning" → `/operations:disaster-recovery-plan`
+- "SOC 2 compliance", "compliance audit", "audit readiness", "security controls" → `/quality:compliance-audit-soc2`
+- "database performance", "query optimization", "database tuning", "index optimization" → `/development:database-optimization`
+
+### Creative & Artistic Agent Keywords
 - "compose music", "orchestral score", "film score", "game music", "soundtrack" → `music-composer`
 - "game mechanics", "level design", "player experience", "game balance", "progression" → `game-designer`
 - "screenplay", "feature film", "script", "character development", "three-act structure" → `screenwriter`
@@ -177,6 +189,24 @@ This project is a collection of markdown-based agent and command definitions. Th
 - Don't use `full-stack-architect` for React Native (use `mobile-developer`)
 - Don't use `devops-engineer` for OS-level configuration (use `linux-sysadmin`)
 - Don't mix domain review and holistic review (use sequential: specialist → `code-architect`)
+
+### Command Platform Improvements (Recent Updates)
+**Consolidation for Coherence:**
+- Quality commands consolidated: `code-review` (from 3), `testing-strategy` (from 3), `performance-optimization` (from 3)
+- Development commands consolidated: `database-optimization` (merged with database-design improvements)
+- Removed redundant `database-review` command (integrated into `database-optimization` + `infrastructure-audit`)
+- Result: 58 total commands (down from previous sprawl), improved discoverability, clearer selection
+
+**Strategic New Commands:**
+- **Tier 1 Innovations** (industry-first capabilities):
+  - `/quality:cognitive-load-optimization` - Measurable cognitive complexity reduction
+  - `/operations:production-learning-loop` - Self-improving organizational memory
+  - `/development:tech-debt-impact-measurement` - Empirical debt cost quantification
+- **High-Priority Operations** (production excellence):
+  - `/operations:monitoring-stack-setup` - Complete observability implementation
+  - `/operations:incident-response-workflow` - Production incident management
+  - `/operations:disaster-recovery-plan` - Business continuity planning
+  - `/quality:compliance-audit-soc2` - SOC 2 compliance preparation
 
 ### Agent Boundary Clarifications
 
