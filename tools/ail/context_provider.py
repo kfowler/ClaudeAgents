@@ -38,7 +38,24 @@ from code_archaeology import (
     RepositoryHistory,
     EnrichedHistory,
     SimpleEmbeddingProvider,
+    EnrichedCommit,
 )
+
+# Import two-tier caching components
+from tools.ail.semantic_cache import SemanticCache
+from tools.ail.two_tier_cache import TwoTierCache
+
+# Import FAISS components (Sprint 2)
+try:
+    from tools.ail.embeddings import EmbeddingGenerator, EmbeddingConfig
+    from tools.ail.faiss_index import FAISSIndex, FAISSConfig
+    HAS_FAISS_INTEGRATION = True
+except ImportError:
+    HAS_FAISS_INTEGRATION = False
+    EmbeddingGenerator = None
+    EmbeddingConfig = None
+    FAISSIndex = None
+    FAISSConfig = None
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -85,6 +102,8 @@ class ArchaeologicalContext:
     cached: bool = False
     query_time_ms: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
+    cache_level: str = ""  # "L1", "L2", or "" for no cache
+    similarity_score: float = 0.0  # 1.0 for L1, 0.85-1.0 for L2
 
     @property
     def has_high_confidence(self) -> bool:
@@ -118,7 +137,14 @@ class ArchaeologicalContext:
                     lines.append(f"   - URL: {source.url}")
                 lines.append("")
 
-        lines.append(f"*Query time: {self.query_time_ms:.0f}ms | Cached: {self.cached}*")
+        cache_info = f"Cached: {self.cached}"
+        if self.cached and self.cache_level:
+            cache_info += f" ({self.cache_level}"
+            if self.cache_level == "L2":
+                cache_info += f", similarity={self.similarity_score:.3f}"
+            cache_info += ")"
+
+        lines.append(f"*Query time: {self.query_time_ms:.0f}ms | {cache_info}*")
 
         return "\n".join(lines)
 
@@ -237,17 +263,23 @@ class ArchaeologyContextProvider:
         github_repo: Optional[str] = None,
         github_token: Optional[str] = None,
         max_query_time_s: float = 2.0,
+        enable_semantic_cache: bool = True,
+        semantic_cache_size: int = 500,
+        similarity_threshold: float = 0.85,
     ):
         """
         Initialize the archaeology context provider.
 
         Args:
             repo_path: Path to git repository
-            cache_size: Maximum cache entries (default: 1000)
+            cache_size: Maximum L1 cache entries (default: 1000)
             github_owner: GitHub repository owner (optional)
             github_repo: GitHub repository name (optional)
             github_token: GitHub API token (optional)
             max_query_time_s: Maximum query time in seconds (default: 2.0)
+            enable_semantic_cache: Enable L2 semantic cache (default: True)
+            semantic_cache_size: Maximum L2 cache entries (default: 500)
+            similarity_threshold: L2 similarity threshold (default: 0.85)
         """
         self.repo_path = Path(repo_path).resolve()
         self.max_query_time_s = max_query_time_s
@@ -256,8 +288,33 @@ class ArchaeologyContextProvider:
         if not (self.repo_path / '.git').exists():
             raise ValueError(f"Not a git repository: {repo_path}")
 
-        # Initialize cache
-        self.cache = LRUCache(max_size=cache_size)
+        # Initialize L1 cache (exact match)
+        self.l1_cache = LRUCache(max_size=cache_size)
+
+        # Initialize L2 cache (semantic similarity)
+        self.l2_cache: Optional[SemanticCache] = None
+        if enable_semantic_cache:
+            try:
+                # L2 cache will initialize its own embedding provider lazily
+                self.l2_cache = SemanticCache(
+                    embedding_provider=None,  # Will auto-initialize SimpleEmbeddingProvider
+                    max_entries=semantic_cache_size,
+                    similarity_threshold=similarity_threshold,
+                    ttl_seconds=3600,
+                    enabled=True,
+                )
+            except Exception as e:
+                logger.warning(f"Failed to initialize semantic cache: {e}")
+                self.l2_cache = None
+
+        # Initialize two-tier cache wrapper
+        self.cache = TwoTierCache(
+            l1_cache=self.l1_cache,
+            l2_cache=self.l2_cache,
+            l2_enabled=enable_semantic_cache,
+        )
+
+        # Statistics (maintain backward compatibility)
         self.stats = CacheStats(max_cache_size=cache_size)
 
         # Initialize CCA components (lazy loading)
@@ -265,6 +322,12 @@ class ArchaeologyContextProvider:
         self._github_archaeologist: Optional[GitHubArchaeologist] = None
         self._context_synthesizer: Optional[ContextSynthesizer] = None
         self._searchable_index: Optional[SearchableIndex] = None
+
+        # FAISS components (Sprint 2)
+        self._embedding_generator: Optional[EmbeddingGenerator] = None
+        self._faiss_index: Optional[FAISSIndex] = None
+        self._faiss_enabled: bool = HAS_FAISS_INTEGRATION
+        self._faiss_initialized: bool = False
 
         # GitHub configuration
         self.github_owner = github_owner
@@ -316,7 +379,6 @@ class ArchaeologyContextProvider:
             else:
                 logger.info("GitHub integration not configured, using git data only")
                 # Create minimal enriched history without GitHub data
-                from code_archaeology.github_integrator import EnrichedHistory, EnrichedCommit
                 enriched_commits = [EnrichedCommit(commit=c) for c in history.commits]
                 enriched_history = EnrichedHistory(
                     base_history=history,
@@ -383,21 +445,24 @@ class ArchaeologyContextProvider:
         # Update stats
         self.stats.total_queries += 1
 
-        # Check cache
+        # Check two-tier cache
         cache_key = self._generate_cache_key(file_path, question)
-        cached_result = self.cache.get(cache_key)
+        cached_result = self.cache.get(file_path, question, cache_key)
 
         if cached_result:
+            result, cache_level, similarity = cached_result
             self.stats.hits += 1
-            self.stats.cache_size = self.cache.size
-            logger.debug(f"Cache hit for: {file_path}")
+            self.stats.cache_size = self.l1_cache.size
+            logger.debug(f"{cache_level} cache hit for: {file_path}")
 
             # Update query time stats
             query_time_ms = (time.time() - start_time) * 1000
-            cached_result.cached = True
-            cached_result.query_time_ms = query_time_ms
+            result.cached = True
+            result.query_time_ms = query_time_ms
+            result.cache_level = cache_level
+            result.similarity_score = similarity
 
-            return cached_result
+            return result
 
         # Cache miss
         self.stats.misses += 1
@@ -437,9 +502,9 @@ class ArchaeologyContextProvider:
                 query_time_ms=query_time_ms,
             )
 
-            # Cache result
-            self.cache.put(cache_key, context)
-            self.stats.cache_size = self.cache.size
+            # Cache result in both tiers
+            self.cache.put(file_path, question, cache_key, context)
+            self.stats.cache_size = self.l1_cache.size
 
             # Update average query time
             total_time = self.stats.avg_query_time_ms * (self.stats.total_queries - 1)
@@ -480,7 +545,7 @@ class ArchaeologyContextProvider:
 
     async def _query_archaeology(self, file_path: str, question: str) -> Answer:
         """
-        Query the archaeology system (async wrapper).
+        Query the archaeology system with FAISS enhancement.
 
         Args:
             file_path: File path to query
@@ -489,6 +554,14 @@ class ArchaeologyContextProvider:
         Returns:
             Answer from CCA system
         """
+        # Try FAISS first if enabled
+        if self._faiss_enabled and self._initialize_faiss():
+            try:
+                return await self._query_with_faiss(file_path, question)
+            except Exception as e:
+                logger.warning(f"FAISS query failed, falling back to original search: {e}")
+
+        # Fallback to original search
         # Enhance question with file context
         enhanced_question = f"For file '{file_path}': {question}"
 
@@ -503,6 +576,189 @@ class ArchaeologyContextProvider:
         )
 
         return answer
+
+    def _initialize_faiss(self) -> bool:
+        """
+        Initialize FAISS components.
+
+        Returns:
+            True if successful, False otherwise
+        """
+        if self._faiss_initialized:
+            return True
+
+        if not self._faiss_enabled:
+            return False
+
+        try:
+            logger.info("Initializing FAISS components...")
+
+            # Initialize embedding generator
+            embed_config = EmbeddingConfig(
+                cache_dir=self.repo_path / '.ail' / 'cache'
+            )
+            self._embedding_generator = EmbeddingGenerator(embed_config)
+
+            # Initialize FAISS index
+            faiss_config = FAISSConfig(
+                index_path=self.repo_path / '.ail' / 'faiss' / 'index.bin',
+                metadata_path=self.repo_path / '.ail' / 'faiss' / 'metadata.pkl'
+            )
+            self._faiss_index = FAISSIndex(faiss_config)
+
+            # Load or build index
+            if faiss_config.index_path.exists():
+                self._faiss_index.load()
+                logger.info(f"Loaded FAISS index with {self._faiss_index.size} documents")
+            else:
+                self._build_faiss_index()
+
+            self._faiss_initialized = True
+            return True
+
+        except Exception as e:
+            logger.warning(f"FAISS initialization failed: {e}")
+            self._faiss_enabled = False
+            return False
+
+    def _build_faiss_index(self) -> None:
+        """Build FAISS index from repository history."""
+        if not self._searchable_index:
+            logger.warning("No searchable index available for building FAISS index")
+            return
+
+        logger.info("Building FAISS index...")
+
+        # Get enriched history from searchable index
+        # Note: SearchableIndex contains enriched_history attribute
+        enriched_history = getattr(self._searchable_index, 'enriched_history', None)
+        if not enriched_history:
+            logger.warning("No enriched history available")
+            return
+
+        # Process commits in batches
+        batch_size = 100
+        enriched_commits = enriched_history.enriched_commits
+
+        for i in range(0, len(enriched_commits), batch_size):
+            batch = enriched_commits[i:i+batch_size]
+
+            # Generate embeddings
+            embeddings, doc_ids = self._embedding_generator.embed_commits(batch)
+
+            # Add to FAISS index
+            self._faiss_index.add_documents(embeddings, doc_ids)
+
+        # Save index and cache
+        self._faiss_index.save()
+        self._embedding_generator.save_cache()
+
+        logger.info(f"Built FAISS index with {self._faiss_index.size} documents")
+
+    async def _query_with_faiss(self, file_path: str, question: str) -> Answer:
+        """
+        Query using FAISS semantic search.
+
+        Args:
+            file_path: File path being queried
+            question: Natural language question
+
+        Returns:
+            Answer synthesized from relevant commits
+        """
+        # Generate query embedding
+        query_text = f"File: {file_path} Question: {question}"
+        query_embedding = self._embedding_generator.embed_query(query_text)
+
+        # Search with FAISS
+        results = self._faiss_index.search(query_embedding, k=20)
+
+        if not results:
+            # Fallback to original search if no FAISS results
+            raise ValueError("No FAISS results found")
+
+        # Retrieve full commit data for top results
+        enriched_history = getattr(self._searchable_index, 'enriched_history', None)
+        if not enriched_history:
+            raise ValueError("No enriched history available")
+
+        relevant_commits = []
+        for doc_id, score in results[:10]:
+            # Extract commit SHA from document ID
+            if doc_id.startswith("commit_"):
+                commit_sha = doc_id.replace("commit_", "")
+
+                # Find commit in enriched history
+                for commit in enriched_history.enriched_commits:
+                    if commit.commit.sha == commit_sha:
+                        relevant_commits.append((commit, score))
+                        break
+
+        # Synthesize answer from relevant commits
+        answer = self._synthesize_answer_from_commits(
+            question, relevant_commits, file_path
+        )
+
+        return answer
+
+    def _synthesize_answer_from_commits(
+        self,
+        question: str,
+        relevant_commits: List[Tuple[EnrichedCommit, float]],
+        file_path: str
+    ) -> Answer:
+        """
+        Synthesize answer from FAISS-retrieved commits.
+
+        Args:
+            question: Original question
+            relevant_commits: List of (EnrichedCommit, score) tuples
+            file_path: File being queried
+
+        Returns:
+            Synthesized answer
+        """
+        # Build answer from relevant commits
+        citations = []
+        answer_parts = []
+
+        for commit, score in relevant_commits[:5]:  # Top 5 most relevant
+            # Create citation
+            citation = Citation(
+                commit_sha=commit.commit.sha,
+                commit_message=commit.commit.message,
+                commit_date=commit.commit.date,
+                author=commit.commit.author,
+                source_type="commit",
+                source_id=None,
+                relevance_score=score,
+                excerpt=commit.commit.message[:200],
+                url=""
+            )
+            citations.append(citation)
+
+            # Add to answer synthesis
+            if score > 0.7:  # High relevance
+                answer_parts.append(
+                    f"Based on commit {commit.commit.sha[:8]} by {commit.commit.author}: "
+                    f"{commit.commit.message}"
+                )
+
+        # Construct final answer
+        if answer_parts:
+            answer_text = "From the repository history:\n\n" + "\n\n".join(answer_parts)
+            confidence = max(score for _, score in relevant_commits[:5])
+        else:
+            answer_text = f"No highly relevant commits found for '{file_path}' regarding: {question}"
+            confidence = 0.3
+
+        return Answer(
+            question=question,
+            answer=answer_text,
+            citations=citations,
+            confidence=confidence,
+            reasoning="FAISS semantic search",
+        )
 
     def get_context_sync(self, file_path: str, question: str) -> ArchaeologicalContext:
         """
@@ -526,7 +782,7 @@ class ArchaeologyContextProvider:
         return loop.run_until_complete(self.get_context(file_path, question))
 
     def clear_cache(self) -> None:
-        """Clear the context cache."""
+        """Clear the context cache (both L1 and L2)."""
         self.cache.clear()
         self.stats.cache_size = 0
         logger.info("Cache cleared")
@@ -539,6 +795,16 @@ class ArchaeologyContextProvider:
             CacheStats object with current statistics
         """
         return self.stats
+
+    def get_combined_cache_stats(self) -> Dict[str, Any]:
+        """
+        Get combined cache statistics from both L1 and L2 tiers.
+
+        Returns:
+            Dictionary with comprehensive cache statistics including
+            L1, L2, and combined metrics
+        """
+        return self.cache.get_combined_stats()
 
     def is_initialized(self) -> bool:
         """Check if provider is initialized."""
