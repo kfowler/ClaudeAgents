@@ -9,13 +9,18 @@ This module provides tools to:
 - Correlate multi-source information
 """
 
+from __future__ import annotations
+
 import os
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List, Dict, Optional, Tuple, Set
+from typing import List, Dict, Optional, Tuple, Set, TYPE_CHECKING
 from pathlib import Path
 import hashlib
+
+if TYPE_CHECKING:
+    from typing import Any
 
 try:
     import anthropic
@@ -111,6 +116,7 @@ class SearchableIndex:
     documents: List[str] = field(default_factory=list)
     document_metadata: List[Dict] = field(default_factory=list)
     faiss_index: Optional[object] = None  # FAISS index
+    embedding_provider: Optional[EmbeddingProvider] = None  # Store the provider
 
     @property
     def size(self) -> int:
@@ -217,13 +223,16 @@ class SimpleEmbeddingProvider(EmbeddingProvider):
         if self._vocabulary is None:
             self._vocabulary = self._build_vocabulary(texts)
 
+        # Determine dimension (use vocabulary size or max_features)
+        dimension = len(self._vocabulary)
+
         embeddings = []
         for text in texts:
             # Tokenize
             tokens = re.findall(r'\w+', text.lower())
 
             # Create vector
-            vec = np.zeros(len(self._vocabulary), dtype=np.float32)
+            vec = np.zeros(dimension, dtype=np.float32)
             for token in tokens:
                 if token in self._vocabulary:
                     vec[self._vocabulary[token]] += 1.0
@@ -240,6 +249,8 @@ class SimpleEmbeddingProvider(EmbeddingProvider):
     @property
     def dimension(self) -> int:
         """Embedding dimension."""
+        if self._vocabulary:
+            return len(self._vocabulary)
         return self.max_features
 
 
@@ -344,6 +355,7 @@ class ContextSynthesizer:
             documents=documents,
             document_metadata=metadata,
             faiss_index=faiss_index,
+            embedding_provider=self.embedding_provider,  # Store provider for queries
         )
 
     def search(self, index: SearchableIndex, query: str, k: int = 10) -> List[SearchResult]:
@@ -358,8 +370,9 @@ class ContextSynthesizer:
         Returns:
             List of SearchResult objects, sorted by relevance
         """
-        # Generate query embedding
-        query_embedding = self.embedding_provider.embed([query])[0]
+        # Generate query embedding using the index's provider (same vocabulary!)
+        provider = index.embedding_provider or self.embedding_provider
+        query_embedding = provider.embed([query])[0]
 
         if index.faiss_index is not None:
             # Use FAISS for fast search

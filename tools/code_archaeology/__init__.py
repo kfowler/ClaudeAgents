@@ -10,7 +10,7 @@ This package provides tools to extract, correlate, and synthesize information fr
 The goal is to answer "why" questions about code decisions using natural language queries.
 """
 
-__version__ = "0.3.0"
+__version__ = "1.0.0"
 
 from .git_analyzer import GitArchaeologist, Commit, ArchCommit, RepositoryHistory
 from .github_integrator import (
@@ -27,6 +27,7 @@ from .context_synthesizer import (
     Citation,
     SimpleEmbeddingProvider,
 )
+from .query_cli import ArchaeologyCLI
 
 __all__ = [
     # Git Analysis
@@ -46,4 +47,6 @@ __all__ = [
     "Answer",
     "Citation",
     "SimpleEmbeddingProvider",
+    # Query CLI
+    "ArchaeologyCLI",
 ]

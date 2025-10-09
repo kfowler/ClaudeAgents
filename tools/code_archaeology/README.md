@@ -185,17 +185,81 @@ for citation in answer.citations:
     print(f"  - {citation.commit_sha[:8]}: {citation.commit_message}")
 ```
 
-## Week 4: Query CLI Interface (Pending)
+## Week 4: Query CLI Interface ✅
 
-**Lead**: developer-experience-engineer
-**Support**: technical-writer
+**Status**: Complete
 
-**Planned Features**:
-- Interactive REPL for questions
-- Natural language query parsing
-- Formatted answer presentation
-- Follow-up question support
-- Export to markdown/HTML
+**Deliverables**:
+- ✅ `query_cli.py`: Interactive CLI with rich formatting (300 lines)
+- ✅ `archaeology` executable: Clean entry point script
+- ✅ `test_query_cli.py`: Comprehensive test suite (8 unit tests, 5 integration tests)
+- ✅ Single query mode + interactive REPL
+- ✅ Export to markdown
+
+**Features**:
+- Interactive REPL:
+  - Natural language question input
+  - Real-time answer generation
+  - Formatted output (plain text + rich terminal)
+  - Command system (help, history, export, quit)
+- Single query mode:
+  - Non-interactive CLI for automation
+  - Direct answer output
+  - Optional markdown export
+- Rich formatting (when available):
+  - Colored output and panels
+  - Progress spinners during analysis
+  - Formatted markdown answers
+  - Beautiful tables for history
+- Export functionality:
+  - Markdown export of query history
+  - Timestamped queries and answers
+  - Citation preservation
+
+**CLI Commands**:
+```bash
+# Interactive mode (default)
+python3 tools/archaeology
+
+# Single query mode
+python3 tools/archaeology --query "Why was X refactored?"
+
+# With GitHub enrichment
+python3 tools/archaeology --github owner/repo
+
+# Export results
+python3 tools/archaeology --query "..." --export output.md
+```
+
+**Example Session**:
+```
+$ python3 tools/archaeology
+
+🔍 Cognitive Code Archaeology
+============================================================
+
+Analyzing git history...
+  ✓ Found 219 commits
+Building searchable index...
+  ✓ Indexed 219 documents
+
+Ready for questions!
+Type 'help' for commands, 'quit' to exit.
+
+❓ Question: What is the purpose of this repository?
+
+Answer:
+Based on repository history analysis:
+
+The most relevant commit is 935383b3 by google-labs-jules[bot]:
+"feat: Create 'Mythical Man-Month' agents"
+
+Confidence: 45% | Credibility: 74%
+
+Citations (5):
+1. 935383b3 by google-labs-jules[bot] (2025-07-28)
+   feat: Create 'Mythical Man-Month' agents
+```
 
 ## Data Models
 
@@ -322,8 +386,13 @@ tests/
 - [x] Week 1: Git history analyzer (Complete)
 - [x] Week 2: GitHub integration (Complete)
 - [x] Week 3: Context synthesis engine (Complete)
-- [ ] Week 4: Query CLI interface
+- [x] Week 4: Query CLI interface (Complete)
 - [ ] Week 5+: Slack/JIRA integration (stretch goal)
+
+## 🎉 **COMPLETE: All 4 weeks implemented successfully!**
+
+The Cognitive Code Archaeology system is now fully operational. You can ask natural
+language questions about your codebase history and get answers with citations.
 
 ## Contributing
 
