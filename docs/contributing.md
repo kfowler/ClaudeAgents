@@ -303,6 +303,105 @@ def test_your_feature(self):
 **"Duplicate agent names"**
 - Check for name conflicts in frontmatter
 
+## Agent Deprecation and Death Certificates
+
+### When to Deprecate an Agent
+
+Deprecate an agent when:
+- **Poor Adoption**: Agent has minimal real-world usage after reasonable trial period
+- **Scope Creep**: Agent boundaries became unclear, causing confusion with other agents
+- **Superseded**: A better agent or approach has replaced this agent's functionality
+- **Technical Debt**: Maintaining the agent creates more problems than value
+
+### Deprecation Process
+
+**IMPORTANT**: Never deprecate an agent without creating a death certificate first.
+
+#### Step 1: Create Death Certificate
+
+Use the death certificate template:
+```bash
+cp tools/death_certificates/TEMPLATE.md tools/death_certificates/your-agent-name.md
+```
+
+Fill in all required sections:
+- **Agent Name**: The agent being deprecated
+- **Date of Creation**: When agent was first introduced
+- **Date of Death**: Today's date
+- **Lifespan**: Days between creation and deprecation
+- **Cause of Death**: Primary reason (Poor Adoption, Scope Creep, Superseded, Technical Debt)
+- **Detailed Autopsy**: Honest analysis of what went wrong
+- **Lessons Learned**: Key insights for future agent development
+- **Migration Path**: How users should transition away from this agent
+- **Final Commit**: Last commit hash where agent was active
+
+See [Death Certificate Template](../tools/death_certificates/TEMPLATE.md) for detailed guidance.
+
+#### Step 2: The-Critic Review
+
+Submit death certificate for review by `the-critic`:
+- Ensures honest, thorough analysis
+- Validates migration path is clear
+- Confirms lessons learned are actionable
+- Verifies no critical functionality is lost
+
+#### Step 3: Execute Deprecation
+
+Use the deprecation helper script:
+```bash
+./tools/deprecate_agent.sh your-agent-name
+```
+
+This script will:
+- Verify death certificate exists
+- Move agent to `agents/deprecated/`
+- Guide you through documentation updates
+- Create properly formatted commit
+
+#### Step 4: Update Documentation
+
+After running the script:
+1. Remove agent from `CLAUDE.md` agent list
+2. Add agent to death certificates gallery (`tools/death_certificates/README.md`)
+3. Update any commands that referenced the deprecated agent
+4. Commit with reference to death certificate:
+   ```
+   Deprecate your-agent-name (see death certificate)
+
+   Agent has been deprecated due to [reason].
+   See tools/death_certificates/your-agent-name.md for full analysis.
+
+   Migration path: [brief description]
+   ```
+
+### Viewing Death Certificates
+
+Browse the [Death Certificates Gallery](../tools/death_certificates/README.md) to:
+- See statistics on agent deprecation patterns
+- Learn from past mistakes
+- Browse by cause of death
+- Review top lessons learned
+
+The gallery includes auto-generated statistics showing:
+- Total agents vs deprecated agents
+- Agent survival rate
+- Average lifespan
+- Most common causes of death
+- Key insights from each deprecation
+
+### Quality Gates
+
+The validation system checks:
+- Deprecated agents must have death certificates
+- Death certificates must have all required sections
+- Migration paths must reference valid agents
+- Warnings for agents with low usage (potential future deprecation)
+
+Run validation to check your deprecation:
+```bash
+python3 tools/validate_agents.py
+```
+
 ## Documentation
 
 ### Updating Documentation

@@ -57,6 +57,8 @@ class AgentValidator:
             agents_dir: Path to directory containing agent files (default: 'agents')
         """
         self.agents_dir = Path(agents_dir)
+        self.death_certs_dir = Path('tools/death_certificates')
+        self.deprecated_dir = self.agents_dir / 'deprecated'
         self.errors: List[str] = []
         self.warnings: List[str] = []
         self.stats: Dict = defaultdict(int)
@@ -213,7 +215,110 @@ class AgentValidator:
         except Exception as e:
             self.errors.append(f"{filename}: Unexpected error: {e}")
             return False, {}
-            
+
+    def validate_death_certificate(self, cert_path: Path) -> Tuple[bool, Dict]:
+        """
+        Validate a death certificate for completeness.
+
+        Checks:
+        - All required sections are present
+        - Migration path references valid agents
+        - Format is correct
+
+        Args:
+            cert_path: Path to death certificate markdown file
+
+        Returns:
+            Tuple of (is_valid, data_dict)
+        """
+        filename = cert_path.name
+        cert_errors = []
+
+        # Skip template and README
+        if filename in ['TEMPLATE.md', 'README.md']:
+            return True, {}
+
+        try:
+            with open(cert_path, 'r') as f:
+                content = f.read()
+
+            # Required sections for death certificates
+            required_sections = [
+                'Agent Name:',
+                'Date of Creation:',
+                'Date of Death:',
+                'Lifespan:',
+                'Cause of Death:',
+                'Detailed Autopsy',
+                'Lessons Learned',
+                'Migration Path',
+                'Final Commit:'
+            ]
+
+            for section in required_sections:
+                if section not in content:
+                    cert_errors.append(f"{filename}: Missing required section '{section}'")
+
+            # Extract migration path and validate referenced agents
+            migration_section = False
+            for line in content.split('\n'):
+                if 'Migration Path' in line:
+                    migration_section = True
+                elif migration_section and line.startswith('#'):
+                    migration_section = False
+                elif migration_section and '`' in line:
+                    # Extract agent names from backticks
+                    import re
+                    agent_refs = re.findall(r'`([a-z-]+)`', line)
+                    for agent_name in agent_refs:
+                        agent_path = self.agents_dir / f"{agent_name}.md"
+                        if not agent_path.exists():
+                            cert_errors.append(
+                                f"{filename}: Migration path references non-existent agent '{agent_name}'"
+                            )
+
+            self.errors.extend(cert_errors)
+            return len(cert_errors) == 0, {}
+
+        except Exception as e:
+            self.errors.append(f"{filename}: Error validating death certificate: {e}")
+            return False, {}
+
+    def validate_deprecated_agents(self):
+        """
+        Validate that all deprecated agents have death certificates.
+
+        Checks:
+        - Deprecated agents exist in agents/deprecated/
+        - Each has corresponding death certificate
+        - Death certificates are valid
+        """
+        if not self.deprecated_dir.exists():
+            return  # No deprecated agents yet
+
+        deprecated_files = list(self.deprecated_dir.glob('*.md'))
+
+        for agent_file in deprecated_files:
+            agent_name = agent_file.stem  # filename without .md
+            cert_path = self.death_certs_dir / f"{agent_name}.md"
+
+            if not cert_path.exists():
+                self.errors.append(
+                    f"Deprecated agent '{agent_name}' missing death certificate at {cert_path}"
+                )
+            else:
+                # Validate the death certificate
+                self.validate_death_certificate(cert_path)
+
+        # Validate all existing death certificates
+        if self.death_certs_dir.exists():
+            cert_files = [f for f in self.death_certs_dir.glob('*.md')
+                         if f.name not in ['TEMPLATE.md', 'README.md']]
+            for cert_file in cert_files:
+                self.validate_death_certificate(cert_file)
+
+        self.stats['deprecated_agents'] = len(deprecated_files)
+
     def validate_all_agents(self) -> bool:
         """
         Validate all agent files in the configured directory.
@@ -255,7 +360,10 @@ class AgentValidator:
         # Report statistics
         self.stats['unique_colors'] = len(color_counts)
         self.stats['most_used_color'] = max(color_counts.items(), key=lambda x: x[1])[0] if color_counts else None
-        
+
+        # Validate death certificates and deprecated agents
+        self.validate_deprecated_agents()
+
         return len(self.errors) == 0
         
     def print_report(self):
@@ -310,7 +418,17 @@ class AgentValidator:
             print(f"    - Low:    {self.stats.get('complexity_low', 0)}")
             print(f"    - Medium: {self.stats.get('complexity_medium', 0)}")
             print(f"    - High:   {self.stats.get('complexity_high', 0)}")
-            
+
+        # Death certificate statistics
+        if self.stats.get('deprecated_agents', 0) > 0:
+            print(f"\n⚰️  DEATH CERTIFICATES:")
+            print(f"  • Deprecated agents: {self.stats.get('deprecated_agents', 0)}")
+            active_agents = self.stats['total_agents']
+            total_agents = active_agents + self.stats.get('deprecated_agents', 0)
+            survival_rate = (active_agents / total_agents * 100) if total_agents > 0 else 100
+            print(f"  • Agent survival rate: {survival_rate:.1f}%")
+            print(f"  • View gallery: tools/death_certificates/README.md")
+
         if not self.errors and not self.warnings:
             print("\n✅ All agents are valid and consistent!")
         elif not self.errors:

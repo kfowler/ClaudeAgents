@@ -136,17 +136,41 @@ git show 223b6ec~1:commands/quality/database-review.md
 
 ## Statistics
 
+**Auto-generated statistics** (run `python3 tools/death_certificates/analyze_certificates.py` to update):
+
+<!-- STATS_START -->
 **Current death certificates:** 3
 **Average lifespan:** 19.7 days
 **Most common cause:** Consolidation (scope overlap)
 **Success rate:** 92.7% (3 deprecations out of 41 total agents/commands)
+<!-- STATS_END -->
 
-**Lessons learned:**
+**Top Lessons Learned:**
 1. Validate command boundaries with users before creating separation
 2. Solve hard problems (implementation) not easy problems (analysis)
 3. Define "out of scope" as clearly as "in scope"
 4. 100% user overlap between commands is a red flag
 5. Support tickets asking "which one?" signal product design issues
+
+### Generating Updated Statistics
+
+To regenerate statistics from all death certificates:
+
+```bash
+# View statistics in terminal
+python3 tools/death_certificates/analyze_certificates.py
+
+# Generate markdown for README update
+python3 tools/death_certificates/analyze_certificates.py > stats_update.txt
+# Then manually copy the statistics into this README
+```
+
+The analyzer extracts:
+- Total agents and survival rate
+- Average agent lifespan
+- Breakdown by cause of death
+- Top lessons learned across all certificates
+- Individual agent details
 
 ## Contributing
 
