@@ -24,16 +24,52 @@ pip install -r tools/requirements-dev.txt
 4. Commit with descriptive messages
 5. Submit a pull request
 
+### Developer Tools
+
+ClaudeAgents provides interactive generators to streamline contribution:
+
+**Agent Generator** (`tools/create_agent.py`):
+- Interactive prompts for all metadata
+- Smart model/complexity recommendations
+- Built-in validation
+- Automatic template population
+
+**Command Generator** (`tools/create_command.py`):
+- Category-based organization
+- Multi-phase workflow builder
+- Agent reference validation
+- Automatic flow diagrams
+
+These tools reduce errors, ensure consistency, and make contributing easier.
+
 ## Adding a New Agent
 
-### Step 1: Create Agent File
+### Quick Start (Recommended)
+
+Use the interactive agent generator:
+```bash
+python3 tools/create_agent.py
+```
+
+This tool will guide you through:
+- Validating the agent name
+- Writing a proper description (50-500 chars)
+- Selecting model tier and complexity with smart recommendations
+- Generating a complete agent file from template
+- Running validation automatically
+
+### Manual Method (Advanced)
+
+If you prefer manual creation:
+
+#### Step 1: Create Agent File
 
 Copy the template:
 ```bash
 cp agents/AGENT_TEMPLATE.md agents/your-agent-name.md
 ```
 
-### Step 2: Fill in Required Fields
+#### Step 2: Fill in Required Fields
 
 **Frontmatter (YAML):**
 ```yaml
@@ -80,7 +116,27 @@ Ensure all tests pass.
 
 ## Adding a New Command
 
-### Step 1: Choose Directory
+### Quick Start (Recommended)
+
+Use the interactive command generator:
+```bash
+python3 tools/create_command.py
+```
+
+This tool will guide you through:
+- Selecting the appropriate category
+- Validating the command name
+- Writing a clear description
+- Defining workflow phases and agent orchestration
+- Validating agent references
+- Generating execution flow diagrams
+- Creating the command file automatically
+
+### Manual Method (Advanced)
+
+If you prefer manual creation:
+
+#### Step 1: Choose Directory
 
 Commands are organized by purpose:
 - `commands/development/`: Code-related workflows
@@ -89,7 +145,7 @@ Commands are organized by purpose:
 - `commands/specialized/`: Language/framework-specific
 - `commands/workflows/`: Multi-agent orchestration
 
-### Step 2: Create Command File
+#### Step 2: Create Command File
 
 ```markdown
 ---
