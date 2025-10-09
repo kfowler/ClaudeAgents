@@ -113,12 +113,64 @@ class TelemetryCollector:
         """Check if telemetry is enabled"""
         return self.config.get("enabled", False)
 
-    def enable(self):
-        """Enable telemetry collection"""
+    def enable(self, interactive: bool = True):
+        """Enable telemetry collection with optional interactive consent"""
+        if interactive:
+            # Show interactive consent prompt
+            if not self._prompt_consent():
+                print("❌ Telemetry not enabled. You can enable it later with:")
+                print("   python3 tools/telemetry.py enable")
+                return False
+
         self.config["enabled"] = True
         self.config["enabled_at"] = datetime.now().isoformat()
         self._save_config()
         print("✅ Telemetry enabled. Data stored in:", self.base_dir)
+        print("   View your data: python3 tools/telemetry.py summary")
+        print("   Disable anytime: python3 tools/telemetry.py disable")
+        return True
+
+    def _prompt_consent(self) -> bool:
+        """Interactive consent prompt with full disclosure"""
+        print("\n" + "="*70)
+        print("ENABLE TELEMETRY?")
+        print("="*70)
+        print("\n📊 What This Helps Us Do:")
+        print("  ✅ Validate quality-first tier system (prove Core agents perform better)")
+        print("  ✅ Identify underused agents (archive low-value agents)")
+        print("  ✅ Optimize performance (fix slow agents)")
+        print("  ✅ Detect workflow patterns (auto-create composite commands)")
+        print("\n🎁 What You Get:")
+        print("  ✅ Early access to v4.0 features (30 days before public release)")
+        print("  ✅ Premium trial (7 days of advanced agents)")
+        print("  ✅ Tier promotion voting rights (shape the roadmap)")
+        print("  ✅ Feature request priority (your voice matters)")
+        print("\n📋 What We Collect:")
+        print("  ✅ Agent usage (which agent, duration, success/failure)")
+        print("  ✅ Command usage (which workflow, completion status)")
+        print("  ✅ Performance metrics (execution time, resource usage)")
+        print("  ✅ Platform info (OS, Claude Code version)")
+        print("\n🔒 What We DON'T Collect:")
+        print("  ❌ No code snippets or file contents")
+        print("  ❌ No project details or identifiable information")
+        print("  ❌ No API keys, credentials, or secrets")
+        print("  ❌ No IP addresses or network data")
+        print("  ❌ No user demographics or personal data")
+        print("\n🏠 Privacy Promise:")
+        print("  • Local-only storage (~/.claude-telemetry/)")
+        print("  • Never transmitted without your consent")
+        print("  • Open-source code (inspect tools/telemetry.py)")
+        print("  • Easy opt-out (python3 tools/telemetry.py disable)")
+        print("\n📖 Full Details: docs/TELEMETRY_PRIVACY.md")
+        print("="*70)
+
+        # Get user consent
+        try:
+            response = input("\nEnable telemetry? (y/N): ").strip().lower()
+            return response in ['y', 'yes']
+        except (KeyboardInterrupt, EOFError):
+            print("\n")  # Clean newline after Ctrl+C
+            return False
 
     def disable(self):
         """Disable telemetry collection"""
@@ -435,7 +487,12 @@ def main():
     command = sys.argv[1]
 
     if command == "enable":
-        collector.enable()
+        # Check for --no-prompt flag for non-interactive enabling
+        interactive = "--no-prompt" not in sys.argv
+        enabled = collector.enable(interactive=interactive)
+        if not enabled and interactive:
+            # User declined consent
+            sys.exit(1)
     elif command == "disable":
         collector.disable()
     elif command == "summary":
@@ -443,6 +500,17 @@ def main():
     elif command == "status":
         print(f"Telemetry: {'✅ Enabled' if collector.is_enabled() else '🔕 Disabled'}")
         print(f"Data directory: {collector.base_dir}")
+        if collector.is_enabled():
+            print(f"\n💡 Tips:")
+            print(f"   • View your data: python3 tools/telemetry.py summary")
+            print(f"   • Inspect events: cat ~/.claude-telemetry/events/*.jsonl")
+            print(f"   • Disable: python3 tools/telemetry.py disable")
+        else:
+            print(f"\n💡 Enable telemetry to unlock:")
+            print(f"   • Early access to v4.0 features")
+            print(f"   • Premium trial (7 days)")
+            print(f"   • Tier promotion voting rights")
+            print(f"   → python3 tools/telemetry.py enable")
     else:
         print(f"Unknown command: {command}")
         sys.exit(1)
