@@ -10,13 +10,27 @@ This package provides tools to extract, correlate, and synthesize information fr
 The goal is to answer "why" questions about code decisions using natural language queries.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 from .git_analyzer import GitArchaeologist, Commit, ArchCommit, RepositoryHistory
+from .github_integrator import (
+    GitHubArchaeologist,
+    EnrichedCommit,
+    EnrichedHistory,
+    PullRequest,
+    Issue,
+)
 
 __all__ = [
+    # Git Analysis
     "GitArchaeologist",
     "Commit",
     "ArchCommit",
     "RepositoryHistory",
+    # GitHub Integration
+    "GitHubArchaeologist",
+    "EnrichedCommit",
+    "EnrichedHistory",
+    "PullRequest",
+    "Issue",
 ]

@@ -79,17 +79,47 @@ Top architectural commits:
   [architecture] Merge Sprint 1: Model Assignment, Boundary Resolution (impact: 1.00)
 ```
 
-## Week 2: GitHub Integration (Pending)
+## Week 2: GitHub Integration ✅
 
-**Lead**: backend-api-engineer
-**Support**: data-engineer, devops-engineer
+**Status**: Complete
 
-**Planned Features**:
-- Link commits to pull requests
-- Extract PR discussion context
-- Capture code review comments
-- Track issue references
+**Deliverables**:
+- ✅ `github_integrator.py`: Complete GitHub API integration (569 lines)
+- ✅ `test_github_integrator.py`: Comprehensive test suite (14 unit tests, 3 integration tests)
+- ✅ Performance: Rate limiting, caching, error handling
+- ✅ JSON export for Week 3 semantic analysis
+
+**Features**:
+- Link commits to pull requests (via message parsing + API search)
+- Extract PR discussion context (body + comments + review comments)
+- Capture code review comments with file/line references
+- Track issue references and relationships
 - Enrich commit data with GitHub metadata
+- Rate limit handling and automatic backoff
+- GITHUB_TOKEN authentication support
+
+**Data Models**:
+- `PullRequest`: Complete PR data with discussion
+- `Issue`: Issue tracking with comments
+- `EnrichedCommit`: Commit + GitHub context
+- `EnrichedHistory`: Full repository with GitHub enrichment
+
+**Example Usage**:
+```python
+from tools.code_archaeology import GitArchaeologist, GitHubArchaeologist
+
+# First, analyze git history
+git_arch = GitArchaeologist(".")
+history = git_arch.analyze_repo()
+
+# Then, enrich with GitHub data
+gh_arch = GitHubArchaeologist("owner", "repo")
+enriched = gh_arch.enrich_history(history, limit=50)
+
+print(f"Enrichment rate: {enriched.enrichment_rate:.1%}")
+print(f"Pull requests: {len(enriched.pull_requests)}")
+print(f"Issues: {len(enriched.issues)}")
+```
 
 ## Week 3: Context Synthesis Engine (Pending)
 
@@ -219,8 +249,12 @@ tests/
 - Git CLI
 - Standard library only
 
+**Current (Week 1-2)**:
+- Python 3.9+
+- Git CLI
+- `requests` (GitHub API)
+
 **Upcoming Weeks**:
-- Week 2: `requests`, `PyGithub` (GitHub API)
 - Week 3: `openai`, `anthropic`, `faiss-cpu` (LLM + vector search)
 - Week 4: `prompt_toolkit`, `rich` (CLI interface)
 
@@ -234,7 +268,7 @@ tests/
 ## Roadmap
 
 - [x] Week 1: Git history analyzer (Complete)
-- [ ] Week 2: GitHub integration
+- [x] Week 2: GitHub integration (Complete)
 - [ ] Week 3: Context synthesis engine
 - [ ] Week 4: Query CLI interface
 - [ ] Week 5+: Slack/JIRA integration (stretch goal)
