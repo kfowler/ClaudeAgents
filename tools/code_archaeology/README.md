@@ -1,0 +1,248 @@
+# Cognitive Code Archaeology
+
+Multi-source historical analysis for codebase understanding. Answer "why" questions about code decisions using natural language queries.
+
+## Overview
+
+Cognitive Code Archaeology combines multiple data sources to provide deep historical context for code decisions:
+
+- **Git History**: Commit messages, diffs, temporal patterns
+- **GitHub Integration**: PR discussions, issue context, code review comments (Week 2)
+- **Context Synthesis**: LLM-powered semantic search and answer generation (Week 3)
+- **Natural Language Queries**: Interactive CLI for asking questions (Week 4)
+
+## Quick Start
+
+### Analyze a Repository
+
+```python
+from tools.code_archaeology import GitArchaeologist
+
+# Initialize the archaeologist
+archaeologist = GitArchaeologist("/path/to/repo")
+
+# Analyze the repository
+history = archaeologist.analyze_repo()
+
+# View summary
+print(f"Total commits: {history.total_commits}")
+print(f"Architecturally significant: {len(history.arch_commits)}")
+print(f"Date range: {history.date_range[0].date()} to {history.date_range[1].date()}")
+
+# Export for further processing
+archaeologist.export_to_json(history, "repo_history.json")
+```
+
+### CLI Usage
+
+```bash
+# Analyze current directory
+python3 tools/code_archaeology/git_analyzer.py . output.json
+
+# Analyze specific repository
+python3 tools/code_archaeology/git_analyzer.py /path/to/repo output.json
+```
+
+## Week 1: Git History Analyzer ✅
+
+**Status**: Complete
+
+**Deliverables**:
+- ✅ `git_analyzer.py`: Complete git history extraction and analysis
+- ✅ `test_git_analyzer.py`: Comprehensive test suite (14 tests, all passing)
+- ✅ Performance: 216 commits analyzed in <6 seconds
+- ✅ JSON export for Week 2 GitHub enrichment
+
+**Features**:
+- Extract complete commit history with metadata
+- Identify architecturally significant commits (68% detection rate)
+- Build temporal index for correlation (date-based grouping)
+- Track file history and author statistics
+- Pattern detection (architecture, feature, refactor, config, dependency)
+- Impact scoring (0.0 to 1.0) based on size, files, and patterns
+
+**Example Output**:
+```
+=== Repository Analysis Summary ===
+Total commits: 216
+Architecturally significant: 147
+Date range: 2025-07-25 to 2025-10-08
+
+Top contributors:
+  Kevin Fowler: 208 commits
+  Thomas Ricouard: 6 commits
+  google-labs-jules[bot]: 2 commits
+
+Top architectural commits:
+  [architecture] Add MCP preview implementation (impact: 1.00)
+  [refactor] Merge Sprint 2: Create 4 Critical Missing Agents (impact: 1.00)
+  [architecture] Merge Sprint 1: Model Assignment, Boundary Resolution (impact: 1.00)
+```
+
+## Week 2: GitHub Integration (Pending)
+
+**Lead**: backend-api-engineer
+**Support**: data-engineer, devops-engineer
+
+**Planned Features**:
+- Link commits to pull requests
+- Extract PR discussion context
+- Capture code review comments
+- Track issue references
+- Enrich commit data with GitHub metadata
+
+## Week 3: Context Synthesis Engine (Pending)
+
+**Lead**: ai-ml-engineer
+**Support**: data-engineer
+
+**Planned Features**:
+- LLM-powered semantic search across history
+- Multi-source correlation (git + GitHub + issues)
+- Natural language answer generation
+- Citation tracking and credibility scoring
+- Confidence scoring for answers
+
+## Week 4: Query CLI Interface (Pending)
+
+**Lead**: developer-experience-engineer
+**Support**: technical-writer
+
+**Planned Features**:
+- Interactive REPL for questions
+- Natural language query parsing
+- Formatted answer presentation
+- Follow-up question support
+- Export to markdown/HTML
+
+## Data Models
+
+### Commit
+```python
+@dataclass
+class Commit:
+    sha: str
+    message: str
+    author: str
+    email: str
+    date: datetime
+    parents: List[str]
+    branch: Optional[str]
+    files_changed: List[str]
+    additions: int
+    deletions: int
+    diff: str
+    tags: Set[str]
+```
+
+### ArchCommit (Architecturally Significant)
+```python
+@dataclass
+class ArchCommit:
+    commit: Commit
+    significance: str  # "architecture", "feature", "refactor", "config", "dependency"
+    impact_score: float  # 0.0 to 1.0
+    patterns: List[str]  # Detected patterns
+    related_files: List[str]  # Key files affected
+```
+
+### RepositoryHistory
+```python
+@dataclass
+class RepositoryHistory:
+    repo_path: Path
+    commits: List[Commit]
+    arch_commits: List[ArchCommit]
+    temporal_index: Dict[str, List[Commit]]  # YYYY-MM-DD -> commits
+    file_history: Dict[str, List[Commit]]  # filename -> commits
+    author_stats: Dict[str, int]  # author -> commit count
+    branch_commits: Dict[str, List[Commit]]  # branch -> commits
+```
+
+## Performance Benchmarks
+
+**ClaudeAgents Repository**:
+- Total commits: 216
+- Analysis time: 5.64 seconds
+- Architectural commits detected: 147 (68%)
+- Files tracked: 583
+- Days indexed: 11
+- Memory usage: <100MB
+
+**Scalability**:
+- Target: 10,000 commits in <60 seconds
+- Current: 216 commits in 5.64 seconds (~38 commits/sec)
+- Projected: 10,000 commits in ~263 seconds (4.4 minutes)
+
+## Example Questions (Week 4 Target)
+
+Once the full system is complete, users will be able to ask:
+
+- "Why did we choose React over Vue for the frontend?"
+- "What was the reasoning behind the microservices architecture?"
+- "When was authentication first added and why?"
+- "Who decided to use TypeScript and what were their concerns?"
+- "What problems were we trying to solve with the latest refactor?"
+
+## Testing
+
+```bash
+# Run all tests
+python3 -m pytest tests/test_git_analyzer.py -v
+
+# Run specific test class
+python3 -m pytest tests/test_git_analyzer.py::TestGitArchaeologist -v
+
+# Run performance tests only
+python3 -m pytest tests/test_git_analyzer.py::TestPerformance -v
+```
+
+## Architecture
+
+```
+tools/code_archaeology/
+├── __init__.py              # Package exports
+├── git_analyzer.py          # Week 1: Git history extraction ✅
+├── github_integrator.py     # Week 2: GitHub API integration
+├── context_synthesizer.py   # Week 3: LLM-powered synthesis
+├── query_cli.py             # Week 4: Natural language queries
+└── README.md                # This file
+
+tests/
+└── test_git_analyzer.py     # Week 1 tests ✅
+```
+
+## Dependencies
+
+**Week 1 (Current)**:
+- Python 3.9+
+- Git CLI
+- Standard library only
+
+**Upcoming Weeks**:
+- Week 2: `requests`, `PyGithub` (GitHub API)
+- Week 3: `openai`, `anthropic`, `faiss-cpu` (LLM + vector search)
+- Week 4: `prompt_toolkit`, `rich` (CLI interface)
+
+## Privacy & Security
+
+- **Local-only processing**: No external API calls (Week 1-2)
+- **Opt-in GitHub access**: Requires PAT for private repos (Week 2)
+- **Code privacy**: Diffs and code content stay local
+- **LLM processing**: Uses local embeddings or user's API keys (Week 3)
+
+## Roadmap
+
+- [x] Week 1: Git history analyzer (Complete)
+- [ ] Week 2: GitHub integration
+- [ ] Week 3: Context synthesis engine
+- [ ] Week 4: Query CLI interface
+- [ ] Week 5+: Slack/JIRA integration (stretch goal)
+
+## Contributing
+
+See `docs/contributing.md` for contribution guidelines.
+
+## License
+
+MIT License - See LICENSE file for details.
