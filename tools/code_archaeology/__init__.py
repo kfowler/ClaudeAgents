@@ -10,7 +10,7 @@ This package provides tools to extract, correlate, and synthesize information fr
 The goal is to answer "why" questions about code decisions using natural language queries.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 from .git_analyzer import GitArchaeologist, Commit, ArchCommit, RepositoryHistory
 from .github_integrator import (
@@ -19,6 +19,13 @@ from .github_integrator import (
     EnrichedHistory,
     PullRequest,
     Issue,
+)
+from .context_synthesizer import (
+    ContextSynthesizer,
+    SearchableIndex,
+    Answer,
+    Citation,
+    SimpleEmbeddingProvider,
 )
 
 __all__ = [
@@ -33,4 +40,10 @@ __all__ = [
     "EnrichedHistory",
     "PullRequest",
     "Issue",
+    # Context Synthesis
+    "ContextSynthesizer",
+    "SearchableIndex",
+    "Answer",
+    "Citation",
+    "SimpleEmbeddingProvider",
 ]
