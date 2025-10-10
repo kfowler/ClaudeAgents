@@ -304,7 +304,110 @@ This document tracks all active tasks with clear ownership, effort estimates, de
 
 ### Priority 1: High Impact, Low Effort
 
-#### TASK-007: Cross-Agent Learning Network
+#### TASK-007: Create the-realist Agent (Contrarian Diversification)
+**Initiative:** Contrarian Agent Diversification (Sprint 17)
+**Owner:** technical-writer
+**Support:** product-strategist, the-critic
+**Effort:** 3-4 hours
+**Timeline:** Sprint 17 (Week of Oct 22-28)
+**Status:** 📅 Backlog
+
+**Description:**
+Create the-realist agent as business/market contrarian to challenge revenue projections, market sizing, competitive positioning, and ROI calculations. Complements the-critic (technical) and the-pragmatist (execution).
+
+**Agent Specifications:**
+- **Name:** the-realist
+- **Description:** Business and market contrarian who challenges revenue fantasies, market sizing delusions, and competitive blindness. Demands empirical data over wishful thinking. Deploy when business cases need brutal reality checks.
+- **Model:** sonnet (cost-effective for market analysis)
+- **Computational Complexity:** medium
+- **Color:** amber (warning signal for unrealistic projections)
+
+**Contrarian Bias Focus:**
+- Market sizing reality (TAM/SAM/SOM validation)
+- Revenue projection skepticism (unit economics, churn rates)
+- Competitive analysis honesty (why won't incumbents crush you?)
+- ROI calculation rigor (hidden costs, opportunity costs)
+- Pricing strategy realism (willingness-to-pay validation)
+- Market timing critique (too early vs too late)
+
+**Example Scenarios:**
+1. Product manager claims "$100B TAM" → the-realist demands bottoms-up calculation with real data
+2. Startup pitches "10x better than competitor" → the-realist asks why customers will switch
+3. Business case assumes 2% churn → the-realist demands cohort analysis and industry benchmarks
+4. Launch plan ignores competitive response → the-realist war-games incumbent reactions
+
+**Success Criteria:**
+- [ ] Agent definition complete with YAML frontmatter
+- [ ] Professional manifesto commitment aligned with contrarian philosophy
+- [ ] Context boundaries clearly defined (appropriate vs inappropriate contexts)
+- [ ] Integration patterns documented (when to use vs other contrarians)
+- [ ] Example scenarios demonstrate business/market focus
+- [ ] Reviewed by the-critic for rigor and product-strategist for market accuracy
+- [ ] Added to agents/ directory and CLAUDE.md agent selection guide
+
+**Dependencies:**
+- TASK-001 (the-critic context boundaries) complete
+- TASK-002 (CLAUDE.md contrarian mapping) complete
+- TASK-003 (project-orchestrator multi-contrarian patterns) complete
+
+**Blockers:** None
+
+---
+
+#### TASK-008: Create the-pragmatist Agent (Contrarian Diversification)
+**Initiative:** Contrarian Agent Diversification (Sprint 17)
+**Owner:** technical-writer
+**Support:** product-manager, the-critic
+**Effort:** 3-4 hours
+**Timeline:** Sprint 17 (Week of Oct 22-28)
+**Status:** 📅 Backlog
+
+**Description:**
+Create the-pragmatist agent as execution/shipping contrarian to challenge unrealistic deadlines, scope creep, MVP complexity, and build-vs-buy decisions. Complements the-critic (technical) and the-realist (business).
+
+**Agent Specifications:**
+- **Name:** the-pragmatist
+- **Description:** Execution and shipping contrarian who challenges unrealistic deadlines, bloated MVPs, and scope creep. Demands shippable increments over perfect solutions. Deploy when teams need brutal honesty about what's actually achievable.
+- **Model:** sonnet (cost-effective for execution analysis)
+- **Computational Complexity:** medium
+- **Color:** orange (urgency signal for shipping pressure)
+
+**Contrarian Bias Focus:**
+- MVP scope skepticism (what's truly minimum?)
+- Deadline feasibility critique (can we actually ship this?)
+- Build vs buy realism (stop reinventing wheels)
+- Technical debt vs velocity tradeoffs (when to ship imperfect)
+- Resource allocation honesty (team capacity, skill gaps)
+- Scope creep prevention (feature bloat detection)
+- Shipping bias enforcement (done is better than perfect)
+
+**Example Scenarios:**
+1. Team commits to 2-week deadline for 6-week feature → the-pragmatist demands scope cut or timeline extension
+2. MVP has 47 features → the-pragmatist asks which 5 are actually minimum for validation
+3. Engineer wants to build custom auth system → the-pragmatist demands justification vs Auth0/Firebase
+4. Product manager adds "just one more feature" pre-launch → the-pragmatist kills scope creep
+5. Technical debt reaches critical mass → the-pragmatist forces refactor sprint before new features
+
+**Success Criteria:**
+- [ ] Agent definition complete with YAML frontmatter
+- [ ] Professional manifesto commitment aligned with contrarian philosophy
+- [ ] Context boundaries clearly defined (appropriate vs inappropriate contexts)
+- [ ] Integration patterns documented (when to use vs other contrarians)
+- [ ] Example scenarios demonstrate execution/shipping focus
+- [ ] Reviewed by the-critic for rigor and product-manager for execution accuracy
+- [ ] Added to agents/ directory and CLAUDE.md agent selection guide
+
+**Dependencies:**
+- TASK-007 (the-realist agent) complete (parallel work acceptable)
+- TASK-001 (the-critic context boundaries) complete
+- TASK-002 (CLAUDE.md contrarian mapping) complete
+- TASK-003 (project-orchestrator multi-contrarian patterns) complete
+
+**Blockers:** None
+
+---
+
+#### TASK-009: Cross-Agent Learning Network
 **Initiative:** Backlog Priority 1 (Score: 600)
 **Owner:** ai-ml-engineer, data-engineer
 **Effort:** 5-6 hours
@@ -335,7 +438,7 @@ Share insights across agents so entire platform improves from each agent's learn
 
 ### Priority 2: Strategic Initiatives
 
-#### TASK-008: Web Dashboard (AIL Phase 2)
+#### TASK-010: Web Dashboard (AIL Phase 2)
 **Initiative:** Backlog Priority 2 (Score: 500)
 **Owner:** full-stack-architect, systems-engineer
 **Effort:** 2 weeks (80 hours)
@@ -365,7 +468,7 @@ Web-based dashboard replacing CLI for broader accessibility and better UX.
 
 ---
 
-#### TASK-009: Community Contributions Framework
+#### TASK-011: Community Contributions Framework
 **Initiative:** Backlog Priority 2 (Score: 450)
 **Owner:** product-manager, technical-writer
 **Effort:** 1 week (40 hours)
@@ -396,7 +499,7 @@ Enable community to contribute agents with quality gates and certification proce
 
 ### Priority 3: Long-Term Bets (Q1-Q2 2026)
 
-#### TASK-010: Vertical Package 1 - SaaS Product Launch
+#### TASK-012: Vertical Package 1 - SaaS Product Launch
 **Initiative:** Phase 4 Deliverable (Score: 800)
 **Owner:** product-strategist, full-stack-architect
 **Effort:** 3 weeks (120 hours)
@@ -434,7 +537,7 @@ End-to-end workflow for launching SaaS products: market validation → MVP → s
 
 ---
 
-#### TASK-011: Intelligent Workflow Orchestrator v2.0
+#### TASK-013: Intelligent Workflow Orchestrator v2.0
 **Initiative:** Phase 4 Deliverable (Score: 750)
 **Owner:** full-stack-architect, ai-ml-engineer
 **Effort:** 4 weeks (160 hours)
