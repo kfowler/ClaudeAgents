@@ -100,6 +100,51 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **Functional Programming**: `functional-programmer` (Haskell, Clojure, F#)
 - **Metaprogramming**: `metaprogramming-specialist` (Lisp, macros, DSLs)
 
+### Contrarian Agents by Decision Type
+Use contrarian agents to challenge assumptions and expose hidden risks, but match the contrarian to the decision domain:
+
+**Technical/Architectural Decisions → `the-critic`**
+- System architecture choices (microservices vs monolith)
+- Technology stack selection (framework comparisons)
+- Code quality and technical debt assessment
+- Infrastructure and scalability decisions
+- Security architecture review
+
+**Examples:**
+- "Should we use microservices or a modular monolith?" → `the-critic`
+- "Is this codebase maintainable?" → `the-critic`
+- "Will this architecture scale to 1M users?" → `the-critic`
+
+**Business/Market Decisions → `the-realist` (Sprint 17)**
+- Market sizing and revenue projections
+- Competitive positioning and differentiation
+- ROI calculations and business case validation
+- Pricing strategy and willingness-to-pay
+- Market timing and launch readiness
+
+**Examples:**
+- "Is there real demand for this product?" → `the-realist`
+- "Can we compete with established players?" → `the-realist`
+- "What's the actual TAM, not the fantasy number?" → `the-realist`
+
+**Execution/Shipping Decisions → `the-pragmatist` (Sprint 17)**
+- MVP scope definition and feature prioritization
+- Deadline feasibility and resource allocation
+- Build vs buy vs partner decisions
+- Technical debt vs feature velocity tradeoffs
+- Scope creep and requirement bloat prevention
+
+**Examples:**
+- "Can we ship this in 2 weeks?" → `the-pragmatist`
+- "Should we build this feature or cut scope?" → `the-pragmatist`
+- "Is this MVP too complex to launch quickly?" → `the-pragmatist`
+
+**Multi-Contrarian Debates:**
+When decisions span multiple domains, engage multiple contrarians sequentially or in parallel:
+- Product launch decision: `the-critic` (technical readiness) + `the-realist` (market validation) + `the-pragmatist` (timeline feasibility)
+- Architecture decision with business impact: `the-critic` (technical analysis) + `the-realist` (cost/ROI) + `the-pragmatist` (implementation time)
+- See `project-orchestrator` for multi-contrarian coordination patterns
+
 ## Development Commands
 
 This project is a collection of markdown-based agent and command definitions. There are no build or test commands as this is a documentation/configuration repository for Claude Code agents.
@@ -146,6 +191,9 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "backlog management", "sprint planning", "product metrics" → `product-manager`
 - "code review" (domain-specific) → domain specialist
 - "code review" (comprehensive) → `code-architect`
+- "technical decision", "architecture review", "code quality critique" → `the-critic`
+- "market validation", "ROI analysis", "competitive reality check" → `the-realist` (Sprint 17)
+- "MVP scope", "deadline feasibility", "shipping decisions" → `the-pragmatist` (Sprint 17)
 
 ### Command Selection Keywords
 - "cognitive load", "complexity metrics", "code comprehension", "developer ergonomics" → `/quality:cognitive-load-optimization`
