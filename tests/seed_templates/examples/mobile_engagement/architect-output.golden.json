@@ -1,0 +1,261 @@
+{
+  "agent": "the-architect-of-experiments",
+  "scenario": "Falsifiable experiment design for mobile engagement frames",
+  "description": "Golden example for experiment design with 100% kill conditions and quantitative metrics",
+  "inputs": {
+    "synthesis_report": "synthesist-output.golden.json",
+    "experiment_count": 3,
+    "falsifiability_requirement": "100% kill conditions",
+    "duration_range": "48-120 hours",
+    "quantitative_metrics_required": true
+  },
+  "expected_output": {
+    "agent_id": "the-architect-of-experiments",
+    "version": "v1.0",
+    "timestamp": "2025-10-10T16:30:00Z",
+    "report_type": "experiment_design",
+    "content": {
+      "experiments": [
+        {
+          "id": "exp_authentic_connection_mvp",
+          "hypothesis": "Removing visible metrics (likes, follower counts) and replacing with qualitative feedback will increase D7 retention by ≥15% and user satisfaction scores by ≥20% within 72 hours, despite potential decrease in session frequency",
+          "related_frame_ids": ["frame_authentic_connection"],
+          "related_idea_ids": ["idea_anti_metrics", "idea_social_vulnerability"],
+          "method": "A/B test with 2000 users split 50/50. Control group sees existing metric-heavy interface. Treatment group sees metrics removed, replaced with qualitative feedback templates ('Sarah said your post helped her today' instead of '15 likes'). Run for 72 hours tracking: D1/D3/D7 retention rate, session frequency, session duration, user satisfaction survey (1-10 scale, n≥200 responses per group), qualitative exit surveys. Implement feature flags for instant rollback if kill condition triggered.",
+          "duration": "72 hours",
+          "duration_hours": 72,
+          "kill_condition": {
+            "description": "Experiment terminated immediately if Treatment group shows ≥10% decrease in D1 retention OR ≥15% decrease in session frequency within first 24 hours, indicating severe negative impact on core engagement",
+            "threshold": "D1 retention drop ≥10% OR session frequency drop ≥15% in first 24h",
+            "measurement_window": "24 hours",
+            "auto_terminate": true
+          },
+          "success_metrics": [
+            {
+              "name": "D7 Retention Rate Increase",
+              "description": "Percentage of users returning on Day 7",
+              "unit": "percentage points",
+              "target_value": 15.0,
+              "threshold_type": "minimum",
+              "measurement_method": "Cohort analysis tracking unique users returning exactly 7 days after first session in experiment"
+            },
+            {
+              "name": "User Satisfaction Score Increase",
+              "description": "Post-experiment satisfaction survey (1-10 scale)",
+              "unit": "scale points",
+              "target_value": 2.0,
+              "threshold_type": "minimum",
+              "measurement_method": "In-app survey delivered at 72h mark, minimum 200 responses per group, statistical significance test (p<0.05)"
+            },
+            {
+              "name": "Qualitative Feedback Engagement Rate",
+              "description": "Percentage of users who read or interact with qualitative feedback messages",
+              "unit": "percentage",
+              "target_value": 60.0,
+              "threshold_type": "minimum",
+              "measurement_method": "Track open rate and dwell time (≥3 seconds) for qualitative feedback cards in treatment group"
+            }
+          ],
+          "risks": [
+            {
+              "risk": "Users in treatment group immediately churn due to lack of familiar validation signals, causing retention drop before benefits manifest",
+              "mitigation": "Implement 24-hour kill condition to catch severe negative impact early. Provide explanatory onboarding message in treatment group explaining the change and why it benefits them. Include opt-out mechanism for users who strongly prefer metrics."
+            },
+            {
+              "risk": "Qualitative feedback generation requires content that might not exist yet (e.g., if no one has commented on user's post)",
+              "mitigation": "Pre-generate qualitative templates based on engagement patterns (views, shares, time spent). Fall back to encouraging messages ('3 people spent time reading your thoughts') when direct quotes unavailable. Monitor null state frequency."
+            },
+            {
+              "risk": "72 hours insufficient to see retention benefits that might only manifest after 7+ days",
+              "mitigation": "Primary measurement is D7 retention but track cohort for 30 days post-experiment. If early signals positive but D7 unclear, extend experiment to 168 hours (7 days) with stakeholder approval."
+            }
+          ],
+          "required_resources": [
+            "Feature flag system for A/B test group assignment",
+            "Analytics instrumentation for D1/D3/D7 retention cohort tracking",
+            "In-app survey system with targeting by experiment group",
+            "Qualitative feedback generation system (may need rapid prototyping)",
+            "Real-time dashboard for monitoring kill conditions (24h automated check)",
+            "2 engineers (1 backend, 1 frontend) for 1 sprint implementation",
+            "1 data analyst for experiment monitoring and statistical analysis",
+            "1 UX researcher for qualitative survey design and analysis"
+          ]
+        },
+        {
+          "id": "exp_contextual_disclosure",
+          "hypothesis": "Progressive disclosure of advanced features triggered by behavioral signals (confusion, repeated clicks) will increase feature discovery by ≥40% and reduce feature abandonment by ≥25% compared to upfront tutorial approach, within 96 hours",
+          "related_frame_ids": ["frame_contextual_intelligence"],
+          "related_idea_ids": ["idea_reverse_onboarding", "idea_curiosity_loops"],
+          "method": "A/B test with 1500 new users split 50/50. Control group receives traditional upfront tutorial (5 screens explaining features). Treatment group starts with minimal UI, then features are progressively revealed when behavioral analytics detect readiness signals (5+ seconds hovering over locked feature, 3+ clicks in area suggesting they're looking for something). Track for 96 hours: feature discovery rate (% users who find each advanced feature), feature adoption rate (% who use after discovery), tutorial completion rate (control group), time-to-first-feature-use, session quality score (engagement depth), user feedback on discoverability.",
+          "duration": "96 hours",
+          "duration_hours": 96,
+          "kill_condition": {
+            "description": "Terminate if treatment group shows ≥30% lower feature discovery rate than control OR ≥20% higher early drop-off (users leaving before discovering any advanced feature) within first 48 hours",
+            "threshold": "Feature discovery drop ≥30% OR early drop-off increase ≥20% at 48h checkpoint",
+            "measurement_window": "48 hours",
+            "auto_terminate": true
+          },
+          "success_metrics": [
+            {
+              "name": "Feature Discovery Rate Increase",
+              "description": "Percentage of users who discover at least 3 out of 5 advanced features within 96h",
+              "unit": "percentage points",
+              "target_value": 40.0,
+              "threshold_type": "minimum",
+              "measurement_method": "Track feature unlock events in treatment group, compare to feature exposure rate in control group tutorial"
+            },
+            {
+              "name": "Feature Abandonment Rate Decrease",
+              "description": "Percentage of discovered features that are never used after discovery",
+              "unit": "percentage points",
+              "target_value": 25.0,
+              "threshold_type": "minimum",
+              "measurement_method": "For each feature: (users who discovered but never used) / (users who discovered) * 100. Compare treatment vs control."
+            },
+            {
+              "name": "Celebration Moment Effectiveness",
+              "description": "User sentiment score for progressive disclosure celebrations (positive emotion detected)",
+              "unit": "percentage",
+              "target_value": 70.0,
+              "threshold_type": "minimum",
+              "measurement_method": "Track user reactions (emoji responses, dwell time ≥2s on celebration screen, click-through to try feature immediately)"
+            }
+          ],
+          "risks": [
+            {
+              "risk": "Behavioral signal detection might have high false positive rate, annoying users with premature feature reveals",
+              "mitigation": "Tune detection thresholds conservatively in pre-experiment calibration phase. Require multiple signals (e.g., both hover AND clicks) before triggering reveal. A/B test threshold sensitivity within treatment group if needed."
+            },
+            {
+              "risk": "Some users might never trigger reveal conditions and completely miss critical features",
+              "mitigation": "Implement safety net: if user reaches 20 sessions without discovering feature X, provide gentle hint. Track 'safety net trigger' rate to measure system effectiveness."
+            },
+            {
+              "risk": "96 hours might not capture long-term adoption patterns - users might discover features but abandon them later",
+              "mitigation": "Primary experiment is 96h but track cohort for 30 days to measure sustained feature usage. Success criteria focuses on initial discovery and adoption; retention is secondary analysis."
+            }
+          ],
+          "required_resources": [
+            "Behavioral analytics system with real-time signal detection (hover tracking, click pattern analysis)",
+            "Feature gating system with progressive unlock capability",
+            "Celebration animation and UI components for unlock moments",
+            "Analytics dashboard for feature discovery funnel tracking",
+            "ML model for behavioral signal pattern detection (or rule-based system for MVP)",
+            "2 engineers (1 backend for analytics, 1 frontend for UI/animations) for 1.5 sprints",
+            "1 data scientist for behavioral signal tuning and analysis",
+            "1 product designer for celebration moment UX"
+          ]
+        },
+        {
+          "id": "exp_earned_notifications",
+          "hypothesis": "Starting users with zero notifications and requiring explicit opt-in per category will decrease notification volume by ≥60% while maintaining D7 retention within 5% of control group, and increase notification engagement rate by ≥3x within 72 hours",
+          "related_frame_ids": ["frame_intentional_boundaries"],
+          "related_idea_ids": ["idea_earned_notifications"],
+          "method": "A/B test with 2500 users split 50/50. Control group has standard notification defaults (all categories enabled, opt-out model). Treatment group starts with zero notifications enabled, must explicitly opt-in to each category with clear explanation of what they'll receive and engagement requirement ('Respond to at least 30% of these notifications or lose this privilege'). Track for 72 hours: notification volume per user, notification engagement rate (open + action taken), notification category adoption rate, D1/D3/D7 retention, user feedback on notification experience, privilege revocation rate (users who lose notification rights due to low engagement).",
+          "duration": "72 hours",
+          "duration_hours": 72,
+          "kill_condition": {
+            "description": "Terminate if treatment group shows ≥8% decrease in D3 retention OR ≥50% of users report frustration with notification system (survey score ≤3/10) within first 48 hours",
+            "threshold": "D3 retention drop ≥8% OR user frustration ≥50% at 48h checkpoint",
+            "measurement_window": "48 hours",
+            "auto_terminate": true
+          },
+          "success_metrics": [
+            {
+              "name": "Notification Volume Reduction",
+              "description": "Decrease in total notifications sent per user compared to control",
+              "unit": "percentage",
+              "target_value": 60.0,
+              "threshold_type": "minimum",
+              "measurement_method": "Sum(notifications sent to treatment group) / Sum(notifications sent to control group) * 100. Track per-user average and distribution."
+            },
+            {
+              "name": "Notification Engagement Rate Increase",
+              "description": "Percentage of notifications that are opened AND acted upon (not just dismissed)",
+              "unit": "multiple",
+              "target_value": 3.0,
+              "threshold_type": "minimum",
+              "measurement_method": "Treatment engagement rate / Control engagement rate. Action = any meaningful interaction beyond just opening notification."
+            },
+            {
+              "name": "D7 Retention Parity",
+              "description": "D7 retention rate maintained within 5% of control group despite lower notification volume",
+              "unit": "percentage points",
+              "target_value": -5.0,
+              "threshold_type": "maximum",
+              "measurement_method": "Treatment D7 retention - Control D7 retention. Success if difference is between -5% and +∞ (i.e., not worse than -5%)."
+            }
+          ],
+          "risks": [
+            {
+              "risk": "Users might not opt-in to any notifications and then forget about the app entirely, hurting retention",
+              "mitigation": "Implement smart prompts at high-engagement moments asking if they want to stay updated. Show preview of what notification would look like. Track opt-in rate and trigger 48h kill condition if retention drops >8%."
+            },
+            {
+              "risk": "Engagement requirement ('respond to 30% or lose privilege') might feel punitive and damage trust",
+              "mitigation": "Frame as quality control rather than punishment ('We only notify people who value these updates'). Provide warning before revoking privilege ('You've ignored 8/10 recent notifications - adjust preferences?'). A/B test messaging tone."
+            },
+            {
+              "risk": "72 hours insufficient to measure true retention impact of lower notification volume",
+              "mitigation": "Primary measurement includes D7 retention (tracked for 7 days after experiment start). Extend cohort tracking to 30 days for secondary analysis. If D7 shows concerning trend but not kill condition, extend experiment with stakeholder approval."
+            }
+          ],
+          "required_resources": [
+            "Notification permission system with category-level granularity",
+            "Engagement tracking per notification category (open rate, action rate)",
+            "Privilege revocation logic with warning system",
+            "Opt-in UI flow with clear category explanations and preview",
+            "Analytics dashboard for notification metrics per experiment group",
+            "1.5 engineers (1 backend for notification system, 0.5 frontend for opt-in UI) for 1 sprint",
+            "1 data analyst for experiment monitoring and metric calculation",
+            "1 UX writer for notification category descriptions and warning messaging"
+          ]
+        }
+      ],
+      "falsifiability_coverage": {
+        "experiments_with_kill_conditions": 3,
+        "total_experiments": 3,
+        "coverage_ratio": 1.0
+      },
+      "experiment_sequencing": [
+        {
+          "sequence_position": 1,
+          "experiment_id": "exp_earned_notifications",
+          "rationale": "Earned notifications (Frame 3: Intentional Boundaries) is fastest to implement (1 sprint) and lowest risk. It demonstrates respect for user attention immediately and can run in parallel with other frame development. Success here validates the boundaries-first approach and builds stakeholder confidence.",
+          "dependencies": []
+        },
+        {
+          "sequence_position": 2,
+          "experiment_id": "exp_contextual_disclosure",
+          "rationale": "Progressive disclosure (Frame 2: Contextual Intelligence) should run second because it requires more complex behavioral analytics but has moderate risk. Learning from earned notifications experiment will inform how to balance user control vs. system intelligence. Can begin development during exp_1 runtime.",
+          "dependencies": []
+        },
+        {
+          "sequence_position": 3,
+          "experiment_id": "exp_authentic_connection_mvp",
+          "rationale": "Anti-metrics experiment (Frame 1: Authentic Connection) is most radical and highest risk (removing visible metrics is counter to industry norms). Run it last after building stakeholder confidence with successful Frame 2 and 3 experiments. However, it has highest potential impact on retention and differentiation if successful. Prepare for potential negative reaction and have robust rollback plan.",
+          "dependencies": ["exp_earned_notifications"]
+        }
+      ]
+    },
+    "metadata": {
+      "session_id": "550e8400-e29b-41d4-a716-446655440001",
+      "context": "Designing falsifiable experiments to validate 3 strategic frames for mobile engagement improvement. Each experiment must have clear kill condition, quantitative success metrics, and be runnable within 48-120 hour window.",
+      "constraints": [
+        "All experiments must have 100% kill condition coverage for falsifiability",
+        "Duration between 48-120 hours per experiment for rapid iteration",
+        "Must include quantitative metrics (not just qualitative feedback)",
+        "Experiments should be independently runnable but also sequence logically",
+        "Resource requirements must be realistic for typical product team"
+      ],
+      "tags": ["experiment-design", "mobile-engagement", "falsifiability", "a-b-testing"]
+    }
+  },
+  "validation_rules": {
+    "kill_condition_coverage_100_percent": true,
+    "all_experiments_have_quantitative_metrics": true,
+    "duration_within_range": true,
+    "frame_coverage_complete": true,
+    "schema_compliant": true
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "agent": "creative-catalyst",
+  "scenario": "Mobile app engagement improvement from 30% D1 retention to 50% target",
+  "description": "Golden example for oblique strategies applied to mobile engagement problem",
+  "inputs": {
+    "problem_statement": "Increase mobile app D1 retention from 30% to 50% while maintaining user satisfaction scores",
+    "mode": "oblique_strategies",
+    "constraint_generation": true,
+    "creative_constraints": [
+      "No dark patterns or manipulative tactics",
+      "Privacy-first approach required",
+      "Must work offline-first",
+      "Maximum 3 notification categories"
+    ],
+    "success_criteria": "8-10 oblique strategies, diverse constraint generation, enables creative synthesis"
+  },
+  "expected_output": {
+    "agent_id": "creative-catalyst",
+    "version": "v1.0",
+    "timestamp": "2025-10-10T16:00:00Z",
+    "report_type": "ideation",
+    "content": {
+      "ideas": [
+        {
+          "id": "idea_reverse_onboarding",
+          "description": "Instead of teaching users features upfront, hide all advanced features and only reveal them when users actively express frustration or curiosity. Track user behavior patterns to identify the exact moment they need a feature, then introduce it contextually with celebration.",
+          "novelty_score": 0.75,
+          "dimensions": {
+            "mechanism": "Behavior-triggered progressive disclosure with celebration moments",
+            "experience": "Mystery box interface that reveals on earned discovery",
+            "market": "Power users who enjoy mastery and discovery"
+          },
+          "rationale": "Oblique strategy: 'What would your closest friend do?' - Treat users like friends discovering secrets together rather than students being lectured",
+          "initial_concerns": [
+            "Users might leave before discovering critical features",
+            "Requires sophisticated behavior analytics",
+            "Risk of feeling patronizing if not executed well"
+          ],
+          "related_ideas": ["idea_curiosity_loops"]
+        },
+        {
+          "id": "idea_social_vulnerability",
+          "description": "Create 'vulnerability moments' where users can share struggles, setbacks, or authentic experiences within the app. These moments are ephemeral (24h) and create intimate micro-communities. Success is measured by authenticity, not engagement metrics.",
+          "novelty_score": 0.82,
+          "dimensions": {
+            "mechanism": "Ephemeral authentic sharing with no metrics visible",
+            "experience": "Private safe space for vulnerability and connection",
+            "market": "Users seeking authentic connection over performative social"
+          },
+          "rationale": "Oblique strategy: 'Honor thy error as a hidden intention' - Design for failure and authenticity, not just success stories",
+          "initial_concerns": [
+            "Moderation complexity for sensitive content",
+            "Risk of negativity spiral without careful design",
+            "Privacy implications of vulnerable sharing"
+          ],
+          "related_ideas": ["idea_anti_metrics"]
+        },
+        {
+          "id": "idea_curiosity_loops",
+          "description": "Design micro-interactions that create open loops - questions without immediate answers, partial reveals, intentional ambiguity. Users return not for notifications but because their curiosity was genuinely sparked. Loops resolve on user-driven schedules, not system timers.",
+          "novelty_score": 0.68,
+          "dimensions": {
+            "mechanism": "Open-loop storytelling with user-controlled resolution",
+            "experience": "Narrative-driven discovery without time pressure",
+            "market": "Curious users who enjoy exploration and puzzle-solving"
+          },
+          "rationale": "Oblique strategy: 'Use an old idea' - Apply Zeigarnik effect (incomplete tasks stay in memory) but ethically through genuine curiosity, not manufactured urgency",
+          "initial_concerns": [
+            "Difficult to balance curiosity vs. frustration",
+            "Requires exceptional content and pacing",
+            "May not work for utility-focused apps"
+          ],
+          "related_ideas": ["idea_reverse_onboarding"]
+        },
+        {
+          "id": "idea_anti_metrics",
+          "description": "Remove all visible metrics (likes, followers, streaks) and replace with qualitative reflection prompts. Instead of 'You have 50 followers', show 'Sarah said your post helped her today'. Shift from quantitative validation to qualitative impact.",
+          "novelty_score": 0.88,
+          "dimensions": {
+            "mechanism": "Qualitative impact feedback replacing quantitative metrics",
+            "experience": "Reflection-focused interface with human stories",
+            "market": "Users suffering from social media anxiety and comparison fatigue"
+          },
+          "rationale": "Oblique strategy: 'Look at the order in which you do things' - Reverse the typical social app logic entirely by removing the metrics-first approach",
+          "initial_concerns": [
+            "Radical departure from proven engagement patterns",
+            "Users might miss traditional validation signals",
+            "Harder to demonstrate growth to stakeholders"
+          ],
+          "related_ideas": ["idea_social_vulnerability"]
+        },
+        {
+          "id": "idea_earned_notifications",
+          "description": "Users earn the right to receive notifications by proving they value them. Start with zero notifications, then users explicitly request notification categories after using the app. Each category requires a 'contract' where users commit to engaging or losing that privilege.",
+          "novelty_score": 0.72,
+          "dimensions": {
+            "mechanism": "Permission-based notification system with accountability",
+            "experience": "Opt-in notification contracts with consequences",
+            "market": "Notification-fatigued users valuing intentional communication"
+          },
+          "rationale": "Oblique strategy: 'Emphasize the flaws' - Make notification permission scarce and valuable, acknowledging that most notifications are ignored anyway",
+          "initial_concerns": [
+            "Lower initial engagement without push notifications",
+            "Complex permission system might confuse users",
+            "Requires data infrastructure to track notification engagement"
+          ],
+          "related_ideas": []
+        },
+        {
+          "id": "idea_offline_first_delight",
+          "description": "Design the best possible experience for offline mode, treating connectivity as optional luxury rather than requirement. Offline mode gets unique features, easter eggs, and capabilities that online mode lacks. Users choose offline for benefits, not just necessity.",
+          "novelty_score": 0.78,
+          "dimensions": {
+            "mechanism": "Offline-exclusive features with sync reconciliation",
+            "experience": "Premium offline experience with unique capabilities",
+            "market": "Users in low-connectivity environments or seeking digital mindfulness"
+          },
+          "rationale": "Oblique strategy: 'What context would look right?' - Flip the constraint (offline limitation) into an opportunity for unique value",
+          "initial_concerns": [
+            "Complex sync conflict resolution",
+            "Risk of fragmenting user experience between modes",
+            "Requires robust local storage and state management"
+          ],
+          "related_ideas": []
+        },
+        {
+          "id": "idea_failure_celebration",
+          "description": "Create moments that celebrate user failures, abandoned attempts, and imperfect progress. When users quit a task, return to celebrate the attempt. Track 'tries' not 'completions'. Make failure data visible and valuable instead of hidden and shameful.",
+          "novelty_score": 0.85,
+          "dimensions": {
+            "mechanism": "Failure tracking with positive reinforcement systems",
+            "experience": "Progress visualization celebrating attempts over outcomes",
+            "market": "Learning-focused users and growth mindset audiences"
+          },
+          "rationale": "Oblique strategy: 'Accept advice' then invert it - Traditional apps hide failures; we make them first-class citizens",
+          "initial_concerns": [
+            "Risk of normalizing giving up",
+            "Requires careful messaging to avoid demotivation",
+            "May conflict with achievement-oriented users"
+          ],
+          "related_ideas": ["idea_social_vulnerability"]
+        },
+        {
+          "id": "idea_time_based_transformation",
+          "description": "App interface and features transform based on time of day and user energy patterns. Morning version is minimal and focused, evening version is richer and exploratory. System learns individual chronotypes and adapts automatically. Same app, different personalities.",
+          "novelty_score": 0.65,
+          "dimensions": {
+            "mechanism": "Chronotype-aware adaptive interface with machine learning",
+            "experience": "Context-shifting UI based on circadian rhythms",
+            "market": "Health-conscious users and productivity optimization enthusiasts"
+          },
+          "rationale": "Oblique strategy: 'Work at a different speed' - Match app pace to user's natural rhythms instead of constant always-on engagement",
+          "initial_concerns": [
+            "Complex to build multiple interface modes",
+            "Privacy concerns with behavioral tracking",
+            "Users might be confused by changing interfaces"
+          ],
+          "related_ideas": []
+        },
+        {
+          "id": "idea_collaborative_content",
+          "description": "Every piece of content in the app is collaboratively created by multiple users in asynchronous creation sessions. No solo posts - everything is a collaboration, even if just adding a single word or emoji. Creates ownership and return visits to see how collaboration evolved.",
+          "novelty_score": 0.80,
+          "dimensions": {
+            "mechanism": "Asynchronous multi-user content co-creation",
+            "experience": "Collaborative canvas with version history and attribution",
+            "market": "Creative communities and collaborative team spaces"
+          },
+          "rationale": "Oblique strategy: 'Ask people to work against their better judgement' - Force collaboration when solo posting is easier, creating friction that builds community",
+          "initial_concerns": [
+            "Coordination overhead for simple actions",
+            "Quality control with multiple contributors",
+            "Attribution and ownership conflicts"
+          ],
+          "related_ideas": []
+        },
+        {
+          "id": "idea_scheduled_unavailability",
+          "description": "App is intentionally unavailable during certain hours (e.g., 10pm-6am) with beautiful 'closed' screens that encourage rest and reflection. Users can override but must write a brief reflection on why. System learns patterns and suggests personalized downtime.",
+          "novelty_score": 0.90,
+          "dimensions": {
+            "mechanism": "Intentional unavailability with reflection gates",
+            "experience": "Boundaries-first design with mindful override process",
+            "market": "Digital wellness advocates and users seeking healthier tech relationships"
+          },
+          "rationale": "Oblique strategy: 'Abandon normal instruments' - Reject the always-available app paradigm entirely, treating unavailability as a feature",
+          "initial_concerns": [
+            "Users will switch to competitor apps that are always available",
+            "Emergency access scenarios need careful design",
+            "Requires strong brand positioning to justify"
+          ],
+          "related_ideas": ["idea_time_based_transformation"]
+        }
+      ],
+      "diversity_metrics": {
+        "mechanism_diversity": 0.92,
+        "experience_diversity": 0.89,
+        "market_diversity": 0.84,
+        "overall_diversity_score": 0.88,
+        "unique_dimension_combinations": 10
+      },
+      "novelty_distribution": {
+        "conventional": 0,
+        "moderate": 4,
+        "breakthrough": 6
+      }
+    },
+    "metadata": {
+      "session_id": "550e8400-e29b-41d4-a716-446655440001",
+      "context": "Mobile productivity app struggling with 30% D1 retention rate. Current approach uses standard engagement tactics (streaks, notifications, social proof). Users report feeling overwhelmed and manipulated. Need to increase retention to 50% while improving user satisfaction.",
+      "constraints": [
+        "No dark patterns or manipulative tactics allowed",
+        "Privacy-first approach required (minimal data collection)",
+        "Must work offline-first for low-connectivity users",
+        "Maximum 3 notification categories to avoid overwhelm"
+      ],
+      "tags": ["mobile-engagement", "retention", "oblique-strategies", "ethical-design"]
+    }
+  },
+  "validation_rules": {
+    "oblique_strategies_applied": true,
+    "constraint_generation_present": true,
+    "novelty_skews_breakthrough": true,
+    "diversity_threshold_met": true,
+    "enables_synthesis": true
+  }
+}
