@@ -718,6 +718,52 @@ Auto-select optimal agents based on project context, eliminating manual selectio
 
 ---
 
+### DECISION-005: Structured Contrarian Agent Evolution (Hybrid Approach)
+**Date:** 2025-10-10
+**Owner:** project-orchestrator, technical-writer, systems-engineer
+**Context:**
+  - User identified variance and theater risk in contrarian agent outputs
+  - Three problems surfaced: (1) Overlap between contrarian agents creating role confusion, (2) Variance in output quality and evidence standards, (3) Risk of "decision theater" without executable decisions
+  - Contrarian agents (the-critic, the-skeptic, the-pragmatist) had strong LLM-friendly manifesto content but lacked structured contracts for agent-to-agent interoperability
+  - User provided detailed architectural analysis with three options: OPTION A (Full DSL), OPTION B (Hybrid), OPTION C (Status Quo)
+**Decision:** OPTION B - Hybrid Approach with Structured Contracts
+**Structure:**
+  - Section 1: Executable Boundaries (~300 lines)
+    - Enhanced YAML frontmatter with triggers, output_contract, handoff_rules, decision_rules
+    - Trigger logic (when to engage/reject)
+    - Input requirements with red flags
+    - Decision methods and analytical frameworks
+    - Evidence minimums (CONTRACTUAL)
+    - Handoff rules for agent coordination
+    - Output schema (strict JSON with required fields)
+  - Section 2: Professional Manifesto (~300 lines, condensed from original)
+    - Core principles for LLM reasoning guidance
+    - Operational principles and integration patterns
+    - Quality standards and anti-patterns
+  - Section 3: Golden Examples (~200 lines)
+    - Real-world scenarios with complete JSON outputs
+    - Validation notes demonstrating schema compliance
+**Rationale:**
+  - Executable boundaries reduce variance and enable chaining (the-skeptic → the-pragmatist → the-critic)
+  - LLM manifesto preserves reasoning context and professional tone
+  - Golden examples serve as validation and teaching tools
+  - Structured outputs enable automated testing and quality gates
+  - Evidence minimums become contractual requirements, not suggestions
+**Implementation:**
+  - the-critic.md: DECISION_REPORT with dominant_axis, alternatives, false_tradeoffs, emotional_economy, required_proofs
+  - the-skeptic.md: AUTOMATION_ASSESSMENT with suitability_matrix, decision_rules (poor_fit >= 2 → reject), ROI thresholds, alternatives with TCO
+  - the-pragmatist.md: DELIVERABILITY_ASSESSMENT with capacity_math formulae, gates (1.3x buffer → scope_cut), required_proofs (vertical slice, deploy pipeline)
+  - tests/seed_templates/: Golden JSON examples for each agent with validation rules
+  - CLAUDE.md: Structured output contracts guidance and interoperability patterns
+**Impact:**
+  - Cleaner agent-to-agent interoperability with parseable JSON outputs
+  - Reduced variance through executable decision gates and evidence minimums
+  - Enforced evidence standards (load tests for "scales", bias audits for automation, vertical slices for MVP)
+  - Multi-contrarian coordination becomes programmable (check gates, chain outputs)
+  - Maintains LLM effectiveness while adding rigor to decision processes
+
+---
+
 ## Next Actions (This Week: Oct 8-14)
 
 ### Priority 1: Death Certificates Soft Launch
