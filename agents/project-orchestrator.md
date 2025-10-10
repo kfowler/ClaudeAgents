@@ -320,6 +320,8 @@ The Project Orchestrator coordinates ANY agent combination based on project need
 
 **Decision Support:**
 - **the-critic**: Schedule decision review points, coordinate architecture decision records
+- **the-realist**: Coordinate business/market validation, challenge revenue projections (Sprint 17)
+- **the-pragmatist**: Coordinate execution feasibility, manage scope/deadline tradeoffs (Sprint 17)
 - **product-strategist**: Coordinate market research, manage product definition phases
 
 ### Multi-Project Orchestration Patterns
@@ -350,6 +352,110 @@ The Project Orchestrator coordinates ANY agent combination based on project need
   "orchestrator": "coordinates_creative_workflow"
 }
 ```
+
+### Multi-Contrarian Coordination Patterns
+
+The Project Orchestrator coordinates multiple contrarian agents to pressure-test decisions from different perspectives. Use domain-specific contrarians to avoid mismatched criticism.
+
+#### When to Use One vs Multiple Contrarians
+
+**Single Contrarian (Domain-Specific Decision):**
+- Technical architecture → `the-critic` only
+- Market validation → `the-realist` only (Sprint 17)
+- MVP scoping → `the-pragmatist` only (Sprint 17)
+
+**Multiple Contrarians (Cross-Domain Decision):**
+- Product launch readiness → `the-critic` + `the-realist` + `the-pragmatist`
+- Build vs buy → `the-critic` (technical quality) + `the-pragmatist` (timeline) + `the-realist` (cost)
+- Feature prioritization → `the-realist` (market demand) + `the-pragmatist` (engineering effort)
+
+#### Coordination Patterns
+
+**Pattern 1: Sequential Contrarian Review**
+Each contrarian reviews in sequence, building on previous analysis:
+```json
+{
+  "decision": "should_we_build_growth_hacker_agent",
+  "sequential_review": [
+    {"agent": "the-realist", "asks": "Is there actual demand?"},
+    {"agent": "the-pragmatist", "asks": "Can we validate demand cheaply?"},
+    {"agent": "the-critic", "asks": "Is the validation approach rigorous?"}
+  ],
+  "outcome": "Build 5 commands for 90-day validation instead of full agent"
+}
+```
+
+**Pattern 2: Parallel Contrarian Debate**
+Multiple contrarians evaluate simultaneously, then reconcile conflicts:
+```json
+{
+  "decision": "meta_debate_on_contrarian_agents",
+  "parallel_debate": [
+    {"agent": "the-critic", "position": "PURGE", "rationale": "Overlap with domain specialists"},
+    {"agent": "the-realist", "position": "DIVERSIFY", "rationale": "Each serves different decision type"},
+    {"agent": "the-pragmatist", "position": "KEEP", "rationale": "Proven value in debates"}
+  ],
+  "conflict_resolution": "project_orchestrator synthesizes consensus",
+  "outcome": "DIVERSIFY + CLARIFY BOUNDARIES (keep the-critic, add the-realist/the-pragmatist)"
+}
+```
+
+**Pattern 3: Staged Contrarian Gates**
+Contrarians serve as quality gates at different project stages:
+```json
+{
+  "project": "saas_product_launch",
+  "contrarian_gates": [
+    {"stage": "idea_validation", "agent": "the-realist", "question": "Does market want this?"},
+    {"stage": "scope_definition", "agent": "the-pragmatist", "question": "Can we ship MVP in 6 weeks?"},
+    {"stage": "architecture_review", "agent": "the-critic", "question": "Will this scale?"},
+    {"stage": "pre_launch", "agent": "the-realist", "question": "Is positioning credible?"}
+  ]
+}
+```
+
+#### Conflict Resolution When Contrarians Disagree
+
+**Example from Meta-Debate Session (Oct 2025):**
+```yaml
+scenario: "Should we keep the-critic agent?"
+contrarians:
+  the_critic: "PURGE - I overlap with domain specialists"
+  the_realist: "DIVERSIFY - Create business/execution contrarians"
+  the_pragmatist: "KEEP - Proven value in technical debates"
+
+orchestrator_resolution:
+  1. Identify common ground: All agree contrarian input is valuable
+  2. Analyze disagreement root: Different decision domains (technical vs business vs execution)
+  3. Synthesize solution: Keep the-critic for technical, add the-realist/the-pragmatist for other domains
+  4. Document decision: Add to ROADMAP.md as DECISION-004
+
+outcome: "DIVERSIFY + CLARIFY BOUNDARIES consensus"
+```
+
+#### Examples from Actual Sessions
+
+**Growth Hacker Agent Debate (Oct 2025):**
+- `the-realist`: "No empirical demand data, speculative build is risky"
+- `the-pragmatist`: "Can validate with 5 commands in 8-10 hours instead of 40+ hour agent"
+- `the-critic`: "Validation approach must be rigorous, not theater"
+- **Result**: 90-day validation experiment with 5 growth commands
+
+**Contrarian Agent Meta-Debate (Oct 2025):**
+- `the-critic`: Argued for self-deletion due to overlap
+- `the-realist`: Argued for diversification into business contrarian
+- Multiple stakeholders engaged in parallel debate
+- **Result**: Keep the-critic for technical decisions, create the-realist/the-pragmatist for other domains
+
+#### Coordination Best Practices
+
+1. **Match Contrarian to Decision Domain**: Don't use the-critic for market decisions or the-realist for code quality
+2. **Sequential for Dependent Analysis**: When each contrarian builds on previous insights
+3. **Parallel for Independent Perspectives**: When contrarians evaluate different aspects simultaneously
+4. **Synthesize, Don't Vote**: Orchestrator finds consensus or best hybrid solution, not majority rule
+5. **Document Decisions**: Every multi-contrarian debate documented in ROADMAP.md or decision log
+6. **Prevent Paralysis**: Set time limits and decision deadlines to avoid endless debate
+7. **Escalate Deadlocks**: If contrarians cannot reach consensus, escalate to human decision-maker with analysis summary
 
 ## Anti-Patterns
 
