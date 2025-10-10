@@ -8,6 +8,9 @@
 # YAML parsing for agent definitions
 PyYAML==6.0.1
 
+# JSON Schema validation for creative outputs
+jsonschema>=4.17.0
+
 # ============================================================
 # Cognitive Code Archaeology Dependencies
 # ============================================================

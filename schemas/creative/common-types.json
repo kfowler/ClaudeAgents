@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claude-agents.dev/schemas/creative/common-types.json",
+  "title": "Creative Agent System - Common Type Definitions",
+  "description": "Shared type definitions for creative agent structured outputs",
+
+  "definitions": {
+    "agent_id": {
+      "type": "string",
+      "description": "Identifier for the agent that produced this output",
+      "enum": [
+        "creative-catalyst",
+        "the-dreamer",
+        "the-builder",
+        "the-experimenter"
+      ]
+    },
+
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of report generation"
+    },
+
+    "version": {
+      "type": "string",
+      "pattern": "^v\\d+\\.\\d+$",
+      "description": "Schema version (e.g., 'v1.0')",
+      "examples": ["v1.0", "v1.1", "v2.0"]
+    },
+
+    "novelty_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Novelty rating from 0.0 (conventional) to 1.0 (groundbreaking)",
+      "examples": [0.3, 0.7, 0.95]
+    },
+
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Confidence level from 0.0 (uncertain) to 1.0 (highly confident)",
+      "examples": [0.5, 0.8, 0.95]
+    },
+
+    "kill_condition": {
+      "type": "object",
+      "description": "Falsifiable condition that would invalidate a claim or hypothesis",
+      "required": ["condition", "threshold", "measurement_method"],
+      "properties": {
+        "condition": {
+          "type": "string",
+          "description": "Observable condition that triggers invalidation",
+          "minLength": 10,
+          "examples": [
+            "User engagement drops below baseline",
+            "Development time exceeds 2x estimate",
+            "No positive feedback in first 100 users"
+          ]
+        },
+        "threshold": {
+          "type": "string",
+          "description": "Quantitative threshold for the kill condition",
+          "minLength": 5,
+          "examples": [
+            "< 20% baseline engagement",
+            "> 40 hours development time",
+            "0 positive mentions in feedback"
+          ]
+        },
+        "measurement_method": {
+          "type": "string",
+          "description": "How to measure whether condition is met",
+          "minLength": 10,
+          "examples": [
+            "Analytics dashboard engagement metric",
+            "Time tracking system logged hours",
+            "User feedback survey sentiment analysis"
+          ]
+        },
+        "timeline": {
+          "type": "string",
+          "description": "When to evaluate this kill condition",
+          "examples": [
+            "After 2 weeks in production",
+            "At 50% development checkpoint",
+            "After first 100 users onboarded"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "success_metric": {
+      "type": "object",
+      "description": "Measurable criteria defining success",
+      "required": ["metric", "target", "measurement_method"],
+      "properties": {
+        "metric": {
+          "type": "string",
+          "description": "Name of the success metric",
+          "minLength": 5,
+          "examples": [
+            "User engagement rate",
+            "Task completion time",
+            "Error rate reduction"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "description": "Target value or threshold for success",
+          "minLength": 3,
+          "examples": [
+            "> 60% engagement",
+            "< 30 seconds completion time",
+            "< 5% error rate"
+          ]
+        },
+        "measurement_method": {
+          "type": "string",
+          "description": "How to measure this metric",
+          "minLength": 10,
+          "examples": [
+            "Analytics event tracking",
+            "Performance monitoring APM",
+            "Error logging and alerting system"
+          ]
+        },
+        "baseline": {
+          "type": "string",
+          "description": "Current baseline value for comparison",
+          "examples": [
+            "Current: 35% engagement",
+            "Current: 90 seconds",
+            "Current: 12% error rate"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "evidence_quality": {
+      "type": "string",
+      "enum": ["strong", "moderate", "weak", "speculative"],
+      "description": "Quality assessment of supporting evidence"
+    },
+
+    "dimension_tag": {
+      "type": "string",
+      "description": "Category dimension for diversity tracking",
+      "enum": [
+        "mechanism",
+        "experience",
+        "market",
+        "data_approach",
+        "implementation",
+        "user_segment",
+        "technology",
+        "business_model"
+      ]
+    },
+
+    "metadata": {
+      "type": "object",
+      "description": "Standard metadata for all creative outputs",
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "description": "Unique identifier for this creative session",
+          "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+        },
+        "context": {
+          "type": "string",
+          "description": "Problem or opportunity context for this creative work",
+          "minLength": 20
+        },
+        "constraints": {
+          "type": "array",
+          "description": "Known constraints influencing creative exploration",
+          "items": {
+            "type": "string",
+            "minLength": 10
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "Categorical tags for organization and retrieval",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          }
+        },
+        "related_sessions": {
+          "type": "array",
+          "description": "References to related creative sessions",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,0 +1,468 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claude-agents.dev/schemas/creative/IDEATION_REPORT_v1.json",
+  "title": "IDEATION_REPORT v1.0",
+  "description": "Structured output schema for creative ideation agents. Supports ideation, synthesis, and experiment design with guaranteed diversity, falsifiability, and measurability.",
+
+  "type": "object",
+  "required": ["agent_id", "version", "timestamp", "report_type", "content", "metadata"],
+
+  "properties": {
+    "agent_id": {
+      "$ref": "common-types.json#/definitions/agent_id"
+    },
+    "version": {
+      "$ref": "common-types.json#/definitions/version",
+      "const": "v1.0"
+    },
+    "timestamp": {
+      "$ref": "common-types.json#/definitions/timestamp"
+    },
+    "report_type": {
+      "type": "string",
+      "enum": ["ideation", "synthesis", "experiment_design"],
+      "description": "Type of creative output report"
+    },
+    "content": {
+      "description": "Report content varies by report_type",
+      "oneOf": [
+        {"$ref": "#/definitions/ideation_content"},
+        {"$ref": "#/definitions/synthesis_content"},
+        {"$ref": "#/definitions/experiment_design_content"}
+      ]
+    },
+    "metadata": {
+      "$ref": "common-types.json#/definitions/metadata"
+    }
+  },
+  "additionalProperties": false,
+
+  "definitions": {
+    "ideation_content": {
+      "type": "object",
+      "description": "Divergent ideation output with diversity guarantees",
+      "required": ["ideas", "diversity_metrics"],
+      "properties": {
+        "ideas": {
+          "type": "array",
+          "description": "Generated ideas with novelty and dimension tagging",
+          "minItems": 5,
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "required": ["id", "description", "novelty_score", "dimensions"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for this idea",
+                "pattern": "^idea_[a-z0-9_]+$"
+              },
+              "description": {
+                "type": "string",
+                "description": "Clear description of the idea",
+                "minLength": 50,
+                "maxLength": 500
+              },
+              "novelty_score": {
+                "$ref": "common-types.json#/definitions/novelty_score"
+              },
+              "dimensions": {
+                "type": "object",
+                "description": "Multi-dimensional categorization for diversity tracking",
+                "required": ["mechanism", "experience", "market"],
+                "properties": {
+                  "mechanism": {
+                    "type": "string",
+                    "description": "How it works (technical approach)",
+                    "minLength": 10,
+                    "examples": [
+                      "AI-powered recommendation engine",
+                      "Peer-to-peer collaboration",
+                      "Gamification mechanics"
+                    ]
+                  },
+                  "experience": {
+                    "type": "string",
+                    "description": "How users experience it (UX paradigm)",
+                    "minLength": 10,
+                    "examples": [
+                      "Conversational interface",
+                      "Visual dashboard",
+                      "Ambient notifications"
+                    ]
+                  },
+                  "market": {
+                    "type": "string",
+                    "description": "Who it serves (market segment)",
+                    "minLength": 10,
+                    "examples": [
+                      "Enterprise teams (50+ people)",
+                      "Individual creators",
+                      "Small business owners"
+                    ]
+                  },
+                  "data_approach": {
+                    "type": "string",
+                    "description": "How data flows and is processed (optional)",
+                    "minLength": 10,
+                    "examples": [
+                      "Real-time streaming analytics",
+                      "Batch processing overnight",
+                      "Client-side only processing"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              },
+              "rationale": {
+                "type": "string",
+                "description": "Why this idea might work or be valuable",
+                "minLength": 30
+              },
+              "initial_concerns": {
+                "type": "array",
+                "description": "Known risks or challenges",
+                "items": {
+                  "type": "string",
+                  "minLength": 20
+                }
+              },
+              "related_ideas": {
+                "type": "array",
+                "description": "IDs of related or complementary ideas",
+                "items": {
+                  "type": "string",
+                  "pattern": "^idea_[a-z0-9_]+$"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "diversity_metrics": {
+          "type": "object",
+          "description": "Calculated diversity across required dimensions",
+          "required": ["mechanism_diversity", "experience_diversity", "market_diversity", "overall_diversity_score"],
+          "properties": {
+            "mechanism_diversity": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Diversity score for mechanism dimension (0.0 = homogenous, 1.0 = maximally diverse)"
+            },
+            "experience_diversity": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Diversity score for experience dimension"
+            },
+            "market_diversity": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Diversity score for market dimension"
+            },
+            "data_approach_diversity": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Diversity score for data_approach dimension (optional)"
+            },
+            "overall_diversity_score": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Aggregate diversity score across all dimensions"
+            },
+            "unique_dimension_combinations": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Number of unique dimension combinations across ideas"
+            }
+          },
+          "additionalProperties": false
+        },
+        "novelty_distribution": {
+          "type": "object",
+          "description": "Distribution of ideas across novelty spectrum",
+          "properties": {
+            "conventional": {
+              "type": "integer",
+              "description": "Count of ideas with novelty_score 0.0-0.4"
+            },
+            "moderate": {
+              "type": "integer",
+              "description": "Count of ideas with novelty_score 0.4-0.7"
+            },
+            "breakthrough": {
+              "type": "integer",
+              "description": "Count of ideas with novelty_score 0.7-1.0"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "synthesis_content": {
+      "type": "object",
+      "description": "Convergent synthesis output combining ideas into coherent frames",
+      "required": ["frames", "synthesis_rationale"],
+      "properties": {
+        "frames": {
+          "type": "array",
+          "description": "Synthesized conceptual frames organizing related ideas",
+          "minItems": 2,
+          "maxItems": 10,
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "idea_ids", "unifying_principle", "implementation_path"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for this frame",
+                "pattern": "^frame_[a-z0-9_]+$"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of this synthesized frame",
+                "minLength": 10,
+                "maxLength": 100
+              },
+              "idea_ids": {
+                "type": "array",
+                "description": "IDs of ideas combined in this frame",
+                "minItems": 2,
+                "items": {
+                  "type": "string",
+                  "pattern": "^idea_[a-z0-9_]+$"
+                }
+              },
+              "unifying_principle": {
+                "type": "string",
+                "description": "Core principle that connects these ideas",
+                "minLength": 50,
+                "maxLength": 500
+              },
+              "implementation_path": {
+                "type": "object",
+                "description": "High-level path to implementation",
+                "required": ["phases", "estimated_effort"],
+                "properties": {
+                  "phases": {
+                    "type": "array",
+                    "description": "Implementation phases in sequence",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "required": ["name", "description"],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 5
+                        },
+                        "description": {
+                          "type": "string",
+                          "minLength": 30
+                        },
+                        "dependencies": {
+                          "type": "array",
+                          "items": {"type": "string"}
+                        }
+                      }
+                    }
+                  },
+                  "estimated_effort": {
+                    "type": "string",
+                    "description": "Rough effort estimate",
+                    "enum": ["days", "weeks", "months", "quarters"]
+                  },
+                  "key_risks": {
+                    "type": "array",
+                    "description": "Major implementation risks",
+                    "items": {
+                      "type": "string",
+                      "minLength": 20
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "frame_strength": {
+                "$ref": "common-types.json#/definitions/confidence_score",
+                "description": "Confidence in this frame's coherence and viability"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "synthesis_rationale": {
+          "type": "string",
+          "description": "Explanation of synthesis approach and frame selection",
+          "minLength": 100
+        },
+        "cross_frame_synergies": {
+          "type": "array",
+          "description": "Opportunities where frames complement or enhance each other",
+          "items": {
+            "type": "object",
+            "required": ["frame_ids", "synergy_description"],
+            "properties": {
+              "frame_ids": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string",
+                  "pattern": "^frame_[a-z0-9_]+$"
+                }
+              },
+              "synergy_description": {
+                "type": "string",
+                "minLength": 30
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "experiment_design_content": {
+      "type": "object",
+      "description": "Experimental validation plans with falsifiability guarantees",
+      "required": ["experiments", "falsifiability_coverage"],
+      "properties": {
+        "experiments": {
+          "type": "array",
+          "description": "Designed experiments to validate hypotheses",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "hypothesis", "method", "duration", "kill_condition", "success_metrics"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for this experiment",
+                "pattern": "^exp_[a-z0-9_]+$"
+              },
+              "hypothesis": {
+                "type": "string",
+                "description": "Falsifiable hypothesis being tested",
+                "minLength": 30,
+                "examples": [
+                  "Users will complete onboarding 50% faster with conversational UI vs. form-based UI",
+                  "AI-generated recommendations will have >70% acceptance rate vs. 40% baseline"
+                ]
+              },
+              "related_idea_ids": {
+                "type": "array",
+                "description": "Ideas this experiment validates",
+                "items": {
+                  "type": "string",
+                  "pattern": "^idea_[a-z0-9_]+$"
+                }
+              },
+              "related_frame_ids": {
+                "type": "array",
+                "description": "Frames this experiment validates",
+                "items": {
+                  "type": "string",
+                  "pattern": "^frame_[a-z0-9_]+$"
+                }
+              },
+              "method": {
+                "type": "string",
+                "description": "Experimental methodology and setup",
+                "minLength": 50,
+                "examples": [
+                  "A/B test with 1000 users, 50/50 split, 2 week duration. Track completion rate, time-to-completion, error rate.",
+                  "Prototype with 20 beta users, qualitative interviews + quantitative usage analytics over 1 month."
+                ]
+              },
+              "duration": {
+                "type": "string",
+                "description": "Expected experiment duration",
+                "minLength": 5,
+                "examples": ["2 weeks", "1 month", "3 sprints", "ongoing"]
+              },
+              "kill_condition": {
+                "$ref": "common-types.json#/definitions/kill_condition",
+                "description": "Condition that would falsify hypothesis (REQUIRED for falsifiability)"
+              },
+              "success_metrics": {
+                "type": "array",
+                "description": "Measurable success criteria (REQUIRED for measurability)",
+                "minItems": 1,
+                "items": {
+                  "$ref": "common-types.json#/definitions/success_metric"
+                }
+              },
+              "risks": {
+                "type": "array",
+                "description": "Experimental risks and mitigations",
+                "items": {
+                  "type": "object",
+                  "required": ["risk", "mitigation"],
+                  "properties": {
+                    "risk": {"type": "string", "minLength": 20},
+                    "mitigation": {"type": "string", "minLength": 20}
+                  }
+                }
+              },
+              "required_resources": {
+                "type": "array",
+                "description": "Resources needed to run experiment",
+                "items": {
+                  "type": "string",
+                  "minLength": 10
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "falsifiability_coverage": {
+          "type": "object",
+          "description": "Assessment of how well experiments enable falsification",
+          "required": ["experiments_with_kill_conditions", "total_experiments", "coverage_ratio"],
+          "properties": {
+            "experiments_with_kill_conditions": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Count of experiments with defined kill conditions"
+            },
+            "total_experiments": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Total experiment count"
+            },
+            "coverage_ratio": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Ratio of experiments with kill conditions (should be 1.0)"
+            }
+          }
+        },
+        "experiment_sequencing": {
+          "type": "array",
+          "description": "Recommended order for running experiments (optional)",
+          "items": {
+            "type": "object",
+            "required": ["sequence_position", "experiment_id", "rationale"],
+            "properties": {
+              "sequence_position": {"type": "integer", "minimum": 1},
+              "experiment_id": {"type": "string", "pattern": "^exp_[a-z0-9_]+$"},
+              "rationale": {"type": "string", "minLength": 30},
+              "dependencies": {
+                "type": "array",
+                "items": {"type": "string", "pattern": "^exp_[a-z0-9_]+$"}
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

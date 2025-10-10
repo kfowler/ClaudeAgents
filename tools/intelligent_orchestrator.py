@@ -470,6 +470,255 @@ class IntentParser:
         return requirements
 
 
+@dataclass
+class AgentRecommendation:
+    """Single agent recommendation with explanation"""
+    agent_name: str
+    relevance_score: float  # 0.0-1.0
+    tier: AgentTier
+    explanation: str
+    match_breakdown: Dict[str, float] = field(default_factory=dict)
+
+
+class AgentDiscoveryEngine:
+    """
+    Solves the 78-agent navigation problem with intelligent search.
+
+    Multi-modal discovery:
+    - Keyword search (description, tags, capabilities)
+    - Natural language queries (intent parsing)
+    - Tier-based filtering (Core, Extended, Experimental)
+    - Task-based recommendations (development, quality, security, etc.)
+
+    Relevance scoring:
+    - Keyword match: 40%
+    - Intent alignment: 30%
+    - Context fit: 20%
+    - Tier priority: 10%
+    """
+
+    # Domain intent keywords
+    DOMAIN_INTENTS = {
+        "development": ["implement", "build", "create", "develop", "code", "write", "add", "feature"],
+        "quality": ["review", "audit", "test", "qa", "quality", "verify", "validate", "check"],
+        "security": ["security", "secure", "auth", "encrypt", "vulnerability", "compliance", "audit"],
+        "optimization": ["optimize", "improve", "speed", "performance", "enhance", "refactor", "faster"],
+        "deployment": ["deploy", "release", "publish", "ship", "ci/cd", "devops", "infrastructure"],
+        "documentation": ["document", "docs", "readme", "guide", "tutorial", "explain", "describe"],
+        "debugging": ["debug", "fix", "troubleshoot", "diagnose", "solve", "error", "bug"],
+        "seo": ["seo", "search", "ranking", "visibility", "google", "meta", "keywords", "sitemap"],
+    }
+
+    # Agent capability keywords (manually curated from agent descriptions)
+    AGENT_KEYWORDS = {
+        "full-stack-architect": ["web", "react", "next.js", "frontend", "backend", "api", "full-stack", "web app", "webapp", "application"],
+        "backend-api-engineer": ["backend", "api", "rest", "graphql", "microservices", "server"],
+        "mobile-developer": ["mobile", "ios", "android", "react native", "flutter", "app"],
+        "ai-ml-engineer": ["ai", "ml", "llm", "rag", "vector", "machine learning", "chatbot"],
+        "data-engineer": ["data", "pipeline", "etl", "analytics", "database", "sql"],
+        "devops-engineer": ["devops", "ci/cd", "docker", "kubernetes", "deploy", "infrastructure"],
+        "security-audit-specialist": ["security", "vulnerability", "auth", "compliance", "audit"],
+        "qa-test-engineer": ["test", "qa", "quality", "testing", "coverage", "validation"],
+        "accessibility-expert": ["accessibility", "a11y", "wcag", "inclusive", "screen reader"],
+        "frontend-performance-specialist": ["performance", "core web vitals", "bundle", "optimize", "lcp", "react", "frontend", "web performance", "speed"],
+        "seo-meta-optimizer": ["seo", "meta tags", "open graph", "structured data", "og"],
+        "seo-technical-auditor": ["seo", "crawl", "sitemap", "robots.txt", "indexability"],
+        "seo-performance-specialist": ["seo", "performance", "core web vitals", "mobile-first"],
+        "seo-keyword-strategist": ["keywords", "search intent", "keyword research", "competitive"],
+        "seo-content-optimizer": ["content", "on-page", "readability", "e-e-a-t", "snippets"],
+        "seo-structure-architect": ["site architecture", "internal linking", "url structure", "silos"],
+        "code-architect": ["architecture", "review", "refactor", "maintainability", "code quality"],
+        "technical-writer": ["documentation", "api docs", "user guide", "tutorial", "readme"],
+        "business-analyst": ["requirements", "stakeholder", "brd", "user stories", "analysis"],
+        "product-manager": ["product", "roadmap", "okr", "prioritization", "product strategy"],
+        "the-inventor": ["ideation", "brainstorming", "ideas", "divergent", "creativity"],
+        "the-synthesist": ["synthesis", "framing", "convergent", "organize", "coherence"],
+        "the-architect-of-experiments": ["experiment", "hypothesis", "validation", "mvp", "testing"],
+        "creative-catalyst": ["creative", "oblique strategies", "lateral thinking", "innovation"],
+        "the-critic": ["decision", "analysis", "tradeoffs", "evaluation", "critique"],
+        "product-strategist": ["strategy", "market", "validation", "product-market fit", "startup"],
+        "linux-sysadmin": ["linux", "systemd", "kernel", "firewall", "os", "sysadmin"],
+        "database-administrator": ["database", "dba", "tuning", "backup", "oltp", "admin"],
+    }
+
+    def __init__(self, registry: AgentRegistry):
+        """Initialize discovery engine"""
+        self.registry = registry
+
+    def discover(
+        self,
+        query: str,
+        max_results: int = 5,
+        tier_filter: Optional[AgentTier] = None
+    ) -> List[AgentRecommendation]:
+        """
+        Discover agents matching query.
+
+        Args:
+            query: Natural language or keyword search
+            max_results: Maximum recommendations to return
+            tier_filter: Filter to specific tier (e.g., CORE only)
+
+        Returns:
+            List of agent recommendations sorted by relevance
+        """
+        query_lower = query.lower()
+
+        # Score all agents
+        scored_agents = []
+        for agent_name in self.registry.list_all_agents():
+            # Apply tier filter if specified
+            if tier_filter and TierManager.get_tier(agent_name) != tier_filter:
+                continue
+
+            score, breakdown = self._calculate_relevance(agent_name, query_lower)
+
+            if score > 0.1:  # Minimum threshold
+                agent_meta = self.registry.get_agent(agent_name)
+                explanation = self._generate_explanation(agent_name, query, breakdown)
+
+                recommendation = AgentRecommendation(
+                    agent_name=agent_name,
+                    relevance_score=score,
+                    tier=TierManager.get_tier(agent_name),
+                    explanation=explanation,
+                    match_breakdown=breakdown
+                )
+                scored_agents.append(recommendation)
+
+        # Sort by relevance score (descending)
+        scored_agents.sort(key=lambda x: x.relevance_score, reverse=True)
+
+        return scored_agents[:max_results]
+
+    def _calculate_relevance(self, agent_name: str, query: str) -> Tuple[float, Dict[str, float]]:
+        """
+        Calculate relevance score for agent.
+
+        Scoring breakdown:
+        - Keyword match: 40% (query matches agent keywords)
+        - Intent alignment: 30% (query intent matches agent domain)
+        - Context fit: 20% (agent description relevance)
+        - Tier priority: 10% (Core > Extended > Experimental)
+        """
+        scores = {}
+
+        # 1. Keyword match (40%)
+        scores['keyword'] = self._keyword_match_score(agent_name, query) * 0.4
+
+        # 2. Intent alignment (30%)
+        scores['intent'] = self._intent_alignment_score(agent_name, query) * 0.3
+
+        # 3. Context fit (20%)
+        scores['context'] = self._context_fit_score(agent_name, query) * 0.2
+
+        # 4. Tier priority (10%)
+        scores['tier'] = self._tier_priority_score(agent_name) * 0.1
+
+        total_score = sum(scores.values())
+
+        return total_score, scores
+
+    def _keyword_match_score(self, agent_name: str, query: str) -> float:
+        """Score based on keyword matching"""
+        if agent_name not in self.AGENT_KEYWORDS:
+            return 0.0
+
+        keywords = self.AGENT_KEYWORDS[agent_name]
+        matches = sum(1 for kw in keywords if kw in query)
+
+        if matches == 0:
+            return 0.0
+
+        # Normalize by keyword count (more matches = higher score)
+        return min(matches / len(keywords), 1.0)
+
+    def _intent_alignment_score(self, agent_name: str, query: str) -> float:
+        """Score based on domain intent alignment"""
+        agent_meta = self.registry.get_agent(agent_name)
+        if not agent_meta:
+            return 0.0
+
+        # Detect query intent
+        detected_intents = []
+        for intent, keywords in self.DOMAIN_INTENTS.items():
+            if any(kw in query for kw in keywords):
+                detected_intents.append(intent)
+
+        if not detected_intents:
+            return 0.5  # Neutral if no intent detected
+
+        # Check if agent aligns with detected intents
+        agent_desc = agent_meta.description.lower()
+        intent_matches = sum(1 for intent in detected_intents if any(
+            kw in agent_desc for kw in self.DOMAIN_INTENTS[intent]
+        ))
+
+        return min(intent_matches / len(detected_intents), 1.0)
+
+    def _context_fit_score(self, agent_name: str, query: str) -> float:
+        """Score based on description relevance"""
+        agent_meta = self.registry.get_agent(agent_name)
+        if not agent_meta:
+            return 0.0
+
+        description = agent_meta.description.lower()
+
+        # Split query into words, filter common words
+        stop_words = {"the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "my", "i", "need", "want", "help"}
+        query_words = [w for w in query.split() if w not in stop_words and len(w) > 2]
+
+        if not query_words:
+            return 0.0
+
+        # Count how many query words appear in description
+        matches = sum(1 for word in query_words if word in description)
+
+        return min(matches / len(query_words), 1.0)
+
+    def _tier_priority_score(self, agent_name: str) -> float:
+        """Score based on agent tier (Core > Extended > Experimental)"""
+        tier = TierManager.get_tier(agent_name)
+        return {
+            AgentTier.CORE: 1.0,
+            AgentTier.EXTENDED: 0.7,
+            AgentTier.EXPERIMENTAL: 0.4,
+            AgentTier.UNKNOWN: 0.0,
+        }[tier]
+
+    def _generate_explanation(
+        self, agent_name: str, query: str, breakdown: Dict[str, float]
+    ) -> str:
+        """Generate human-readable explanation for recommendation"""
+        agent_meta = self.registry.get_agent(agent_name)
+        if not agent_meta:
+            return "Agent not found in registry"
+
+        # Find strongest match component
+        max_component = max(breakdown.items(), key=lambda x: x[1])
+        component_name, component_score = max_component
+
+        explanations = {
+            'keyword': f"Strong keyword match with '{query}'",
+            'intent': f"Aligns well with task intent",
+            'context': f"Description matches query context",
+            'tier': f"{TierManager.get_tier(agent_name).name} tier agent",
+        }
+
+        explanation = explanations.get(component_name, "Good match")
+
+        # Add tier badge
+        tier = TierManager.get_tier(agent_name)
+        tier_badge = {
+            AgentTier.CORE: "⭐ CORE",
+            AgentTier.EXTENDED: "✓ EXTENDED",
+            AgentTier.EXPERIMENTAL: "🧪 EXPERIMENTAL",
+            AgentTier.UNKNOWN: "? UNKNOWN"
+        }[tier]
+
+        return f"{tier_badge} | {explanation}"
+
+
 class IntelligentOrchestrator:
     """
     Orchestrates agent selection based on context and intent.
@@ -488,6 +737,7 @@ class IntelligentOrchestrator:
         self.registry = AgentRegistry()
         self.analyzer = ProjectAnalyzer(project_dir)
         self.parser = IntentParser()
+        self.discovery = AgentDiscoveryEngine(self.registry)
 
         # Load telemetry if available
         try:
@@ -705,6 +955,25 @@ class IntelligentOrchestrator:
 
         return criteria
 
+    def discover_agents(
+        self,
+        query: str,
+        max_results: int = 5,
+        tier_filter: Optional[AgentTier] = None
+    ) -> List[AgentRecommendation]:
+        """
+        Discover agents matching query.
+
+        Args:
+            query: Natural language or keyword search
+            max_results: Maximum recommendations to return
+            tier_filter: Filter to specific tier
+
+        Returns:
+            List of agent recommendations
+        """
+        return self.discovery.discover(query, max_results, tier_filter)
+
     def print_workflow(self, workflow: OrchestratedWorkflow):
         """Print workflow in human-readable format"""
         print("\n" + "="*60)
@@ -739,28 +1008,83 @@ class IntelligentOrchestrator:
 
         print("\n" + "="*60 + "\n")
 
+    def print_recommendations(self, recommendations: List[AgentRecommendation]):
+        """Print agent recommendations in human-readable format"""
+        print("\n" + "="*60)
+        print("AGENT DISCOVERY RESULTS")
+        print("="*60)
+
+        if not recommendations:
+            print("\nNo agents found matching your query.")
+            print("Try different keywords or broaden your search.")
+            return
+
+        print(f"\nTop {len(recommendations)} recommendations:\n")
+
+        for i, rec in enumerate(recommendations, 1):
+            agent_meta = self.registry.get_agent(rec.agent_name)
+
+            print(f"{i}. {rec.agent_name}")
+            print(f"   Relevance: {rec.relevance_score:.2f} | {rec.explanation}")
+
+            if agent_meta:
+                # Truncate description to 100 chars
+                desc = agent_meta.description
+                if len(desc) > 100:
+                    desc = desc[:97] + "..."
+                print(f"   {desc}")
+
+            # Show score breakdown
+            breakdown_str = " | ".join([
+                f"{k}: {v:.2f}" for k, v in rec.match_breakdown.items()
+            ])
+            print(f"   Score: {breakdown_str}")
+            print()
+
+        print("="*60 + "\n")
+
 
 def main():
     """CLI interface for intelligent orchestrator"""
     import sys
 
-    orchestrator = IntelligentOrchestrator()
-
     if len(sys.argv) < 2:
-        print("Usage: python intelligent_orchestrator.py '<user request>'")
+        print("Usage: python intelligent_orchestrator.py <command> '<query>'")
+        print("\nCommands:")
+        print("  orchestrate '<request>'  - Generate workflow for user request")
+        print("  discover '<query>'       - Discover agents matching query")
         print("\nExamples:")
-        print("  python intelligent_orchestrator.py 'implement authentication system'")
-        print("  python intelligent_orchestrator.py 'review code for security issues'")
-        print("  python intelligent_orchestrator.py 'optimize frontend performance'")
+        print("  python intelligent_orchestrator.py orchestrate 'implement authentication'")
+        print("  python intelligent_orchestrator.py discover 'optimize my React app'")
+        print("  python intelligent_orchestrator.py discover 'seo performance'")
         sys.exit(1)
 
-    user_request = " ".join(sys.argv[1:])
+    command = sys.argv[1]
+    orchestrator = IntelligentOrchestrator()
 
-    # Generate workflow
-    workflow = orchestrator.orchestrate(user_request)
+    if command == "orchestrate":
+        if len(sys.argv) < 3:
+            print("Error: orchestrate requires a request")
+            sys.exit(1)
 
-    # Print results
-    orchestrator.print_workflow(workflow)
+        user_request = " ".join(sys.argv[2:])
+        workflow = orchestrator.orchestrate(user_request)
+        orchestrator.print_workflow(workflow)
+
+    elif command == "discover":
+        if len(sys.argv) < 3:
+            print("Error: discover requires a query")
+            sys.exit(1)
+
+        query = " ".join(sys.argv[2:])
+        recommendations = orchestrator.discover_agents(query, max_results=5)
+        orchestrator.print_recommendations(recommendations)
+
+    else:
+        # Backward compatibility: treat as orchestrate command
+        user_request = " ".join(sys.argv[1:])
+        workflow = orchestrator.orchestrate(user_request)
+        orchestrator.print_workflow(workflow)
 
 
 if __name__ == "__main__":
