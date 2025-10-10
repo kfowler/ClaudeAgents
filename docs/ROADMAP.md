@@ -764,6 +764,70 @@ Auto-select optimal agents based on project context, eliminating manual selectio
 
 ---
 
+### DECISION-006: Creative Triad Implementation (Hybrid Innovation Approach)
+**Date:** 2025-10-10
+**Owner:** project-orchestrator, systems-engineer, qa-test-engineer
+**Context:**
+  - User requested implementation of Creative Triad from ChatGPT 5.0 specification (4 agents: creative-catalyst, the-inventor, the-synthesist, the-architect-of-experiments)
+  - Platform had 78 total agents, experiencing concerns about agent sprawl and discoverability
+  - Need balanced approach: add innovative capabilities while improving platform usability
+  - User explicitly requested: (1) Creative Triad agents, (2) Agent discovery system, (3) Deprecation audit to reduce agent count
+**Decision:** Hybrid approach combining innovation with platform improvement
+**Structure:**
+  1. **Creative Triad Agents** (4 new agents):
+     - `creative-catalyst`: Oblique strategies, breakthrough thinking, constraint generation (5-50 ideas, novelty-focused)
+     - `the-inventor`: Systematic diversity guarantees, comprehensive exploration (7-12 ideas, diversity-focused)
+     - `the-synthesist`: Convergent synthesis, 100% idea coverage, false tradeoff identification
+     - `the-architect-of-experiments`: Falsifiable experiment design, 100% kill condition coverage, 48-120 hour validation windows
+  2. **Structured Output System**:
+     - `IDEATION_REPORT_v1.json` schema with divergent/convergent/experiment content types
+     - Diversity metrics (≥0.6 overall_diversity_score required)
+     - Falsifiability guarantees (100% kill condition coverage for experiments)
+     - Common types schema with flexible formats (string vs object) for backward compatibility
+  3. **Agent Discovery System**:
+     - Natural language query interface: `python tools/agent_discovery.py "optimize react performance"`
+     - Relevance scoring (0.0-1.0) with tier classification (core/specialized/experimental)
+     - Top-N recommendations with context and usage guidance
+     - Integration with agent registry for programmatic access
+  4. **Platform Improvement**:
+     - Deprecation audit targeting 6-11 agents to reduce total count from 78 to 67-72
+     - Death certificates for deprecated agents with migration paths
+     - Documentation consolidation (Creative Triad guide, Agent Discovery guide)
+     - Test suite validation (≥85% coverage with 46 tests)
+**Rationale:**
+  - Creative Triad fills gap in ideation and validation workflows (complementary to contrarian agents)
+  - Structured output schemas enable rigorous validation and agent chaining
+  - Discovery system solves agent selection problem as platform grows
+  - Deprecation audit maintains quality-over-quantity positioning
+  - Hybrid approach: Innovation without sprawl
+**Implementation:**
+  - Phase 1 (Complete): 4 Creative Triad agents with IDEATION_REPORT schema
+  - Phase 2 (Complete): 2 golden examples (SaaS onboarding, mobile engagement) with full workflow demonstrations
+  - Phase 3 (Complete): Core documentation (Creative Triad README, Agent Discovery Guide, CLAUDE.md integration)
+  - Phase 4 (Complete): Schema validation with dual format support (simple string vs structured object)
+  - Phase 5 (In Progress): Test suite fixes and deprecation audit
+**Golden Examples:**
+  - `tests/seed_templates/creative-catalyst.golden.json`: SaaS onboarding optimization (10 ideas, 0.87 diversity)
+  - `tests/seed_templates/examples/mobile_engagement/`: Complete workflow (creative-catalyst → synthesist → architect)
+    - Problem: Increase D1 retention from 30% to 50%
+    - Output: 10 breakthrough ideas → 3 strategic frames → 3 falsifiable experiments
+    - Demonstrates: Oblique strategies, frame synthesis, experiment sequencing
+**Impact:**
+  - Platform gains structured ideation capability (fills creative workflow gap)
+  - Improved discoverability through discovery system (reduces selection friction)
+  - Reduced agent count through deprecation (67-72 agents target vs 78 current)
+  - Integration with contrarian triad (creative → critical → decisive workflow)
+  - Production-ready validation through test suite (≥85% coverage)
+**Success Criteria:**
+  - ✅ 4 Creative Triad agents production-ready
+  - ✅ 2 complete golden examples demonstrating full workflow
+  - ✅ Core documentation published (README, discovery guide, CLAUDE.md updates)
+  - 🟡 Test suite passing with ≥85% coverage (22 passing, 11 failing, progress made)
+  - 🟡 Deprecation audit complete with 6-11 death certificates (pending)
+  - 🟡 Agent count reduced to 67-72 total (pending deprecation)
+
+---
+
 ## Next Actions (This Week: Oct 8-14)
 
 ### Priority 1: Death Certificates Soft Launch

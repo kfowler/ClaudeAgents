@@ -94,6 +94,43 @@ Start with `product-strategist` for market validation, then use `project-orchest
 - **Performance**: `choreographer` (dance composition, movement design), `video-director` (video production, cinematography)
 - **3D Arts**: `3d-modeler` (modeling, texturing, rendering)
 
+### Creative Triad: Structured Ideation & Validation
+The **Creative Triad** transforms ideation from art into science through divergent exploration, convergent synthesis, and rigorous experimental validation. Use these agents for innovation, product design, and strategic exploration.
+
+**Divergent Ideation** (choose one based on approach):
+- **creative-catalyst**: Oblique strategies, breakthrough thinking, constraint generation (5-50 ideas, novelty-focused)
+  - Use for: Breaking assumptions, creative breakthroughs, challenging conventional thinking
+  - Keywords: "oblique strategies", "breakthrough ideas", "challenge assumptions", "creative constraints"
+- **the-inventor**: Systematic diversity guarantees, comprehensive exploration (7-12 ideas, diversity-focused)
+  - Use for: Comprehensive solution space coverage, guaranteed diversity metrics, balanced exploration
+  - Keywords: "diverse ideas", "systematic ideation", "diversity guarantees", "comprehensive exploration"
+
+**Convergent Synthesis**:
+- **the-synthesist**: Organizes scattered ideas into coherent strategic frames with 100% coverage
+  - Use for: Synthesizing multiple ideas, identifying false tradeoffs, creating implementation paths
+  - Keywords: "synthesize ideas", "strategic frames", "false tradeoffs", "organize ideas"
+  - **Required input**: Ideation report from creative-catalyst or the-inventor
+
+**Experimental Validation**:
+- **the-architect-of-experiments**: Designs falsifiable experiments with 100% kill condition coverage
+  - Use for: A/B test design, validation planning, rigorous experimentation, hypothesis testing
+  - Keywords: "experiments", "a/b test", "validation", "falsifiable", "kill conditions"
+  - **Required input**: Synthesis report from the-synthesist OR ideation report
+
+**Typical Creative Triad Workflow**:
+```
+Problem → creative-catalyst/the-inventor → the-synthesist → the-architect-of-experiments → Validated Strategy
+```
+
+**Example Use Cases**:
+- "Generate diverse ideas for improving mobile app retention" → creative-catalyst (oblique) OR the-inventor (systematic)
+- "Synthesize 10 retention ideas into 3 strategic approaches" → the-synthesist
+- "Design A/B tests to validate retention strategies" → the-architect-of-experiments
+- "Explore new revenue models challenging subscription assumptions" → creative-catalyst
+- "Systematically explore backend architecture approaches" → the-inventor
+
+See [Creative Triad Guide](docs/creative-triad/README.md) for complete documentation and examples.
+
 ### Specialized Agents
 - **Decision Support**: `the-critic` (technical decision analysis)
 - **Legacy Systems**: `legacy-specialist` (migration, compatibility)
@@ -227,6 +264,10 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "technical decision", "architecture review", "code quality critique" → `the-critic`
 - "market validation", "ROI analysis", "competitive reality check" → `the-realist` (Sprint 17)
 - "MVP scope", "deadline feasibility", "shipping decisions" → `the-pragmatist` (Sprint 17)
+- "ideation", "generate ideas", "brainstorm", "breakthrough thinking", "oblique strategies" → `creative-catalyst`
+- "diverse ideas", "systematic ideation", "diversity guarantees", "comprehensive exploration" → `the-inventor`
+- "synthesize ideas", "strategic frames", "organize ideas", "false tradeoffs" → `the-synthesist`
+- "experiments", "a/b test", "validation", "falsifiable", "kill conditions", "hypothesis testing" → `the-architect-of-experiments`
 
 ### Command Selection Keywords
 - "cognitive load", "complexity metrics", "code comprehension", "developer ergonomics" → `/quality:cognitive-load-optimization`
