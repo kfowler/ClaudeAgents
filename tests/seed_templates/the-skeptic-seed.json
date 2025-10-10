@@ -1,0 +1,106 @@
+{
+  "agent": "the-skeptic",
+  "scenario": "AI resume screening automation proposal",
+  "description": "Golden example for rejecting inappropriate automation due to high-stakes, legal liability, and ethical concerns",
+  "inputs": {
+    "problem_statement": "Automate resume screening for 200 resumes/week to reduce HR workload from 10 hours to 2 hours",
+    "current_state": "Manual review by HR team, 3 minutes per resume average",
+    "proposed_automation": "AI resume screening with automatic rejection and interview scheduling",
+    "volume": {
+      "resumes_per_week": 200,
+      "annual_resumes": 10400,
+      "hr_time_weekly": 10
+    },
+    "stakes": "high",
+    "constraints": {
+      "legal": "EEOC regulations require explainable hiring decisions",
+      "bias_risk": "AI resume screening has documented bias problems (Amazon, HireVue precedent)",
+      "training_data": "Only 500 historical hires across 20 different roles"
+    }
+  },
+  "expected_output": {
+    "type": "AUTOMATION_ASSESSMENT",
+    "context": {
+      "problem_statement": "Automate resume screening for 200 resumes/week to reduce HR workload from 10 hours to 2 hours",
+      "current_state": "Manual review by HR team, 3 minutes per resume average",
+      "proposed_automation": "AI resume screening with automatic rejection and interview scheduling",
+      "stakes": "high",
+      "decision_urgency": "Planning for Q4 implementation"
+    },
+    "suitability_analysis": {
+      "good_fit_indicators": [
+        {
+          "factor": "high_volume",
+          "evidence": "200 resumes/week = 10,400 per year, repetitive task",
+          "strength": "strong"
+        }
+      ],
+      "poor_fit_indicators": [
+        {
+          "factor": "high_stakes",
+          "evidence": "Bad hire costs 2-3x salary + team disruption. Wrong rejection loses great candidates.",
+          "severity": "critical"
+        },
+        {
+          "factor": "legal_liability",
+          "evidence": "EEOC regulations require explainable hiring decisions. AI bias lawsuits precedent exists (Amazon, HireVue).",
+          "severity": "critical"
+        },
+        {
+          "factor": "ethical_concerns",
+          "evidence": "Resume screening AI has documented bias problems (race, gender, age from proxies like names, schools, employment gaps).",
+          "severity": "critical"
+        }
+      ],
+      "net_assessment": "POOR FIT for automation. 3 critical poor-fit indicators vs 1 good-fit indicator. Risk-to-benefit ratio is unacceptable."
+    },
+    "alternatives_explored": [
+      {
+        "approach": "process_improvement",
+        "description": "Standardize job descriptions, create screening rubrics, improve application forms",
+        "pros": ["Reduces unqualified applications by ~40%", "No legal risk"],
+        "cons": ["Still requires human review"],
+        "estimated_cost": "$5,000 setup + $15,600/year",
+        "estimated_benefit": "$10,400/year time savings",
+        "roi_3yr": "1.5x"
+      },
+      {
+        "approach": "full_automation",
+        "description": "AI screens resumes, auto-rejects unqualified, auto-schedules interviews",
+        "pros": ["Maximum time savings"],
+        "cons": ["Legal liability from AI bias", "$100K+ development", "No explainability"],
+        "estimated_cost": "$100,000 development + $20,000/year maintenance",
+        "estimated_benefit": "$20,800/year time savings",
+        "roi_3yr": "0.4x (loses significant money, ignoring legal risk)"
+      }
+    ],
+    "recommendation": {
+      "verdict": "do_not_automate",
+      "confidence": 0.94,
+      "rationale": "High-stakes + legal liability + ethical concerns + poor ROI = do not proceed. Process improvement delivers better ROI (1.5x) with zero legal risk.",
+      "conditions": [
+        "This verdict holds while hiring remains high-stakes with legal liability"
+      ],
+      "invalidation_triggers": [
+        "Regulations change to explicitly allow and regulate AI hiring (not current reality)"
+      ]
+    },
+    "red_flags": [
+      "CRITICAL: AI resume screening has documented bias problems. Legal liability is severe.",
+      "CRITICAL: EEOC requires explainable hiring decisions. Black-box AI cannot comply.",
+      "HIGH: ROI is negative (0.4x) even ignoring legal risk."
+    ],
+    "honest_truths": [
+      "Your problem isn't resume volume, it's unclear job requirements leading to unqualified applicants.",
+      "If you automate hiring and get sued for bias, the cost will be 10-50x the time savings."
+    ]
+  },
+  "validation_rules": {
+    "poor_fit_count_triggers_rejection": ">=2 critical poor-fit indicators",
+    "roi_threshold_enforced": "0.4x < 3x triggers do_not_automate",
+    "alternatives_with_roi_calculated": true,
+    "hidden_costs_quantified": true,
+    "legal_risks_identified": true,
+    "honest_truths_address_root_problem": true
+  }
+}

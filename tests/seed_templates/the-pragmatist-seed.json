@@ -1,0 +1,119 @@
+{
+  "agent": "the-pragmatist",
+  "scenario": "30-feature MVP with 8-week deadline and 3 developers",
+  "description": "Golden example for MVP bloat destruction with capacity math triggering scope cut gate",
+  "inputs": {
+    "scope_summary": "30-feature e-commerce MVP: product catalog, cart, checkout, user accounts, reviews, wishlist, recommendations",
+    "timeline_request": "8 weeks to public launch",
+    "team_composition": {
+      "developers": 3,
+      "skills": "Full-stack (React/Node.js)",
+      "qa_engineer": false
+    },
+    "constraints": {
+      "fixed": "deadline (marketing event)",
+      "negotiable": "scope",
+      "non_negotiable": "team size"
+    },
+    "estimates": {
+      "total_story_points": 150,
+      "hours_per_point_historical": 8,
+      "features_proposed": 30
+    }
+  },
+  "expected_output": {
+    "type": "DELIVERABILITY_ASSESSMENT",
+    "context": {
+      "scope_summary": "30-feature e-commerce MVP: product catalog, cart, checkout, user accounts, reviews, wishlist, recommendations, etc.",
+      "timeline_request": "8 weeks to public launch",
+      "team_composition": "3 full-stack developers (React/Node.js), no dedicated QA",
+      "constraints": "Fixed deadline (marketing event), scope negotiable, team fixed"
+    },
+    "capacity_analysis": {
+      "team_size": 3,
+      "sprint_weeks": 8,
+      "hours_per_week_per_engineer": 40,
+      "utilization_factor": 0.65,
+      "available_hours": 624,
+      "calculation": "3 × 8 × 40 × 0.65 = 624 hours"
+    },
+    "scope_analysis": {
+      "total_story_points": 150,
+      "hours_per_point_historical": 8,
+      "required_hours_estimated": 1200,
+      "buffer_multiplier": 1.3,
+      "required_hours_with_buffer": 1560,
+      "calculation": "150 points × 8 hours/point × 1.3 buffer = 1560 hours"
+    },
+    "timeline_feasibility": {
+      "on_time_probability": "near-zero",
+      "capacity_utilization": "250%",
+      "buffer_remaining": "-936 hours (624 available, 1560 required)",
+      "risk_factors": [
+        "Required hours 2.5x available capacity",
+        "No QA engineer allocated",
+        "Estimates assume zero bugs"
+      ]
+    },
+    "mvp_bloat_analysis": {
+      "features_proposed": 30,
+      "truly_minimum_estimated": 8,
+      "bloat_ratio": "3.75x",
+      "scope_cut_recommendation": "Cut to 8 core features (73% reduction)",
+      "core_features_identified": [
+        "Product listing (browse catalog)",
+        "Product detail page",
+        "Add to cart",
+        "Checkout flow (guest checkout only)",
+        "Payment processing (Stripe integration)",
+        "Order confirmation",
+        "Basic admin (add/edit products)",
+        "Deploy pipeline + monitoring"
+      ]
+    },
+    "recommendation": {
+      "verdict": "cut_scope",
+      "confidence": 0.96,
+      "rationale": "Required capacity (1560 hours) is 2.5x available capacity (624 hours). Gate 1 (mandate_scope_cut) triggered. With scope cut to 8 features, timeline becomes feasible.",
+      "specific_actions": [
+        "Cut scope to 8 core features",
+        "Defer user accounts, reviews, recommendations to phase 2",
+        "Use Stripe for payments (don't build custom)",
+        "Buy off-the-shelf admin panel"
+      ],
+      "risk_mitigation": [
+        "Build vertical slice in week 1",
+        "Deploy to staging by week 2",
+        "Feature freeze after week 4"
+      ]
+    },
+    "gates_triggered": [
+      {
+        "gate": "mandate_scope_cut",
+        "condition": "1560 required > 1.3 × 624 available (811)",
+        "required_action": "Cut scope by minimum 67% to achieve on-time probability >50%"
+      }
+    ],
+    "required_proofs": [
+      {
+        "requirement": "Vertical slice demo: Browse → Cart → Checkout",
+        "evidence_type": "Working end-to-end flow in staging",
+        "acceptance_criteria": "User can buy a product from listing to confirmation",
+        "timeline": "End of week 1 (12.5% into project)"
+      }
+    ],
+    "brutal_truth": [
+      "Your 'MVP' has 3.75x more features than minimum. This is not an MVP, it's a v1.0 wishlist.",
+      "Marketing committed to a date without asking engineering. This is how projects fail publicly.",
+      "You're planning for 2.5x your team's capacity. Even working weekends won't close this gap."
+    ]
+  },
+  "validation_rules": {
+    "capacity_math_executed": "team_size × weeks × 40 × 0.65",
+    "gate_triggered": "mandate_scope_cut when required > 1.3 × available",
+    "scope_cut_percentage_calculated": "73% reduction (30 → 8 features)",
+    "buffered_hours_feasible_after_cut": "520 buffered < 624 available",
+    "required_proofs_include_vertical_slice": true,
+    "brutal_truth_addresses_root_causes": true
+  }
+}

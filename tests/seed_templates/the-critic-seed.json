@@ -1,0 +1,103 @@
+{
+  "agent": "the-critic",
+  "scenario": "PostgreSQL vs MongoDB decision for SaaS analytics platform",
+  "description": "Golden example for database selection with complex tradeoffs",
+  "inputs": {
+    "problem_statement": "Select primary database for multi-tenant SaaS analytics platform with complex relational queries",
+    "alternatives": [
+      {
+        "name": "PostgreSQL",
+        "description": "Relational database with ACID compliance, excellent JOIN performance"
+      },
+      {
+        "name": "MongoDB",
+        "description": "Document database with horizontal scaling, flexible schema"
+      }
+    ],
+    "constraints": {
+      "team_expertise": "5 years PostgreSQL experience, 0 MongoDB experience",
+      "query_requirements": "Complex JOINs across 12+ tables, financial transactions require ACID",
+      "timeline": "Must decide in 1 week, 3 month implementation window",
+      "future_needs": "Eventual multi-tenancy for enterprise customers"
+    },
+    "stakes": "high",
+    "success_criteria": "Query performance for analytics workloads, data integrity for billing, operational simplicity"
+  },
+  "expected_output": {
+    "type": "DECISION_REPORT",
+    "decision_context": {
+      "problem_statement": "Select primary database for multi-tenant SaaS analytics platform with complex relational queries",
+      "stakes": "high",
+      "reversibility": "difficult",
+      "timeline": "Must decide in 1 week, 3 month implementation window"
+    },
+    "dominant_axis": {
+      "primary_factor": "Query complexity and data integrity requirements",
+      "rationale": "Analytics platform requires JOINs across 12+ tables, ACID transactions for billing, complex aggregations. Document flexibility is not needed—schema is well-defined and stable.",
+      "measurement": "Query performance benchmarks for typical analytics workloads, transaction consistency verification"
+    },
+    "alternatives": [
+      {
+        "option": "PostgreSQL",
+        "strengths": [
+          "Excellent JOIN performance for relational analytics queries",
+          "ACID compliance for financial/billing data integrity",
+          "Team has 5 years production PostgreSQL experience"
+        ],
+        "weaknesses": [
+          "Vertical scaling limits (single-node writes)",
+          "Schema migrations require careful planning"
+        ],
+        "failure_modes": [
+          "Write bottleneck at >100K TPS (mitigated by read replicas)"
+        ],
+        "evidence_quality": "strong",
+        "dominant_axis_score": 0.92
+      },
+      {
+        "option": "MongoDB",
+        "strengths": [
+          "Horizontal scaling through sharding",
+          "Flexible schema for rapid iteration"
+        ],
+        "weaknesses": [
+          "JOIN performance significantly slower than PostgreSQL",
+          "Team lacks production MongoDB experience (6-12 month learning curve)"
+        ],
+        "failure_modes": [
+          "Query performance collapse on complex analytics",
+          "Operational expertise gap leads to misconfigured clusters"
+        ],
+        "evidence_quality": "moderate",
+        "dominant_axis_score": 0.34
+      }
+    ],
+    "recommendation": {
+      "choice": "PostgreSQL",
+      "confidence": 0.94,
+      "rationale": "Dominant axis (query complexity + data integrity) strongly favors PostgreSQL. Team expertise de-risks implementation. Scaling concerns are premature optimization.",
+      "conditions": [
+        "Remains optimal while write throughput < 50K TPS"
+      ],
+      "invalidation_triggers": [
+        "Write throughput exceeds 50K TPS and becomes bottleneck"
+      ]
+    },
+    "required_proofs": [
+      {
+        "claim": "PostgreSQL can handle projected query load",
+        "evidence_needed": "Load test with production-representative dataset and query patterns",
+        "acceptance_criteria": "p95 query latency < 500ms at 10x current user volume",
+        "timeline": "Before implementation begins (2 weeks)"
+      }
+    ]
+  },
+  "validation_rules": {
+    "dominant_axis_identified": true,
+    "evidence_quality_assessed": true,
+    "false_tradeoffs_exposed": true,
+    "emotional_economy_analyzed": true,
+    "required_proofs_specified": true,
+    "invalidation_triggers_defined": true
+  }
+}
