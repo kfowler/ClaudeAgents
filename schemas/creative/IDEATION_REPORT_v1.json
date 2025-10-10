@@ -383,7 +383,13 @@
                 "type": "string",
                 "description": "Expected experiment duration",
                 "minLength": 5,
-                "examples": ["2 weeks", "1 month", "3 sprints", "ongoing"]
+                "examples": ["2 weeks", "1 month", "3 sprints", "ongoing", "72 hours", "96 hours"]
+              },
+              "duration_hours": {
+                "type": "integer",
+                "description": "Duration in hours (for precise time window validation)",
+                "minimum": 1,
+                "examples": [48, 72, 96, 120]
               },
               "kill_condition": {
                 "$ref": "common-types.json#/definitions/kill_condition",

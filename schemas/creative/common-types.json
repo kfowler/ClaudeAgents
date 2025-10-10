@@ -10,6 +10,9 @@
       "description": "Identifier for the agent that produced this output",
       "enum": [
         "creative-catalyst",
+        "the-inventor",
+        "the-synthesist",
+        "the-architect-of-experiments",
         "the-dreamer",
         "the-builder",
         "the-experimenter"
@@ -46,99 +49,166 @@
     },
 
     "kill_condition": {
-      "type": "object",
       "description": "Falsifiable condition that would invalidate a claim or hypothesis",
-      "required": ["condition", "threshold", "measurement_method"],
-      "properties": {
-        "condition": {
+      "oneOf": [
+        {
           "type": "string",
-          "description": "Observable condition that triggers invalidation",
+          "description": "Simple kill condition (legacy format)",
           "minLength": 10,
           "examples": [
-            "User engagement drops below baseline",
-            "Development time exceeds 2x estimate",
-            "No positive feedback in first 100 users"
+            "If average completion time is not <6 minutes after 100 users, kill experiment",
+            "Kill if completion rate is not >70% after 200 users"
           ]
         },
-        "threshold": {
-          "type": "string",
-          "description": "Quantitative threshold for the kill condition",
-          "minLength": 5,
-          "examples": [
-            "< 20% baseline engagement",
-            "> 40 hours development time",
-            "0 positive mentions in feedback"
-          ]
-        },
-        "measurement_method": {
-          "type": "string",
-          "description": "How to measure whether condition is met",
-          "minLength": 10,
-          "examples": [
-            "Analytics dashboard engagement metric",
-            "Time tracking system logged hours",
-            "User feedback survey sentiment analysis"
-          ]
-        },
-        "timeline": {
-          "type": "string",
-          "description": "When to evaluate this kill condition",
-          "examples": [
-            "After 2 weeks in production",
-            "At 50% development checkpoint",
-            "After first 100 users onboarded"
-          ]
+        {
+          "type": "object",
+          "description": "Structured kill condition (recommended format)",
+          "required": ["description", "threshold", "measurement_window"],
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Clear description of what triggers experiment termination",
+              "minLength": 10,
+              "examples": [
+                "Terminate if treatment group shows ≥10% decrease in D1 retention",
+                "Kill if no improvement over baseline after minimum sample size"
+              ]
+            },
+            "threshold": {
+              "type": "string",
+              "description": "Quantitative threshold for the kill condition",
+              "minLength": 5,
+              "examples": [
+                "D1 retention drop ≥10%",
+                "< 20% baseline engagement",
+                "> 40 hours development time"
+              ]
+            },
+            "measurement_window": {
+              "type": "string",
+              "description": "When to evaluate this kill condition",
+              "minLength": 3,
+              "examples": [
+                "24 hours",
+                "After first 100 users",
+                "48 hours"
+              ]
+            },
+            "auto_terminate": {
+              "type": "boolean",
+              "description": "Whether to automatically terminate when condition met"
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": false
+      ]
     },
 
     "success_metric": {
-      "type": "object",
       "description": "Measurable criteria defining success",
-      "required": ["metric", "target", "measurement_method"],
-      "properties": {
-        "metric": {
-          "type": "string",
-          "description": "Name of the success metric",
-          "minLength": 5,
-          "examples": [
-            "User engagement rate",
-            "Task completion time",
-            "Error rate reduction"
-          ]
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "Structured success metric (recommended format)",
+          "required": ["name", "description", "unit", "target_value", "threshold_type", "measurement_method"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the success metric",
+              "minLength": 5,
+              "examples": [
+                "D7 Retention Rate Increase",
+                "User Satisfaction Score Increase"
+              ]
+            },
+            "description": {
+              "type": "string",
+              "description": "Clear description of what is being measured",
+              "minLength": 10,
+              "examples": [
+                "Percentage of users returning on Day 7",
+                "Post-experiment satisfaction survey (1-10 scale)"
+              ]
+            },
+            "unit": {
+              "type": "string",
+              "description": "Unit of measurement",
+              "minLength": 1,
+              "examples": ["percentage points", "scale points", "percentage", "seconds", "count"]
+            },
+            "target_value": {
+              "type": "number",
+              "description": "Numeric target value for success"
+            },
+            "threshold_type": {
+              "type": "string",
+              "enum": ["minimum", "maximum", "exact"],
+              "description": "Type of threshold (minimum, maximum, or exact match)"
+            },
+            "measurement_method": {
+              "type": "string",
+              "description": "How to measure this metric",
+              "minLength": 10,
+              "examples": [
+                "Cohort analysis tracking unique users returning exactly 7 days after first session",
+                "In-app survey delivered at 72h mark, minimum 200 responses per group"
+              ]
+            },
+            "baseline": {
+              "type": "number",
+              "description": "Current baseline value for comparison"
+            }
+          },
+          "additionalProperties": false
         },
-        "target": {
-          "type": "string",
-          "description": "Target value or threshold for success",
-          "minLength": 3,
-          "examples": [
-            "> 60% engagement",
-            "< 30 seconds completion time",
-            "< 5% error rate"
-          ]
-        },
-        "measurement_method": {
-          "type": "string",
-          "description": "How to measure this metric",
-          "minLength": 10,
-          "examples": [
-            "Analytics event tracking",
-            "Performance monitoring APM",
-            "Error logging and alerting system"
-          ]
-        },
-        "baseline": {
-          "type": "string",
-          "description": "Current baseline value for comparison",
-          "examples": [
-            "Current: 35% engagement",
-            "Current: 90 seconds",
-            "Current: 12% error rate"
-          ]
+        {
+          "type": "object",
+          "description": "Simple success metric (legacy format)",
+          "required": ["metric", "target"],
+          "properties": {
+            "metric": {
+              "type": "string",
+              "description": "Name of the success metric",
+              "minLength": 5,
+              "examples": [
+                "User engagement rate",
+                "Task completion time",
+                "Error rate reduction"
+              ]
+            },
+            "target": {
+              "type": "string",
+              "description": "Target value or threshold for success",
+              "minLength": 3,
+              "examples": [
+                "> 60% engagement",
+                "< 30 seconds completion time",
+                "< 5% error rate"
+              ]
+            },
+            "measurement_method": {
+              "type": "string",
+              "description": "How to measure this metric",
+              "minLength": 10,
+              "examples": [
+                "Analytics event tracking",
+                "Performance monitoring APM",
+                "Error logging and alerting system"
+              ]
+            },
+            "baseline": {
+              "type": "string",
+              "description": "Current baseline value for comparison",
+              "examples": [
+                "Current: 35% engagement",
+                "Current: 90 seconds",
+                "Current: 12% error rate"
+              ]
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": false
+      ]
     },
 
     "evidence_quality": {
