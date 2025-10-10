@@ -409,13 +409,13 @@ All dependencies included in `tools/requirements.txt`.
 
 ## Links
 
-- [Sprint 2 Complete Summary](../../docs/AIL_SPRINT_2_COMPLETE.md)
-- [Sprint 1 Complete Summary](../../docs/AIL_SPRINT_1_COMPLETE.md)
-- [Getting Started Guide](../../docs/AIL_GETTING_STARTED.md)
-- [Deployment Guide](../../docs/AIL_DEPLOYMENT_GUIDE.md)
-- [User Guide](../../docs/AIL_USER_GUIDE.md)
-- [API Reference](../../docs/AIL_API.md)
-- [Architecture](../../docs/AIL_ARCHITECTURE.md)
+- [Sprint 2 Complete Summary](AIL_SPRINT_2_COMPLETE.md)
+- [Sprint 1 Complete Summary](AIL_SPRINT_1_COMPLETE.md)
+- [Getting Started Guide](AIL_GETTING_STARTED.md)
+- [Deployment Guide](AIL_DEPLOYMENT_GUIDE.md)
+- [User Guide](AIL_USER_GUIDE.md)
+- [API Reference](AIL_API.md)
+- [Architecture](AIL_ARCHITECTURE.md)
 
 ---
 

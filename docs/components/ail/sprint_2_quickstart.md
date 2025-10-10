@@ -415,9 +415,9 @@ asyncio.run(adaptive_tuning())
 
 ## Resources
 
-- **Full Documentation**: `docs/AIL_SPRINT_2_IMPLEMENTATION.md`
-- **Design Spec**: `docs/AIL_SPRINT_2_SEMANTIC_CACHE_DESIGN.md`
-- **Executive Summary**: `docs/AIL_SPRINT_2_SEMANTIC_CACHE_SUMMARY.md`
+- **Full Documentation**: `AIL_SPRINT_2_IMPLEMENTATION.md`
+- **Design Spec**: `AIL_SPRINT_2_SEMANTIC_CACHE_DESIGN.md`
+- **Executive Summary**: `AIL_SPRINT_2_SEMANTIC_CACHE_SUMMARY.md`
 - **Test Suite**: `tests/test_ail/test_semantic_cache.py`
 - **Validation Tool**: `tools/ail/validate_semantic_cache.py`
 

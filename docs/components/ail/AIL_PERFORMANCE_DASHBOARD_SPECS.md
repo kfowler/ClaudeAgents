@@ -248,7 +248,7 @@ Example:
 
 View real-time quality metrics for our AI Integration Layer:
 
-📊 [**View AIL Performance Dashboard**](docs/AIL_PERFORMANCE_DASHBOARD.md)
+📊 [**View AIL Performance Dashboard**](AIL_PERFORMANCE_DASHBOARD.md)
 
 ```bash
 python3 tools/ail/performance_dashboard.py
@@ -269,7 +269,7 @@ python3 tools/ail/performance_dashboard.py
 
 Agents with AIL integration demonstrate higher consistency and edge case handling. View current integration status:
 
-📊 [AIL Performance Dashboard](docs/AIL_PERFORMANCE_DASHBOARD.md) - Real-time quality metrics
+📊 [AIL Performance Dashboard](AIL_PERFORMANCE_DASHBOARD.md) - Real-time quality metrics
 
 **AIL-Integrated Agents** (7/41):
 - `full-stack-architect` - 92 quality score

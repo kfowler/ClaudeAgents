@@ -40,7 +40,7 @@ The AIL Performance Dashboard delivers real-time visibility into Archaeological 
    - Output format validation
    - Helper method testing
 
-3. **`docs/AIL_PERFORMANCE_DASHBOARD.md`** (comprehensive)
+3. **`AIL_PERFORMANCE_DASHBOARD.md`** (comprehensive)
    - Complete user guide
    - Metrics reference
    - CLI usage examples

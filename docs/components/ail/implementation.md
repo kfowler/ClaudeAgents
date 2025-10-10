@@ -271,7 +271,7 @@ python3 tools/ail/performance_dashboard.py --watch 30
   ...
 ```
 
-See [Performance Dashboard Documentation](../../docs/AIL_PERFORMANCE_DASHBOARD.md) for complete details.
+See [Performance Dashboard Documentation](AIL_PERFORMANCE_DASHBOARD.md) for complete details.
 
 ### Advanced: Custom Questions by Task Type
 
@@ -700,28 +700,28 @@ pip install -r tools/requirements.txt
 ## Documentation
 
 ### Quick Start
-- **[Getting Started Guide](../../docs/AIL_GETTING_STARTED.md)** ← Start here
-- **[Deployment Guide](../../docs/AIL_DEPLOYMENT_GUIDE.md)** ← Production deployment
+- **[Getting Started Guide](AIL_GETTING_STARTED.md)** ← Start here
+- **[Deployment Guide](AIL_DEPLOYMENT_GUIDE.md)** ← Production deployment
 
 ### Comprehensive Documentation
-- **[Sprint 2 Complete Summary](../../docs/AIL_SPRINT_2_COMPLETE.md)**: Full Sprint 2 deliverables
-- **[Sprint 1 Complete Summary](../../docs/AIL_SPRINT_1_COMPLETE.md)**: Sprint 1 deliverables
-- **[User Guide](../../docs/AIL_USER_GUIDE.md)**: Complete feature documentation
-- **[API Reference](../../docs/AIL_API.md)**: Full API documentation
-- **[Architecture](../../docs/AIL_ARCHITECTURE.md)**: System architecture and design
-- **[Changelog](CHANGELOG.md)**: Version history and breaking changes
+- **[Sprint 2 Complete Summary](AIL_SPRINT_2_COMPLETE.md)**: Full Sprint 2 deliverables
+- **[Sprint 1 Complete Summary](AIL_SPRINT_1_COMPLETE.md)**: Sprint 1 deliverables
+- **[User Guide](AIL_USER_GUIDE.md)**: Complete feature documentation
+- **[API Reference](AIL_API.md)**: Full API documentation
+- **[Architecture](AIL_ARCHITECTURE.md)**: System architecture and design
+- **[Changelog](changelog.md)**: Version history and breaking changes
 
 ### Sprint 2 Technical Documentation
-- **[FAISS Specification](../../docs/AIL_SPRINT_2_FAISS_SPECIFICATION.md)**: Technical specification
-- **[Semantic Cache Design](../../docs/AIL_SPRINT_2_SEMANTIC_CACHE_DESIGN.md)**: Caching architecture
-- **[Performance Benchmarks](../../docs/AIL_SPRINT_2_PERFORMANCE_BENCHMARKS.md)**: Performance metrics
-- **[Agent Integration Guide](../../agents/integrations/README.md)**: Agent integration documentation
-- **[Integration Summary](../../docs/ail_agent_integration_summary.md)**: Sprint 2 integration overview
+- **[FAISS Specification](AIL_SPRINT_2_FAISS_SPECIFICATION.md)**: Technical specification
+- **[Semantic Cache Design](AIL_SPRINT_2_SEMANTIC_CACHE_DESIGN.md)**: Caching architecture
+- **[Performance Benchmarks](AIL_SPRINT_2_PERFORMANCE_BENCHMARKS.md)**: Performance metrics
+- **[Agent Integration Guide](../../../agents/integrations/README.md)**: Agent integration documentation
+- **[Integration Summary](ail_agent_integration_summary.md)**: Sprint 2 integration overview
 
 ### Quick References
-- **[Sprint 2 Quickstart](SPRINT_2_QUICKSTART.md)**: Quick start with Sprint 2 features
-- **[Implementation Summary](IMPLEMENTATION_SUMMARY.md)**: Sprint 1 implementation details
-- **[Quickstart](QUICKSTART.md)**: 5-minute getting started
+- **[Sprint 2 Quickstart](sprint_2_quickstart.md)**: Quick start with Sprint 2 features
+- **[Implementation Summary](implementation_summary.md)**: Sprint 1 implementation details
+- **[Quickstart](quickstart.md)**: 5-minute getting started
 
 ## Version Information
 
@@ -744,7 +744,7 @@ See main project CONTRIBUTING.md for guidelines.
 
 ### Getting Help
 
-1. **Read the Documentation**: Start with the [Getting Started Guide](../../docs/AIL_GETTING_STARTED.md)
+1. **Read the Documentation**: Start with the [Getting Started Guide](AIL_GETTING_STARTED.md)
 2. **Check Examples**: Review `examples.py` and test files for usage patterns
 3. **Run Validation**: Use validation scripts to check your setup
 4. **Review Tests**: Look at `tests/test_ail/` for real-world scenarios
@@ -752,9 +752,9 @@ See main project CONTRIBUTING.md for guidelines.
 
 ### Common Resources
 
-- **Troubleshooting**: [Deployment Guide - Common Issues](../../docs/AIL_DEPLOYMENT_GUIDE.md#common-issues)
-- **Performance Tips**: [Getting Started - Performance Tips](../../docs/AIL_GETTING_STARTED.md#performance-tips)
-- **Agent Integration Examples**: [Agent Integration Guide](../../agents/integrations/README.md)
+- **Troubleshooting**: [Deployment Guide - Common Issues](AIL_DEPLOYMENT_GUIDE.md#common-issues)
+- **Performance Tips**: [Getting Started - Performance Tips](AIL_GETTING_STARTED.md#performance-tips)
+- **Agent Integration Examples**: [Agent Integration Guide](../../../agents/integrations/README.md)
 
 ---
 
