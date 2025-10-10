@@ -1,15 +1,15 @@
 # ClaudeAgents Team Capacity & Expertise
 
 **Last Updated:** 2025-10-10
-**Total Agents:** 73 specialized agents
+**Total Agents:** 75 specialized agents
 **Active This Week:** 8 agents across 3 initiatives
-**Version:** 1.0
+**Version:** 1.1
 
 ---
 
 ## Executive Summary
 
-The ClaudeAgents platform consists of 73 specialized agents organized into strategic tiers (Core, Extended, Experimental) across 15+ domains. This document maps agent expertise, current workload, and capacity to ensure optimal task allocation and prevent overload.
+The ClaudeAgents platform consists of 75 specialized agents organized into strategic tiers (Core, Extended, Experimental) across 15+ domains. This document maps agent expertise, current workload, and capacity to ensure optimal task allocation and prevent overload.
 
 **Current Capacity Utilization (Week of Oct 8-14):**
 - Total available agent capacity: ~300 hours/week
@@ -22,7 +22,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 ## Agent Tiers & Expertise Mapping
 
-### Core Tier (12 Agents)
+### Core Tier (14 Agents)
 **Definition:** Most-used, highest quality, production-ready for mission-critical tasks.
 
 #### Strategic Leadership
@@ -104,12 +104,61 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 - Growth-hacker agent challenge (prevented 40-hour waste)
 - Death certificates honesty review (no corporate speak)
 - Architecture decision validation
+- Sprint 17 agent validation (the-realist and the-pragmatist)
+
+---
+
+##### 5. the-realist
+**Domain:** Business and market contrarian analysis
+**Expertise:**
+- Market sizing validation (TAM/SAM/SOM bottoms-up calculation)
+- Revenue model reality checks (unit economics, CAC, LTV)
+- Competitive dynamics assessment (moat validation, incumbent response)
+- Financial feasibility analysis (ROI, burn rate, break-even)
+- Market timing critique (adoption curves, readiness signals)
+
+**Current Workload:** 0% (Available)
+**This Week:** No active tasks
+**Availability:** High (ready for business case validation)
+
+**Recent Work:**
+- Sprint 17 creation (contrarian agent diversification)
+- Agent definition completed and validated
+
+**Future Assignments:**
+- Business case validation for vertical packages (Q1 2026)
+- Market opportunity assessment for strategic initiatives
+- ROI validation for build vs buy decisions
+
+---
+
+##### 6. the-pragmatist
+**Domain:** Execution and shipping contrarian analysis
+**Expertise:**
+- MVP scope validation (minimum viable vs feature bloat)
+- Deadline feasibility checking (capacity math, velocity analysis)
+- Build vs buy assessment (ROI calculation, maintenance costs)
+- Technical debt tradeoff analysis (velocity impact, refactor timing)
+- Resource allocation reality (team capacity, skill gaps, dependencies)
+
+**Current Workload:** 0% (Available)
+**This Week:** No active tasks
+**Availability:** High (ready for sprint planning validation)
+
+**Recent Work:**
+- Sprint 17 creation (contrarian agent diversification)
+- Agent definition completed and validated
+
+**Future Assignments:**
+- Sprint planning validation for major initiatives
+- Scope review for vertical packages (Q1 2026)
+- Timeline feasibility assessment for roadmap commitments
 
 ---
 
 #### Technical Implementation
 
-##### 5. full-stack-architect
+##### 7. full-stack-architect
 **Domain:** Web applications, React, Next.js, backend APIs, full-stack workflows
 **Expertise:**
 - Modern web frameworks (React, Next.js, Svelte)
@@ -133,7 +182,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 ---
 
-##### 6. ai-ml-engineer
+##### 8. ai-ml-engineer
 **Domain:** AI/ML systems, LLM integration, RAG, vector databases, FAISS
 **Expertise:**
 - FAISS semantic search integration
@@ -158,7 +207,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 ---
 
-##### 7. systems-engineer
+##### 9. systems-engineer
 **Domain:** Performance optimization, systems programming, low-level optimization
 **Expertise:**
 - Performance profiling and optimization
@@ -178,7 +227,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 ---
 
-##### 8. data-engineer
+##### 10. data-engineer
 **Domain:** Data pipelines, analytics, ETL, OLAP workloads
 **Expertise:**
 - Two-tier caching architecture
@@ -202,7 +251,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 ---
 
-##### 9. security-audit-specialist
+##### 11. security-audit-specialist
 **Domain:** Security audits, vulnerability assessment, compliance
 **Expertise:**
 - Security review and hardening
@@ -225,7 +274,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 ---
 
-##### 10. qa-test-engineer
+##### 12. qa-test-engineer
 **Domain:** Test strategies, test automation, quality assurance
 **Expertise:**
 - Comprehensive test suite design (115 tests for AIL Sprint 2)
@@ -249,7 +298,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 ---
 
-##### 11. code-architect
+##### 13. code-architect
 **Domain:** Architecture review, code quality, maintainability, design patterns
 **Expertise:**
 - Holistic architecture assessment
@@ -269,7 +318,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 ---
 
-##### 12. technical-writer
+##### 14. technical-writer
 **Domain:** Documentation, API docs, user guides, developer documentation
 **Expertise:**
 - Comprehensive documentation (45+ files for AIL Sprint 2)
@@ -286,6 +335,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 - AIL Sprint 2 complete documentation suite
 - Death certificate template and examples
 - Death certificates marketing content support
+- Sprint 17 agent creation (the-realist and the-pragmatist)
 
 **Future Assignments:**
 - TASK-005 support (blog post, Week of Oct 15)
@@ -298,33 +348,33 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 #### SEO Specialists (6 Agents)
 
-##### 13. seo-meta-optimizer
+##### 15. seo-meta-optimizer
 **Domain:** Meta tags, Open Graph, structured data, CTR optimization
 **Expertise:** Technical meta tag optimization, social media markup
 **Workload:** 0% | **Availability:** High
 **Future:** Vertical Package 2 - eCommerce (Q2 2026)
 
-##### 14. seo-technical-auditor
+##### 16. seo-technical-auditor
 **Domain:** Crawlability, indexability, sitemaps, mobile-friendliness
 **Expertise:** Technical SEO infrastructure, crawl optimization
 **Workload:** 0% | **Availability:** High
 
-##### 15. seo-performance-specialist
+##### 17. seo-performance-specialist
 **Domain:** Core Web Vitals for rankings, TTFB, mobile-first indexing
 **Expertise:** Performance optimization for SEO impact
 **Workload:** 0% | **Availability:** High
 
-##### 16. seo-keyword-strategist
+##### 18. seo-keyword-strategist
 **Domain:** Keyword research, search intent, competitive analysis
 **Expertise:** Keyword clustering, gap analysis, search intent mapping
 **Workload:** 0% | **Availability:** High
 
-##### 17. seo-content-optimizer
+##### 19. seo-content-optimizer
 **Domain:** On-page optimization, readability, E-E-A-T, featured snippets
 **Expertise:** Content optimization for search rankings
 **Workload:** 0% | **Availability:** High
 
-##### 18. seo-structure-architect
+##### 20. seo-structure-architect
 **Domain:** Site architecture, internal linking, URL structure, content silos
 **Expertise:** Information architecture for SEO
 **Workload:** 0% | **Availability:** High
@@ -333,24 +383,24 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 #### Mobile & Specialized Development (4 Agents)
 
-##### 19. mobile-developer
+##### 21. mobile-developer
 **Domain:** iOS, Android, React Native, Flutter, app store deployment
 **Expertise:** Cross-platform mobile development, app store optimization
 **Workload:** 0% | **Availability:** High
 
-##### 20. backend-api-engineer
+##### 22. backend-api-engineer
 **Domain:** REST APIs, GraphQL, microservices, server-side logic
 **Expertise:** API design (41% improvement with AIL), authentication, authorization
 **Workload:** 0% | **Availability:** High
 **Recent:** AIL Sprint 2 integration (41% API design improvement)
 
-##### 21. debugging-specialist
+##### 23. debugging-specialist
 **Domain:** Issue resolution, root cause analysis, production troubleshooting
 **Expertise:** Debugging complex systems (48% improvement with AIL)
 **Workload:** 0% | **Availability:** High
 **Recent:** AIL Sprint 2 integration (48% issue resolution improvement)
 
-##### 22. frontend-performance-specialist
+##### 24. frontend-performance-specialist
 **Domain:** Core Web Vitals, bundle optimization, rendering performance
 **Expertise:** Frontend optimization (40% improvement with AIL)
 **Workload:** 0% | **Availability:** High
@@ -360,33 +410,33 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 #### DevOps & Infrastructure (6 Agents)
 
-##### 23. devops-engineer
+##### 25. devops-engineer
 **Domain:** CI/CD, Docker, Kubernetes, cloud deployment, application infrastructure
 **Expertise:** Container orchestration, deployment automation, monitoring
 **Workload:** 0% | **Availability:** High
 **Future:** Vertical Package 1 - SaaS Launch (Q1 2026)
 
-##### 24. linux-sysadmin
+##### 26. linux-sysadmin
 **Domain:** OS hardening, system services, bare metal/VM setup
 **Expertise:** systemd, kernel tuning, firewall configuration
 **Workload:** 0% | **Availability:** High
 
-##### 25. cloud-architect
+##### 27. cloud-architect
 **Domain:** Cloud architecture design, AWS/Azure/GCP, cost optimization
 **Expertise:** Multi-cloud strategy, scalability planning
 **Workload:** 0% | **Availability:** High
 
-##### 26. infrastructure-as-code-specialist
+##### 28. infrastructure-as-code-specialist
 **Domain:** Terraform, CloudFormation, IaC best practices
 **Expertise:** Infrastructure automation, version control for infrastructure
 **Workload:** 0% | **Availability:** High
 
-##### 27. site-reliability-engineer
+##### 29. site-reliability-engineer
 **Domain:** SRE practices, incident management, observability
 **Expertise:** SLO/SLI definition, error budgets, on-call processes
 **Workload:** 0% | **Availability:** High
 
-##### 28. observability-engineer
+##### 30. observability-engineer
 **Domain:** Monitoring, alerting, distributed tracing, metrics
 **Expertise:** Prometheus, Grafana, distributed system observability
 **Workload:** 0% | **Availability:** High
@@ -395,18 +445,18 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 #### Business Operations (3 Agents)
 
-##### 29. business-analyst
+##### 31. business-analyst
 **Domain:** Requirements gathering, stakeholder management, BRD, user stories
 **Expertise:** Process analysis, use case documentation
 **Workload:** 0% | **Availability:** High
 **Recent:** Growth validation requirements analysis
 
-##### 30. compliance-automation-engineer
+##### 32. compliance-automation-engineer
 **Domain:** Automated compliance testing, regulatory frameworks
 **Expertise:** SOC 2, GDPR, HIPAA automation
 **Workload:** 0% | **Availability:** High
 
-##### 31. developer-experience-engineer
+##### 33. developer-experience-engineer
 **Domain:** DX optimization, CLI tools, developer tooling
 **Expertise:** Reducing developer friction, improving workflows
 **Workload:** 0% | **Availability:** High
@@ -415,7 +465,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 #### Specialized Technical (13 Agents)
 
-##### 32-44. Other Extended Tier Agents
+##### 34-46. Other Extended Tier Agents
 - **database-administrator**: OLTP operations, database tuning, backups
 - **accessibility-expert**: WCAG compliance, inclusive design, screen reader testing
 - **functional-programmer**: Haskell, Clojure, F#, functional paradigms
@@ -439,27 +489,27 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 #### AI/ML Specialists (6 Agents)
 
-##### 45. llm-integration-architect
+##### 47. llm-integration-architect
 **Domain:** LLM orchestration, prompt engineering workflows
 **Workload:** 0% | **Availability:** High
 
-##### 46. fine-tuning-specialist
+##### 48. fine-tuning-specialist
 **Domain:** Model fine-tuning, custom model training
 **Workload:** 0% | **Availability:** High
 
-##### 47. generative-image-specialist
+##### 49. generative-image-specialist
 **Domain:** Stable Diffusion, DALL-E, image generation
 **Workload:** 0% | **Availability:** High
 
-##### 48. inference-optimization-specialist
+##### 50. inference-optimization-specialist
 **Domain:** Model serving, inference speed optimization
 **Workload:** 0% | **Availability:** High
 
-##### 49. prompt-engineering-specialist
+##### 51. prompt-engineering-specialist
 **Domain:** Advanced prompting techniques, chain-of-thought
 **Workload:** 0% | **Availability:** High
 
-##### 50. rag-systems-engineer
+##### 52. rag-systems-engineer
 **Domain:** RAG architecture, retrieval optimization
 **Workload:** 0% | **Availability:** High
 
@@ -467,27 +517,27 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 #### Creative Agents (10 Agents)
 
-##### 51. digital-artist
+##### 53. digital-artist
 **Domain:** Digital art creation, visual assets
 **Workload:** 0% | **Availability:** High
 
-##### 52. video-director
+##### 54. video-director
 **Domain:** Video production, storytelling
 **Workload:** 0% | **Availability:** High
 
-##### 53. audio-engineer
+##### 55. audio-engineer
 **Domain:** Audio production, sound design
 **Workload:** 0% | **Availability:** High
 
-##### 54. comedy-writer
+##### 56. comedy-writer
 **Domain:** Comedic content, humor writing
 **Workload:** 0% | **Availability:** High
 
-##### 55. tv-writer
+##### 57. tv-writer
 **Domain:** Television writing, episodic content
 **Workload:** 0% | **Availability:** High
 
-##### 56-60. Other Creative Agents
+##### 58-62. Other Creative Agents
 - **3d-modeler**: 3D asset creation
 - **music-composer**: Musical composition
 - **game-designer**: Game design, mechanics
@@ -504,7 +554,7 @@ The ClaudeAgents platform consists of 73 specialized agents organized into strat
 
 #### Platform Specialists (13 Agents)
 
-##### 61-73. Platform & Specialized Agents
+##### 63-75. Platform & Specialized Agents
 - **macos-specialist**: macOS development and tooling
 - **windows-specialist**: Windows development and tooling
 - **kafka-expert**: Kafka streaming, event-driven architecture
