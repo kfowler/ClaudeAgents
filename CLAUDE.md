@@ -145,6 +145,39 @@ When decisions span multiple domains, engage multiple contrarians sequentially o
 - Architecture decision with business impact: `the-critic` (technical analysis) + `the-realist` (cost/ROI) + `the-pragmatist` (implementation time)
 - See `project-orchestrator` for multi-contrarian coordination patterns
 
+**Structured Output Contracts (Sprint 17 Enhancement):**
+Contrarian agents now provide structured JSON outputs for improved interoperability and reduced variance:
+
+- **the-critic** produces `DECISION_REPORT` with:
+  - `dominant_axis`: The ONE factor that matters most in the decision
+  - `alternatives`: Each option evaluated with evidence quality scores (0.0-1.0)
+  - `false_tradeoffs_identified`: Binary choices that are actually false
+  - `emotional_economy`: Hidden psychological forces (fear, ego, politics)
+  - `required_proofs`: Specific evidence needed with acceptance criteria
+  - `recommendation`: Choice with confidence score and invalidation triggers
+
+- **the-skeptic** produces `AUTOMATION_ASSESSMENT` with:
+  - `suitability_analysis`: Good-fit vs poor-fit indicators with severity ratings
+  - `alternatives_explored`: Do-nothing, process improvement, better tools, hybrid, full automation
+  - `hidden_costs_analysis`: Implementation, ongoing, opportunity, and risk costs quantified
+  - `recommendation`: Verdict (do_not_automate, hybrid, pilot, proceed) with confidence
+  - `decision_rules`: Executable gates (poor_fit >= 2, ROI < 3x → reject automation)
+
+- **the-pragmatist** produces `DELIVERABILITY_ASSESSMENT` with:
+  - `capacity_analysis`: Available hours = team_size × weeks × 40 × 0.65
+  - `scope_analysis`: Required hours with 1.3x buffer multiplier
+  - `mvp_bloat_analysis`: Features proposed vs truly minimum (bloat ratio)
+  - `gates_triggered`: Mandate scope cut, extend timeline, or cancel project
+  - `required_proofs`: Vertical slice demo, deploy pipeline proven with timelines
+
+These structured outputs enable:
+- Chaining contrarian agents (the-skeptic → the-pragmatist → the-critic)
+- Automated validation of decision quality
+- Consistent evidence requirements across decisions
+- Reduced variance in recommendations
+
+See `tests/seed_templates/` for golden JSON examples and validation rules.
+
 ## Development Commands
 
 This project is a collection of markdown-based agent and command definitions. There are no build or test commands as this is a documentation/configuration repository for Claude Code agents.
