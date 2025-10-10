@@ -2,7 +2,7 @@
 
 **Command:** `/development:cognitive-archaeology`
 
-**Agents:** `ai-ml-engineer`, `data-engineer`, `technical-writer`
+**Agents:** `llm-integration-architect`, `data-engineer`, `technical-writer`
 
 **Complexity:** High
 

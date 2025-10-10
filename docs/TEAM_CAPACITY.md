@@ -1,15 +1,15 @@
 # ClaudeAgents Team Capacity & Expertise
 
 **Last Updated:** 2025-10-10
-**Total Agents:** 75 specialized agents
+**Total Agents:** 70 specialized agents (8 deprecated October 2025)
 **Active This Week:** 8 agents across 3 initiatives
-**Version:** 1.1
+**Version:** 1.2
 
 ---
 
 ## Executive Summary
 
-The ClaudeAgents platform consists of 75 specialized agents organized into strategic tiers (Core, Extended, Experimental) across 15+ domains. This document maps agent expertise, current workload, and capacity to ensure optimal task allocation and prevent overload.
+The ClaudeAgents platform consists of 70 specialized agents organized into strategic tiers (Core, Extended, Experimental) across 15+ domains. In October 2025, 8 agents were deprecated to improve platform coherence and reduce cognitive load (see [Deprecation Report](DEPRECATION_REPORT_2025-10.md)). This document maps agent expertise, current workload, and capacity to ensure optimal task allocation and prevent overload.
 
 **Current Capacity Utilization (Week of Oct 8-14):**
 - Total available agent capacity: ~300 hours/week

@@ -35,7 +35,7 @@ This document outlines the architecture and implementation plan for integrating 
 │                          ┌─────────────▼──────────────┐         │
 │                          │  MCP-Aware Agents          │         │
 │                          │  - full-stack-architect    │         │
-│                          │  - ai-ml-engineer          │         │
+│                          │  - llm-integration-architect│         │
 │                          │  - devops-engineer         │         │
 │                          │  - data-engineer           │         │
 │                          │  - systems-engineer        │         │
@@ -185,7 +185,7 @@ This document outlines the architecture and implementation plan for integrating 
    - **Use Cases:** Code analysis, issue tracking, file inspection
    - **Integration Point:** Add MCP tool discovery to agent initialization
 
-2. **ai-ml-engineer**
+2. **llm-integration-architect**
    - **MCP Tools:** search_code, read_file, analyze_pr
    - **Use Cases:** Model code review, data pipeline inspection
    - **Integration Point:** Extend agent with MCP-aware code analysis

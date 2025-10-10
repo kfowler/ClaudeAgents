@@ -387,7 +387,7 @@ These agents handle general development, coordination, and moderate complexity t
 
 1. **full-stack-architect**: Web application development
 2. **mobile-developer**: iOS/Android app development
-3. **ai-ml-engineer**: ML integration and RAG systems
+3. **llm-integration-architect** and **rag-systems-engineer**: ML integration and RAG systems
 4. **data-engineer**: Database design and data pipelines
 5. **devops-engineer**: CI/CD and infrastructure
 6. **systems-engineer**: Systems programming (Rust, C++, Go)

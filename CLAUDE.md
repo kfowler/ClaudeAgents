@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 71 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, SEO optimization, creative production, and more.
+This repository contains specialized AI agent definitions and commands for Claude Code. It provides a comprehensive ecosystem of 70 specialized agents that can autonomously handle complex software development tasks across multiple domains including web development, mobile apps, AI/ML integration, security, business operations, SEO optimization, creative production, and more.
 
 ## Architecture & Structure
 
@@ -27,6 +27,8 @@ This repository contains specialized AI agent definitions and commands for Claud
 Agent selection is based on keyword matching, task type analysis, and domain expertise. See [System Architecture](docs/architecture.md) for detailed information on agent selection patterns and multi-agent orchestration.
 
 ## Agent Selection Guide
+
+**Note on Deprecated Agents (October 2025):** 8 agents were deprecated to improve platform usability and reduce cognitive load. All deprecated agents have complete death certificates with migration paths in `tools/death_certificates/`. Deprecated agents are archived in `agents/deprecated/` for reference. See [Deprecation Report](docs/DEPRECATION_REPORT_2025-10.md) for details.
 
 ### For New Projects/Products
 Start with `product-strategist` for market validation, then use `project-orchestrator` for execution planning.
@@ -193,12 +195,6 @@ Contrarian agents now provide structured JSON outputs for improved interoperabil
   - `required_proofs`: Specific evidence needed with acceptance criteria
   - `recommendation`: Choice with confidence score and invalidation triggers
 
-- **the-skeptic** produces `AUTOMATION_ASSESSMENT` with:
-  - `suitability_analysis`: Good-fit vs poor-fit indicators with severity ratings
-  - `alternatives_explored`: Do-nothing, process improvement, better tools, hybrid, full automation
-  - `hidden_costs_analysis`: Implementation, ongoing, opportunity, and risk costs quantified
-  - `recommendation`: Verdict (do_not_automate, hybrid, pilot, proceed) with confidence
-  - `decision_rules`: Executable gates (poor_fit >= 2, ROI < 3x → reject automation)
 
 - **the-pragmatist** produces `DELIVERABILITY_ASSESSMENT` with:
   - `capacity_analysis`: Available hours = team_size × weeks × 40 × 0.65
@@ -208,7 +204,7 @@ Contrarian agents now provide structured JSON outputs for improved interoperabil
   - `required_proofs`: Vertical slice demo, deploy pipeline proven with timelines
 
 These structured outputs enable:
-- Chaining contrarian agents (the-skeptic → the-pragmatist → the-critic)
+- Chaining contrarian agents (the-pragmatist → the-realist → the-critic)
 - Automated validation of decision quality
 - Consistent evidence requirements across decisions
 - Reduced variance in recommendations
@@ -240,7 +236,8 @@ This project is a collection of markdown-based agent and command definitions. Th
 - "backend API", "REST API", "GraphQL", "microservices" → `backend-api-engineer`
 - "server-side", "API design", "authentication" → `backend-api-engineer`
 - "iOS", "Android", "mobile", "app store" → `mobile-developer`
-- "AI", "LLM", "RAG" → `ai-ml-engineer`
+- "AI", "LLM integration", "multi-model" → `llm-integration-architect`
+- "RAG", "vector database", "semantic search" → `rag-systems-engineer`
 - "security audit", "vulnerability" → `security-audit-specialist`
 - "test", "QA" → `qa-test-engineer`
 - "performance", "Core Web Vitals", "bundle size", "LCP", "optimize frontend" → `frontend-performance-specialist`
@@ -306,7 +303,6 @@ This project is a collection of markdown-based agent and command definitions. Th
 ### Anti-Patterns to Avoid
 - Don't use overlapping agents simultaneously (e.g., multiple code reviewers)
 - Don't skip security/accessibility for production deployments
-- Don't implement AI features without `ai-ml-engineer`
 - Don't start complex projects without `project-orchestrator`
 - Don't use `full-stack-architect` for React Native (use `mobile-developer`)
 - Don't use `devops-engineer` for OS-level configuration (use `linux-sysadmin`)

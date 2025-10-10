@@ -352,7 +352,7 @@ export ALLOWED_PATHS=/path1:/path2
 Five agents have been enhanced with MCP tool awareness:
 
 1. **full-stack-architect** - Code analysis, issue tracking
-2. **ai-ml-engineer** - Model code review, pipeline inspection
+2. **llm-integration-architect** - Model code review, pipeline inspection
 3. **devops-engineer** - Configuration review, deployment verification
 4. **data-engineer** - Schema analysis, data pipeline review
 5. **systems-engineer** - Performance analysis, systems code review

@@ -35,7 +35,7 @@ The `/debate` command orchestrates a structured argument between 2-3 agents with
 **Example:**
 - **Question:** "Should we use PostgreSQL or MongoDB?"
 - **Traditional:** Single agent recommends one
-- **Debate:** data-engineer (PostgreSQL) vs ai-ml-engineer (MongoDB vector search) vs the-skeptic ("neither, use managed service")
+- **Debate:** data-engineer (PostgreSQL) vs rag-systems-engineer (vector database) vs the-critic ("neither, use managed service")
 
 ### When Disagreement Adds Value
 
@@ -90,7 +90,7 @@ The `/debate` command orchestrates a structured argument between 2-3 agents with
 
 **Debaters:**
 - **Agent A:** Performance-focused (e.g., systems-engineer)
-- **Agent B:** Simplicity-focused (e.g., the-skeptic)
+- **Agent B:** Simplicity-focused (e.g., the-pragmatist)
 - **Moderator:** the-critic
 
 **Deliverable:**
@@ -130,7 +130,7 @@ The `/debate` command orchestrates a structured argument between 2-3 agents with
 **Example:**
 - **Proposal:** "Let's use serverless architecture"
 - **Challenger 1:** devops-engineer (operational complexity)
-- **Challenger 2:** the-skeptic (cost overruns)
+- **Challenger 2:** the-realist (cost overruns)
 - **Challenger 3:** systems-engineer (performance unpredictability)
 - **Moderator:** the-critic
 
@@ -216,7 +216,7 @@ Agents challenge each other's assumptions:
 - Mature ecosystem (pgAdmin, pg_stat_statements, etc.)
 - Horizontal scaling via Citus extension
 
-**Agent B: ai-ml-engineer (MongoDB)**
+**Agent B: rag-systems-engineer (Vector Database)**
 
 **Opening Statement:**
 > "MongoDB excels for evolving data models and vector search. Your analytics platform will grow—PostgreSQL migrations break things. MongoDB's flexible schema lets you iterate fast. Native vector search (Atlas Vector Search) for AI-powered insights without external service. Aggregation pipeline more intuitive than SQL for data scientists."
@@ -277,7 +277,7 @@ Agents challenge each other's assumptions:
 - Technical debt accumulates exponentially
 - "We'll optimize later" rarely happens
 
-**Agent B: the-skeptic (Optimize Later)**
+**Agent B: the-pragmatist (Optimize Later)**
 
 **Opening Statement:**
 > "You don't have 10K users. You have 0 users. Premature optimization is procrastination disguised as engineering. You're guessing at bottlenecks. 90% of your optimizations will target the wrong thing. Ship, measure, optimize what actually matters. Every hour optimizing is an hour not validating product-market fit."
@@ -427,7 +427,7 @@ Agents challenge each other's assumptions:
 /debate "PostgreSQL vs MongoDB for analytics platform"
 
 # Specify agents
-/debate "performance vs simplicity" --agents=systems-engineer,the-skeptic
+/debate "performance vs simplicity" --agents=systems-engineer,the-pragmatist
 
 # Multi-agent debate
 /debate "authentication approach" --agents=security-audit-specialist,accessibility-expert,product-manager
@@ -482,7 +482,7 @@ Agents challenge each other's assumptions:
 ## Related Agents
 
 - **the-critic** - Default moderator for debates
-- **the-skeptic** - Questions all automation assumptions
+- **the-critic** - Questions all automation assumptions
 - **project-orchestrator** - Coordinates multi-agent workflows
 
 ---

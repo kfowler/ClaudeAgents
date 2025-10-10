@@ -1,8 +1,7 @@
 ---
 name: production-learning-loop
-description: "Automated organizational memory system coordinating incident-coordinator, site-reliability-engineer, technical-writer, and observability-engineer to extract patterns from production incidents, synthesize root causes, generate runbooks, and build self-improving system intelligence that captures tribal knowledge"
+description: "Automated organizational memory system coordinating site-reliability-engineer, technical-writer, and observability-engineer to extract patterns from production incidents, synthesize root causes, generate runbooks, and build self-improving system intelligence that captures tribal knowledge"
 agents:
-  - incident-coordinator
   - site-reliability-engineer
   - technical-writer
   - observability-engineer
@@ -13,7 +12,7 @@ duration: 8-12 hours (initial setup), continuous operation
 # Production Learning Loop Workflow
 
 **Command:** `/operations:production-learning-loop`
-**Agents:** `incident-coordinator`, `site-reliability-engineer`, `technical-writer`, `observability-engineer`
+**Agents:** `site-reliability-engineer`, `technical-writer`, `observability-engineer`
 **Complexity:** High
 **Duration:** 8-12 hours (initial setup), continuous operation
 
@@ -108,7 +107,7 @@ Apply ML and statistical analysis to identify incident patterns:
 - Predictive alerting for high-risk patterns
 
 ### Phase 3: Root Cause Synthesis (1-2 hours initial, continuous)
-**Lead:** `incident-coordinator`
+**Lead:** `site-reliability-engineer`
 
 Synthesize deep understanding across related incidents:
 
@@ -305,7 +304,7 @@ Implement self-improving intelligence through feedback:
 - ML model retraining and optimization
 
 ### Phase 8: Organization-Wide Learning Distribution (1 hour initial, continuous)
-**Lead:** `incident-coordinator`
+**Lead:** `site-reliability-engineer`
 
 Share learnings across the organization effectively:
 
@@ -483,7 +482,7 @@ Share learnings across the organization effectively:
 
 **Tribal Knowledge Extraction:** Solves the critical problem of knowledge loss when senior engineers leave or move to other teams. System intelligence captures and codifies expert knowledge that typically lives only in people's heads.
 
-**Multi-Agent Coordination:** Requires coordination between four specialists - incident-coordinator for synthesis, site-reliability-engineer for pattern analysis, technical-writer for knowledge capture, and observability-engineer for data infrastructure. Incident-coordinator leads overall workflow.
+**Multi-Agent Coordination:** Requires coordination between three specialists - site-reliability-engineer for synthesis and pattern analysis, technical-writer for knowledge capture, and observability-engineer for data infrastructure. Site-reliability-engineer leads overall workflow.
 
 **Continuous Operation:** Initial setup takes 8-12 hours, but system operates continuously thereafter, processing incidents in real-time and updating knowledge automatically.
 

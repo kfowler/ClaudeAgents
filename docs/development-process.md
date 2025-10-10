@@ -335,7 +335,7 @@ Is this a complex multi-step task?
         ├─ Database → data-engineer
         ├─ Web Development → full-stack-architect
         ├─ Mobile → mobile-developer
-        ├─ AI/ML → ai-ml-engineer
+        ├─ AI/ML → llm-integration-architect, rag-systems-engineer
         └─ Legacy Systems → legacy-specialist
 ```
 

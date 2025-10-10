@@ -83,7 +83,7 @@ Use `/saas-mvp` when you need to:
 - `full-stack-architect` - Frontend and backend implementation
 - `backend-api-engineer` - RESTful/GraphQL API development
 - `data-engineer` - Database design and optimization
-- `ai-ml-engineer` - AI features (if applicable)
+- `llm-integration-architect` - AI features (if applicable)
 
 **Implementation Areas:**
 
@@ -297,7 +297,7 @@ Use `/saas-mvp` when you need to:
 - **Tech Stack Recommendation**: Next.js + FastAPI + PostgreSQL + OpenAI API
 - **Pricing**: $49/mo (Starter), $149/mo (Professional), $499/mo (Enterprise)
 
-### Phase 2: Implementation (full-stack-architect, ai-ml-engineer, data-engineer)
+### Phase 2: Implementation (full-stack-architect, llm-integration-architect, data-engineer)
 - **Frontend**: Next.js dashboard with Chart.js visualizations
 - **Backend**: FastAPI with async endpoints, Shopify webhook integration
 - **Database**: PostgreSQL with TimescaleDB extension for time-series data

@@ -417,13 +417,13 @@ python tools/agent_discovery.py "app store deployment"
 
 ```bash
 python tools/agent_discovery.py "llm integration rag system"
-# → ai-ml-engineer
+# → llm-integration-architect
 
 python tools/agent_discovery.py "vector database embeddings"
-# → ai-ml-engineer
+# → llm-integration-architect
 
 python tools/agent_discovery.py "machine learning pipeline"
-# → ai-ml-engineer, data-engineer
+# → llm-integration-architect, data-engineer
 ```
 
 ### DevOps/Infrastructure

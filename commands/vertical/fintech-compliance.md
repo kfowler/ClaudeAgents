@@ -291,8 +291,8 @@ Use `/fintech-compliance` when you need to:
 **Agents:**
 - `security-audit-specialist` - Comprehensive security audit
 - `qa-test-engineer` - Compliance testing
-- `incident-coordinator` - Incident simulation
-- `the-skeptic` - Risk assessment
+- `site-reliability-engineer` - Incident simulation
+- `the-critic` - Risk assessment
 
 **Testing & Validation:**
 
@@ -349,7 +349,7 @@ Use `/fintech-compliance` when you need to:
 **Agents:**
 - `devops-engineer` - Secure deployment
 - `observability-engineer` - Security monitoring
-- `incident-coordinator` - Runbooks and playbooks
+- `site-reliability-engineer` - Runbooks and playbooks
 - `technical-writer` - Operations documentation
 
 **Production Readiness:**

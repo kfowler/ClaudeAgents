@@ -1,8 +1,7 @@
 ---
 name: incident-response-workflow
-description: "Production incident management workflow coordinating incident-coordinator, site-reliability-engineer, devops-engineer, and technical-writer to deliver structured incident detection, triage, resolution, communication, and blameless postmortems"
+description: "Production incident management workflow coordinating site-reliability-engineer, devops-engineer, and technical-writer to deliver structured incident detection, triage, resolution, communication, and blameless postmortems"
 agents:
-  - incident-coordinator
   - site-reliability-engineer
   - devops-engineer
   - technical-writer
@@ -13,7 +12,7 @@ duration: 2-4 hours (initial setup), continuous operation during incidents
 # Incident Response Workflow
 
 **Command:** `/operations:incident-response-workflow`
-**Agents:** `incident-coordinator`, `site-reliability-engineer`, `devops-engineer`, `technical-writer`
+**Agents:** `site-reliability-engineer`, `devops-engineer`, `technical-writer`
 **Complexity:** High
 **Duration:** 2-4 hours (initial setup), continuous operation during incidents
 
@@ -125,7 +124,7 @@ Detect incidents quickly and initiate structured response:
   - "We are investigating [issue]. Estimated impact: [X% of users/transactions]"
 
 ### Phase 2: Incident Triage and War Room Coordination (5-30 minutes)
-**Lead:** `incident-coordinator`
+**Lead:** `site-reliability-engineer`
 
 Establish structured incident command and coordinate response:
 
@@ -380,7 +379,7 @@ Restore service and resolve root cause:
   - All systems green
 
 ### Phase 5: Communication and Stakeholder Updates (Throughout incident)
-**Lead:** `incident-coordinator` + `technical-writer`
+**Lead:** `site-reliability-engineer` + `technical-writer`
 
 Maintain clear, timely communication with all stakeholders:
 
@@ -503,7 +502,7 @@ Maintain clear, timely communication with all stakeholders:
   - Regular updates (every 30-60 minutes for P0)
 
 ### Phase 6: Post-Incident Review and Learning (Within 5 business days)
-**Lead:** `technical-writer` + `incident-coordinator`
+**Lead:** `technical-writer` + `site-reliability-engineer`
 
 Conduct blameless postmortem and extract learnings:
 

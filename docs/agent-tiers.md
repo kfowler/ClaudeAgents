@@ -57,14 +57,14 @@ The ClaudeAgents ecosystem uses a three-tier system to organize agents based on 
 
 **Decision Support:**
 10. **the-critic** - Technical decision analysis
-11. **the-skeptic** - Automation skepticism, alternative approaches
+11. **the-realist** - Business and market contrarian analysis
 
 **Business:**
 12. **product-strategist** - Market validation, competitive analysis
 
 **Potential Additions (Pending Data):**
 - frontend-performance-specialist (if high usage)
-- ai-ml-engineer (if high usage in AI projects)
+- llm-integration-architect, rag-systems-engineer (if high usage in AI projects)
 - database-administrator (if operational DB needs common)
 
 ### Core Tier Benefits
@@ -123,7 +123,7 @@ The ClaudeAgents ecosystem uses a three-tier system to organize agents based on 
 - functional-programmer (Haskell, Clojure, F#)
 - game-development-engineer (Unity, Unreal Engine)
 - blockchain-web3-engineer (Solidity, DeFi, NFTs)
-- embedded-iot-developer (ESP32, STM32, RTOS)
+- [DEPRECATED] embedded-iot-developer → systems-engineer
 
 **Quality Specialists:**
 - frontend-performance-specialist (Core Web Vitals)
@@ -135,9 +135,9 @@ The ClaudeAgents ecosystem uses a three-tier system to organize agents based on 
 - cloud-architect (Multi-cloud strategy)
 - infrastructure-as-code-specialist (Terraform, Pulumi)
 - platform-engineering-specialist (Backstage, IDPs)
-- edge-computing-specialist (Cloudflare Workers)
+- [DEPRECATED] edge-computing-specialist → devops-engineer, cloud-architect
 - observability-engineer (Distributed tracing, SLOs)
-- incident-coordinator (Incident response)
+- [DEPRECATED] incident-coordinator → site-reliability-engineer
 - database-administrator (Production DB operations)
 - linux-sysadmin (System administration, OS hardening)
 
@@ -155,9 +155,9 @@ The ClaudeAgents ecosystem uses a three-tier system to organize agents based on 
 - technical-writer (API docs, user guides)
 
 **Specialized:**
-- platform-integrator (Native platform APIs)
+- [DEPRECATED] platform-integrator → domain-specific specialists
 - legacy-specialist (Legacy code migration)
-- merge-conflict-resolver (Git conflicts)
+- [DEPRECATED] merge-conflict-resolver → domain specialists
 
 ### Extended Tier Benefits
 
@@ -220,13 +220,13 @@ The ClaudeAgents ecosystem uses a three-tier system to organize agents based on 
 - tv-writer (Television scripts, procedurals)
 
 **Niche Development:**
-- elisp-specialist (Emacs configuration)
+- [DEPRECATED] elisp-specialist → metaprogramming-specialist
 - metaprogramming-specialist (Lisp, macros, DSLs)
 
 **Emerging Composites** (Example placeholders):
 - mobile-security-specialist (mobile-developer + security-audit-specialist)
 - performance-accessibility-specialist (frontend-performance + accessibility-expert)
-- data-ml-engineer (data-engineer + ai-ml-engineer)
+- data-ml-engineer (data-engineer + llm-integration-architect)
 
 ### Experimental Tier Characteristics
 
