@@ -43,6 +43,7 @@ class TierManager:
         "full-stack-architect",
         "backend-api-engineer",
         "mobile-developer",
+        "ai-ml-engineer",
         "security-audit-specialist",
         "qa-test-engineer",
         "code-architect",
@@ -89,12 +90,14 @@ class TierManager:
         "platform-integrator",
         "legacy-specialist",
         "merge-conflict-resolver",
-        "ai-ml-engineer",
     }
 
     EXPERIMENTAL_AGENTS = {
         # Creative & Specialized
         "creative-catalyst",
+        "the-inventor",
+        "the-synthesist",
+        "the-architect-of-experiments",
         "digital-artist",
         "video-director",
         "audio-engineer",
@@ -514,7 +517,7 @@ class AgentDiscoveryEngine:
         "full-stack-architect": ["web", "react", "next.js", "frontend", "backend", "api", "full-stack", "web app", "webapp", "application"],
         "backend-api-engineer": ["backend", "api", "rest", "graphql", "microservices", "server"],
         "mobile-developer": ["mobile", "ios", "android", "react native", "flutter", "app"],
-        "ai-ml-engineer": ["ai", "ml", "llm", "rag", "vector", "machine learning", "chatbot"],
+        "ai-ml-engineer": ["ai", "ml", "llm", "rag", "vector", "machine learning", "chatbot", "ai integration", "artificial intelligence"],
         "data-engineer": ["data", "pipeline", "etl", "analytics", "database", "sql"],
         "devops-engineer": ["devops", "ci/cd", "docker", "kubernetes", "deploy", "infrastructure"],
         "security-audit-specialist": ["security", "vulnerability", "auth", "compliance", "audit"],
@@ -531,10 +534,10 @@ class AgentDiscoveryEngine:
         "technical-writer": ["documentation", "api docs", "user guide", "tutorial", "readme"],
         "business-analyst": ["requirements", "stakeholder", "brd", "user stories", "analysis"],
         "product-manager": ["product", "roadmap", "okr", "prioritization", "product strategy"],
-        "the-inventor": ["ideation", "brainstorming", "ideas", "divergent", "creativity"],
-        "the-synthesist": ["synthesis", "framing", "convergent", "organize", "coherence"],
-        "the-architect-of-experiments": ["experiment", "hypothesis", "validation", "mvp", "testing"],
-        "creative-catalyst": ["creative", "oblique strategies", "lateral thinking", "innovation"],
+        "the-inventor": ["ideation", "brainstorming", "ideas", "divergent", "creativity", "inventor", "invention", "generate", "explore", "workflow"],
+        "the-synthesist": ["synthesis", "framing", "convergent", "organize", "coherence", "synthesist", "combine", "integrate", "workflow", "ideation"],
+        "the-architect-of-experiments": ["experiment", "hypothesis", "validation", "mvp", "testing", "architect", "design", "falsifiable", "workflow", "ideation"],
+        "creative-catalyst": ["creative", "oblique strategies", "lateral thinking", "innovation", "catalyst", "disruption"],
         "the-critic": ["decision", "analysis", "tradeoffs", "evaluation", "critique"],
         "product-strategist": ["strategy", "market", "validation", "product-market fit", "startup"],
         "linux-sysadmin": ["linux", "systemd", "kernel", "firewall", "os", "sysadmin"],
@@ -621,17 +624,29 @@ class AgentDiscoveryEngine:
 
     def _keyword_match_score(self, agent_name: str, query: str) -> float:
         """Score based on keyword matching"""
+        # Check if query matches agent name directly (highest priority)
+        if agent_name == query or agent_name.replace("-", " ") == query:
+            return 1.0  # Perfect match
+
         if agent_name not in self.AGENT_KEYWORDS:
             return 0.0
 
         keywords = self.AGENT_KEYWORDS[agent_name]
-        matches = sum(1 for kw in keywords if kw in query)
+        query_words = set(query.split())
 
-        if matches == 0:
+        # Check for exact keyword matches (worth more)
+        exact_matches = sum(1 for kw in keywords if kw == query or kw in query_words)
+        # Check for partial matches (keyword appears as substring in query)
+        partial_matches = sum(1 for kw in keywords if kw != query and kw in query and kw not in query_words)
+
+        total_matches = exact_matches * 2 + partial_matches  # Exact matches worth double
+
+        if total_matches == 0:
             return 0.0
 
         # Normalize by keyword count (more matches = higher score)
-        return min(matches / len(keywords), 1.0)
+        # Cap at 1.0 but allow exact matches to boost score significantly
+        return min(total_matches / len(keywords), 1.0)
 
     def _intent_alignment_score(self, agent_name: str, query: str) -> float:
         """Score based on domain intent alignment"""

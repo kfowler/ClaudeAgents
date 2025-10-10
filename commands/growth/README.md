@@ -6,7 +6,7 @@ This directory contains 5 growth-focused commands designed as a **demand validat
 
 ## Validation Hypothesis
 
-**Question:** Is there sufficient demand for growth-specific functionality to justify building a dedicated `growth-engineer` agent?
+**Question:** Is there sufficient demand for growth-specific functionality to justify building a dedicated growth-engineer agent?
 
 **Approach:** Build 5 high-value commands (1-2 hours each) that solve real growth problems using existing agents. Track usage for 60-90 days to validate demand.
 
@@ -206,7 +206,7 @@ These commands leverage existing agents' expertise:
 
 ## Future Growth Agent Scope (If Validated)
 
-Based on validation results, a dedicated `growth-engineer` agent would:
+Based on validation results, a dedicated growth-engineer agent would:
 
 ### Core Capabilities
 - Growth model design and metric selection

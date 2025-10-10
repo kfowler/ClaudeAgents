@@ -248,7 +248,7 @@ tools/
 
 **Question:** Is there demand for growth-specific functionality?
 
-**Hypothesis:** If users invoke these commands 20+ times across 10+ users with 70%+ completion rates over 90 days, we should build a dedicated `growth-engineer` agent.
+**Hypothesis:** If users invoke these commands 20+ times across 10+ users with 70%+ completion rates over 90 days, we should build a dedicated growth-engineer agent.
 
 **Why This Validates Demand:**
 - **Usage frequency** shows problem is common enough to warrant investment
