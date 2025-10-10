@@ -244,6 +244,38 @@ Intelligent agent selection based on task context, reducing user cognitive load 
 
 ---
 
+#### 4. Contrarian Agent Diversification (Sprint 17)
+**Owner:** technical-writer
+**Team:** product-strategist, product-manager, the-critic
+**Effort:** 6-8 hours total (3-4 hours per agent)
+**Timeline:** Week of Oct 22-28
+
+**Description:**
+Create the-realist and the-pragmatist agents to complement the-critic with business/market and execution/shipping contrarian perspectives.
+
+**Tasks:**
+- [ ] Create the-realist agent (business/market contrarian)
+  - [ ] Agent definition with YAML frontmatter
+  - [ ] Contrarian bias focus on market sizing, ROI, competitive analysis
+  - [ ] Context boundaries and example scenarios
+  - [ ] Review by product-strategist and the-critic
+- [ ] Create the-pragmatist agent (execution/shipping contrarian)
+  - [ ] Agent definition with YAML frontmatter
+  - [ ] Contrarian bias focus on MVP scope, deadlines, build vs buy
+  - [ ] Context boundaries and example scenarios
+  - [ ] Review by product-manager and the-critic
+- [ ] Update CLAUDE.md with contrarian selection guide (already complete)
+- [ ] Add agents to tier system (likely Core tier given strategic value)
+
+**Success Criteria:**
+- Both agents complete with rigorous definitions
+- Clear differentiation from the-critic (no overlap)
+- Integration patterns documented in project-orchestrator
+- Reviewed and validated by supporting agents
+- Added to agents/ directory and CLAUDE.md
+
+---
+
 ## Backlog (Prioritized by Business Value Score)
 
 ### Priority 1: High Impact, Low Effort
@@ -659,6 +691,30 @@ Auto-select optimal agents based on project context, eliminating manual selectio
 **Decision:** Build comprehensive AIL system with performance dashboard
 **Rationale:** 47% performance improvement measurable, unique in market, production-ready
 **Outcome:** 7 agents integrated, dashboard live
+
+---
+
+### Decision 4: Contrarian Agent Diversification (Oct 10, 2025)
+**Context:** Meta-debate on the-critic agent effectiveness and overlap with domain specialists
+**Decision:** DIVERSIFY + CLARIFY BOUNDARIES
+  - Keep the-critic with explicit context boundaries (technical decisions only)
+  - Create the-realist for business/market contrarian input (Sprint 17)
+  - Create the-pragmatist for execution/shipping contrarian input (Sprint 17)
+**Rationale:**
+  - the-critic has proven value in technical architecture debates
+  - Different decision types need different contrarian perspectives
+  - Technical contrarian (the-critic) ≠ Business contrarian (the-realist) ≠ Execution contrarian (the-pragmatist)
+  - Context boundaries prevent mismatched criticism (e.g., technical contrarian on marketing decisions)
+**Outcome:**
+  - the-critic.md updated with appropriate/inappropriate context sections
+  - CLAUDE.md updated with contrarian agent decision-type mapping
+  - project-orchestrator.md updated with multi-contrarian coordination patterns
+  - Sprint 17 tasks created for the-realist and the-pragmatist agents
+**Impact:**
+  - Users can select appropriate contrarian for decision domain
+  - Multi-contrarian debates coordinate better (parallel vs sequential patterns)
+  - Prevents context boundary violations (wrong contrarian for wrong decision)
+  - Enables cross-domain decisions with multiple contrarians
 
 ---
 
