@@ -746,11 +746,11 @@ Auto-select optimal agents based on project context, eliminating manual selectio
 
 ## References
 
-- [Strategic Product Roadmap](STRATEGIC_PRODUCT_ROADMAP.md) - Detailed market analysis
+- [Strategic Product Roadmap Archive](archive/roadmaps/STRATEGIC_PRODUCT_ROADMAP_2025-10-07.md) - Historical market analysis (archived)
 - [Competitive Analysis 2025](competitive-analysis-2025.md) - Market positioning
 - [Session Summary Oct 8](SESSION_SUMMARY_2025_10_08.md) - Recent achievements
 - [Death Certificates Marketing Plan](DEATH_CERTIFICATES_MARKETING_PLAN.md) - Viral strategy
-- [AIL Performance Dashboard](AIL_PERFORMANCE_DASHBOARD.md) - Monitoring guide
+- [AIL Performance Dashboard](components/ail/AIL_PERFORMANCE_DASHBOARD.md) - Monitoring guide
 - [Task Allocation](TASK_ALLOCATION.md) - Current work assignments
 - [Team Capacity](TEAM_CAPACITY.md) - Agent expertise and availability
 

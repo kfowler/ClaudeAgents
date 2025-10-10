@@ -430,13 +430,13 @@ provider.get_context("file2.py", "Question 2")
 
 ### Core Documents
 
-1. **[Test Strategy](../docs/AIL_SPRINT_1_TEST_STRATEGY.md)**
+1. **[Test Strategy](../docs/components/ail/AIL_SPRINT_1_TEST_STRATEGY.md)**
    - Comprehensive testing approach
    - Test architecture and coverage
    - Performance requirements
    - Implementation plan
 
-2. **[Quality Report](../docs/AIL_SPRINT_1_QUALITY_REPORT.md)**
+2. **[Quality Report](../docs/components/ail/AIL_SPRINT_1_QUALITY_REPORT.md)**
    - Quality improvement results
    - Performance benchmarks
    - Risk assessment
@@ -489,7 +489,7 @@ provider.initialize()
 
 **Issues**: Create GitHub issue with `ail-testing` label
 **Questions**: Contact qa-test-engineer agent
-**Documentation**: See `docs/AIL_SPRINT_1_TEST_STRATEGY.md`
+**Documentation**: See `docs/components/ail/AIL_SPRINT_1_TEST_STRATEGY.md`
 
 ---
 
