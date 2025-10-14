@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: security-no-eval
+message: Avoid using eval() - major security risk
+severity: error
+language: TypeScript
+rule:
+  pattern: eval($CODE)
+note: |
+  eval() executes arbitrary code and is a major security risk.
+  It can lead to code injection vulnerabilities.
+
+  Instead, use safer alternatives:
+  - JSON.parse() for parsing JSON
+  - Function constructors with proper validation
+  - Safe evaluation libraries if absolutely necessary

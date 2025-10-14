@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: sveltekit-post-handler
+message: SvelteKit POST route handler
+severity: info
+language: TypeScript
+rule:
+  pattern: export async function POST($EVENT) { $$$ }
+note: |
+  Finds POST route handlers in SvelteKit +server.ts files.
+
+  Example:
+  export async function POST({ request, locals }) {
+    const data = await request.json();
+    // Handle POST request
+    return json({ success: true });
+  }

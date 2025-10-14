@@ -403,6 +403,121 @@ Monthly cost: $15
 
 ---
 
+## Development Tools
+
+### ast-grep: AST-Based Code Search
+
+**ast-grep** is installed and available for precise, structure-aware code searching, linting, and refactoring.
+
+#### When to Use ast-grep vs Grep
+
+**Use ast-grep when**:
+- Searching for function/method calls: `ast-grep --pattern 'functionName($$$)'`
+- Finding component patterns in Svelte: `ast-grep --pattern '<ComponentName $$$>' --lang html`
+- Locating TypeScript interfaces: `ast-grep --pattern 'interface $NAME { $$$ }'`
+- Refactoring code safely: `ast-grep --pattern 'var $X' --rewrite 'const $X'`
+- No false positives needed (AST-based = structure-aware)
+
+**Use Grep when**:
+- Simple string searches
+- Searching logs or text files
+- Multi-line content searches
+- Quick file path discovery
+
+#### Common ast-grep Patterns for StartupStack
+
+**Find all OAuth implementations**:
+```bash
+ast-grep --pattern 'OAuth($$$)' --lang typescript
+```
+
+**Find Stripe API calls**:
+```bash
+ast-grep --pattern 'stripe.$METHOD($$$)' --lang typescript
+```
+
+**Find all Drizzle ORM queries**:
+```bash
+ast-grep --pattern 'db.$TABLE.$METHOD($$$)' --lang typescript
+```
+
+**Find SvelteKit form actions**:
+```bash
+ast-grep --pattern 'export const actions = { $$$ }' --lang typescript
+```
+
+**Find all API route handlers**:
+```bash
+ast-grep --pattern 'export async function $METHOD(event) { $$$ }' --lang typescript
+```
+
+**Find PostgreSQL connection strings (security)**:
+```bash
+ast-grep --pattern 'postgresql://$$$' --lang typescript
+```
+
+#### ast-grep Configuration
+
+The repository includes ast-grep configuration:
+- **sgconfig.yml** - Main configuration (project root)
+- **.ast-grep/rules/security/** - Security anti-pattern rules
+- **.ast-grep/rules/api/** - SvelteKit API route patterns
+- **.ast-grep/rules/svelte/** - Svelte component patterns
+
+Rules are organized by category for easy management.
+
+#### Running Custom Rules
+
+```bash
+# Scan codebase with all rules
+ast-grep scan
+
+# Scan specific directory
+ast-grep scan src/
+
+# Run specific rule
+ast-grep scan --filter security-no-hardcoded-secrets
+
+# Interactive mode (confirm each fix)
+ast-grep scan -i
+
+# Apply all fixes automatically
+ast-grep scan -U
+
+# Output as JSON
+ast-grep scan --json
+```
+
+#### Meta Variables
+
+- `$VAR` - Matches single AST node (variable, expression, etc.)
+- `$$$` - Matches zero or more nodes (arguments, statements, etc.)
+- `$_` - Non-capturing match (like regex non-capturing groups)
+
+#### Quick Examples
+
+**Find unused imports**:
+```bash
+ast-grep --pattern 'import { $$$ } from "$MODULE"' --lang typescript
+```
+
+**Find all console.log calls**:
+```bash
+ast-grep --pattern 'console.log($$$)' --lang typescript
+```
+
+**Refactor var to const**:
+```bash
+ast-grep --pattern 'var $X = $Y' --rewrite 'const $X = $Y' --lang typescript
+```
+
+**Find environment variable usage**:
+```bash
+ast-grep --pattern 'process.env.$VAR' --lang typescript
+```
+
+---
+
 ## Remember
 
 **StartupStack is for founders who ship, not founders who plan.**

@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: svelte-onmount
+message: Svelte onMount lifecycle hook
+severity: info
+language: TypeScript
+rule:
+  pattern: onMount($CALLBACK)
+note: |
+  Finds onMount lifecycle hooks in Svelte components.
+
+  Example:
+  onMount(async () => {
+    // Runs when component is mounted to DOM
+    const data = await fetchData();
+    items = data;
+  });

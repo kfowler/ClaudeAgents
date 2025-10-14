@@ -1,0 +1,48 @@
+# ast-grep configuration for StartupStack
+# AST-based code search, lint, and rewrite tool
+# Docs: https://ast-grep.github.io
+
+# Rule directories
+ruleDirs:
+  - rules
+
+# Language configurations
+languageGlobs:
+  typescript:
+    - "**/*.ts"
+    - "**/*.tsx"
+  javascript:
+    - "**/*.js"
+    - "**/*.jsx"
+    - "**/*.mjs"
+  html:
+    - "**/*.svelte"
+    - "**/*.html"
+  css:
+    - "**/*.css"
+  yaml:
+    - "**/*.yml"
+    - "**/*.yaml"
+  json:
+    - "**/*.json"
+
+# Paths to ignore during scanning
+ignore:
+  - "node_modules/**"
+  - ".git/**"
+  - "dist/**"
+  - "build/**"
+  - ".svelte-kit/**"
+  - "**/*.min.js"
+  - "**/*.bundle.js"
+  - "coverage/**"
+  - ".next/**"
+  - ".cache/**"
+  - "*.log"
+
+# Test directory for ast-grep test command
+testConfigs:
+  - testDir: .ast-grep/test
+
+# Output configuration
+outputStyle: rich

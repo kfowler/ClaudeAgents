@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: sveltekit-form-actions
+message: SvelteKit form actions export
+severity: info
+language: TypeScript
+rule:
+  pattern: export const actions = { $$$ }
+note: |
+  Finds form actions in SvelteKit +page.server.ts files.
+
+  Example:
+  export const actions = {
+    default: async ({ request }) => {
+      const formData = await request.formData();
+      // Handle form submission
+      return { success: true };
+    }
+  }

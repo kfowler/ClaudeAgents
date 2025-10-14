@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: security-insecure-cookie
+message: Cookies should use secure, httpOnly, and sameSite flags
+severity: warning
+language: TypeScript
+rule:
+  pattern: cookies.set($NAME, $VALUE, $OPTIONS)
+note: |
+  Secure cookie options for SvelteKit:
+
+  cookies.set(name, value, {
+    httpOnly: true,    // Prevents JavaScript access
+    secure: true,      // HTTPS only
+    sameSite: 'strict', // CSRF protection
+    path: '/',
+    maxAge: 60 * 60 * 24 * 7  // 7 days
+  })
